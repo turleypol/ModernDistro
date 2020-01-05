@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/polserver/ModernDistro.svg?branch=master)](https://travis-ci.org/polserver/ModernDistro)
+i[![Build Status](https://github.com/polserver/ModernDistro/workflows/Compile%20test/badge.svg)]
 
 # POL-Distro
 
