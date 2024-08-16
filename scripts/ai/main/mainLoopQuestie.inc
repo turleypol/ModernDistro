@@ -40,7 +40,7 @@ function main_AI_loop()
 			else
 				MoveObjectToLocation(me,5288, 1176, 0,"britannia_alt",MOVEOBJECT_FORCELOCATION);
 				SetObjProperty(me,"guardkill",1);
-				me,kill();
+				me.kill();
 			endif
 			endif
 			ev := sleepmode();

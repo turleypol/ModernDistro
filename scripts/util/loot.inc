@@ -117,7 +117,7 @@ function CreateLootItemInContainer(corpse, lootitem)
         for (cntr := 1; cntr <= intamount; cntr := cntr + 1)
             var created := CreateItemInContainer(corpse, CInt(theitem), 1);
             if (propname)
-                    case proptype
+                    case (proptype)
                         "i" : SetObjProperty(created, propname, CInt(propval));
                         "r" : SetObjProperty(created, propname, CStr(propval));
                         "s" : SetObjProperty(created, propname, propval);
@@ -155,7 +155,7 @@ function CreateLootItemAtLocation(x,y,z, lootitem, map)
         for (cntr := 1; cntr <= intamount; cntr := cntr + 1)
                 var created := CreateItemAtLocation(x,y,z, theitem, 1, map);
                 if (propname)
-                    case proptype
+                    case (proptype)
                         "i" : SetObjProperty(created, propname, CInt(propval));
                         "r" : SetObjProperty(created, propname, CStr(propval));
                         "s" : SetObjProperty(created, propname, propval);

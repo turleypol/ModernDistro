@@ -5,7 +5,7 @@ function yesno(who, prompt:="", yestext:="Yes", notext:="No")
 	{
 		"page 0",
 		"noclose",
-		"resizepic 10 10 3600 300 140",
+		"resizepic 10 10 3600 300 140"
 	};
 	var yesnodata :=	{};
 	yesnodata.append(prompt);
