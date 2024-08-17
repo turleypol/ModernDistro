@@ -5,10 +5,9 @@ use cfgfile;
 include ":itemutils:itemdesc";
 
 program Install()
-	return 1;
+  return 1;
 endprogram
 
 exported function IsWax( unused item )
-	return 1;
+  return 1;
 endfunction
-

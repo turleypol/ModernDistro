@@ -6,9 +6,9 @@
 use uo;
 
 program Install()
-	return 1;
+  return 1;
 endprogram
 
 exported function IsTrainningDummy( unused item )
-	return 1;
+  return 1;
 endfunction

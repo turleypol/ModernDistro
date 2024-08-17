@@ -15,7 +15,7 @@ use uo;
 
 program RevealMe( who )
 
-	who.concealed := 0;
-	SendSysMessage( who, "You are unconcealed.", color := 66 );
+  who.concealed := 0;
+  SendSysMessage( who, "You are unconcealed.", color := 66 );
 
 endprogram

@@ -37,19 +37,19 @@ use storage;
 		- Creates 9 piles of 10k gold into the container.
 	Thanks to HellRaider <zion@uo.com.br> 2000-12-19
 */
-const STD_DAY_LENGTH := 7200;	// A whole UO day in seconds (7200 is equivalent to 2 hours)
-const STD_GOLD := 0x0EED;		// ObjType for gold coins.
+const STD_DAY_LENGTH := 7200; // A whole UO day in seconds (7200 is equivalent to 2 hours)
+const STD_GOLD := 0x0EED; // ObjType for gold coins.
 
-function CreateStackArrayInContainer (container, objtype, amount, limit_per_stack := 60000)
-	var result array;
-	for loops := 1 to (amount/limit_per_stack)
-		result.append(CreateItemInContainer(container, objtype, limit_per_stack));
-	endfor
-	var remainder := amount-(amount/limit_per_stack)*limit_per_stack;
-	if (remainder > 0)
-		result.append(CreateItemInContainer(container, objtype, remainder));
-	endif
-	return result;
+function CreateStackArrayInContainer( container, objtype, amount, limit_per_stack := 60000 )
+  var result array;
+  for loops := 1 to ( amount / limit_per_stack )
+    result.append( CreateItemInContainer( container, objtype, limit_per_stack ) );
+  endfor
+  var remainder := amount - ( amount / limit_per_stack ) * limit_per_stack;
+  if ( remainder > 0 )
+    result.append( CreateItemInContainer( container, objtype, remainder ) );
+  endif
+  return result;
 endfunction
 
 /*
@@ -59,17 +59,17 @@ endfunction
 	Thanks to HellRaider <zion@uo.com.br> 2000-12-13
 */
 function GetFormattedTime()
-    var time := GetTimeOfDay();
-    var raw_time := 24.0/(CDbl(STD_DAY_LENGTH)/time);
-    var hours := CInt(raw_time);
-    var minutes := CInt((raw_time-hours)*60);
-    if (minutes < 10)
-		minutes := "0"+minutes;
-    endif
-    if (hours < 10)
-		hours := "0"+hours;
-    endif
-    return (hours+":"+minutes);
+  var time := GetTimeOfDay();
+  var raw_time := 24.0 / ( CDbl( STD_DAY_LENGTH ) / time );
+  var hours := CInt( raw_time );
+  var minutes := CInt( ( raw_time - hours ) * 60 );
+  if ( minutes < 10 )
+    minutes := "0" + minutes;
+  endif
+  if ( hours < 10 )
+    hours := "0" + hours;
+  endif
+  return ( hours + ":" + minutes );
 endfunction
 
 /*
@@ -82,15 +82,15 @@ endfunction
 		function would return {20000, 1st_pile, 2nd_pile}.
 	Thanks to HellRaider <zion@uo.com.br> 2000-12-18
 */
-function GetGoldInContainer (container)
-	var result := {0};
-	foreach item in EnumerateItemsInContainer(container)
-		if (item.objtype == STD_GOLD)
-			result.append(item);
-			result[1] := result[1]+item.amount;
-		endif
-	endforeach
-	return result;
+function GetGoldInContainer( container )
+  var result := { 0 };
+  foreach item in EnumerateItemsInContainer( container )
+    if ( item.objtype == STD_GOLD )
+      result.append( item );
+      result[1] := result[1] + item.amount;
+    endif
+  endforeach
+  return result;
 endfunction
 
 /*
@@ -104,65 +104,78 @@ endfunction
 	HellRaider <zion@uo.com.br> 2000-12-13
 */
 function GetSpelledTime()
-	var time := GetTimeOfDay();
-    var raw_time := 24.0/(CDbl(STD_DAY_LENGTH)/time);
-    var hours := CInt(raw_time);
-    var minutes := CInt((raw_time-hours)*60);
-	var ext;
-	if (hours<11)
-		ext := " in the morning.";
-	elseif (hours>11 && hours<19)
-		ext := " in the afternoon.";
-	else
-		ext := " at night.";
-	endif
-	if (hours>12)
-		hours := hours-12;
-	endif
-	if (minutes<15)
-		if (!hours || hours == 12)
-			return SpellHour(hours);
-		else
-			return SpellHour(hours)+" o'clock"+ext;
-		endif
-	elseif (minutes > 14 && minutes < 30)
-		if (!hours || hours == 12)
-			return "quarter past "+SpellHour(hours);
-		else
-			return "quarter past "+SpellHour(hours)+ext;
-		endif
-	elseif (minutes > 29 && minutes < 45)
-		if (!hours || hours == 12)
-			return "half past "+SpellHour(hours);
-		else
-			return "half past "+SpellHour(hours)+ext;
-		endif
-	else
-		if (!hours || hours == 12)
-			return "quarter to "+SpellHour(hours+1);
-		else
-			return "quarter to "+SpellHour(hours+1)+ext;
-		endif
-	endif
+  var time := GetTimeOfDay();
+  var raw_time := 24.0 / ( CDbl( STD_DAY_LENGTH ) / time );
+  var hours := CInt( raw_time );
+  var minutes := CInt( ( raw_time - hours ) * 60 );
+  var ext;
+  if ( hours < 11 )
+    ext := " in the morning.";
+  elseif ( hours > 11 && hours < 19 )
+    ext := " in the afternoon.";
+  else
+    ext := " at night.";
+  endif
+  if ( hours > 12 )
+    hours := hours - 12;
+  endif
+  if ( minutes < 15 )
+    if ( !hours || hours == 12 )
+      return SpellHour( hours );
+    else
+      return SpellHour( hours ) + " o'clock" + ext;
+    endif
+  elseif ( minutes > 14 && minutes < 30 )
+    if ( !hours || hours == 12 )
+      return "quarter past " + SpellHour( hours );
+    else
+      return "quarter past " + SpellHour( hours ) + ext;
+    endif
+  elseif ( minutes > 29 && minutes < 45 )
+    if ( !hours || hours == 12 )
+      return "half past " + SpellHour( hours );
+    else
+      return "half past " + SpellHour( hours ) + ext;
+    endif
+  else
+    if ( !hours || hours == 12 )
+      return "quarter to " + SpellHour( hours + 1 );
+    else
+      return "quarter to " + SpellHour( hours + 1 ) + ext;
+    endif
+  endif
 endfunction
 
 // HellRaider <zion@uo.com.br> 2000-12-13
-function SpellHour (hours)
-	case (hours)
-		0:	return "midnight.";
-		1:	return "one";
-		2:	return "two";
-		3:	return "three";
-		4:	return "four";
-		5:	return "five";
-		6:	return "six";
-		7:	return "seven";
-		8:	return "eight";
-		9:	return "nine";
-		10:	return "ten";
-		11:	return "eleven";
-		12:	return "midday.";
-	endcase
+function SpellHour( hours )
+  case ( hours )
+    0:
+      return "midnight.";
+    1:
+      return "one";
+    2:
+      return "two";
+    3:
+      return "three";
+    4:
+      return "four";
+    5:
+      return "five";
+    6:
+      return "six";
+    7:
+      return "seven";
+    8:
+      return "eight";
+    9:
+      return "nine";
+    10:
+      return "ten";
+    11:
+      return "eleven";
+    12:
+      return "midday.";
+  endcase
 endfunction
 
 /*
@@ -176,15 +189,15 @@ endfunction
 		would return {100, 1st_stack_of_cloth, 2nd_stack_of_cloth}.
 	Thanks to HellRaider <zion@uo.com.br> 2000-12-18
 */
-function GetStacksOfTypeInContainer (container, objtype)
-	var result := {0};
-	foreach item in EnumerateItemsInContainer(container)
-		if (item.objtype == objtype)
-			result.append(item);
-			result[1] := result[1]+item.amount;
-		endif
-	endforeach
-	return result;
+function GetStacksOfTypeInContainer( container, objtype )
+  var result := { 0 };
+  foreach item in EnumerateItemsInContainer( container )
+    if ( item.objtype == objtype )
+      result.append( item );
+      result[1] := result[1] + item.amount;
+    endif
+  endforeach
+  return result;
 endfunction
 
 /*
@@ -194,12 +207,12 @@ endfunction
 		Returns: reference to the storage area found or created.
 	Thanks to HellRaider <zion@uo.com.br> 2000-12-13
 */
-function GetStorageArea (areaname)
-	var area := FindStorageArea(areaname);
-	if (!area)
-		return CreateStorageArea(areaname);
-	endif
-	return area;
+function GetStorageArea( areaname )
+  var area := FindStorageArea( areaname );
+  if ( !area )
+    return CreateStorageArea( areaname );
+  endif
+  return area;
 endfunction
 
 /*
@@ -210,12 +223,12 @@ endfunction
 		Returns: reference to the root container found or created.
 	Thanks to HellRaider <zion@uo.com.br> 2000-12-13
 */
-function GetStorageRoot (storage, rootname, objtype := 0x0E7C)
-	var item := FindRootItemInStorageArea(storage, rootname);
-	if (!item)
-		return CreateRootItemInStorageArea(storage, rootname, objtype);
-    endif
-	return item;
+function GetStorageRoot( storage, rootname, objtype := 0x0E7C )
+  var item := FindRootItemInStorageArea( storage, rootname );
+  if ( !item )
+    return CreateRootItemInStorageArea( storage, rootname, objtype );
+  endif
+  return item;
 endfunction
 
 /*
@@ -227,8 +240,8 @@ endfunction
 			GetStrAfter("sky ", "the sky is blue") returns "is blue";
 	Thanks to HellRaider <zion@uo.com.br> 2000-12-13
 */
-function GetStrAfter (needle, byref haystack)
-	return haystack[Find(haystack, needle, 1)+len(needle), len(haystack)];
+function GetStrAfter( needle, byref haystack )
+  return haystack[Find( haystack, needle, 1 ) + len( needle ), len( haystack )];
 endfunction
 
 /*
@@ -240,8 +253,8 @@ endfunction
 			GetStrBefore(" is ", "the sky is blue") returns "the sky";
 	Thanks to HellRaider <zion@uo.com.br> 2000-12-13
 */
-function GetStrBefore (needle, byref haystack)
-	return haystack[1, Find(haystack, needle, 1)];
+function GetStrBefore( needle, byref haystack )
+  return haystack[1, Find( haystack, needle, 1 )];
 endfunction
 
 /*
@@ -249,7 +262,7 @@ endfunction
 		Returns: elapsed seconds in the current UO day.
 	Thanks to HellRaider <zion@uo.com.br> 2000-12-13
 */
-//function GetTimeOfDay()
+// function GetTimeOfDay()
 //    var time := ReadGameClock();
 //	return (time-((time/STD_DAY_LENGTH)*STD_DAY_LENGTH));
 //endfunction
@@ -264,25 +277,32 @@ endfunction
 		This function is limited and it'd be a good idea to have core support for it.
 	Thanks to HellRaider <zion@uo.com.br> 2000-12-13
 */
-function ListObjectsOfClassNearLocation (x, y, z, range, POLCLASS, flags := LISTEX_FLAG_NORMAL, objrealm := _DEFAULT_REALM)
-	case (POLCLASS)
-		POLCLASS_UOBJECT:
-			return ListObjectsInBox(x-range, y+range, z-10, x+range, y-range, z+10, objrealm);
-		POLCLASS_MOBILE: //I'll separate it from POLCLASS_NPC for performance purposes.
-			return ListMobilesNearLocationEx(x, y, z, range, flags, objrealm);
-		POLCLASS_NPC:
-			var result array;
-			foreach mobile in ListMobilesNearLocationEx(x, y, z, range, flags, objrealm)
-				if (mobile.isa(POLCLASS_NPC)) result.append(mobile); endif
-			endforeach
-			return result;
-		default:
-			var result array;
-			foreach item in ListItemsNearLocation(x, y, z, range, objrealm)
-				if (item.isa(POLCLASS)) result.append(item); endif
-			endforeach
-			return result;
-	endcase
+function ListObjectsOfClassNearLocation( x, y, z, range, POLCLASS,
+                                         flags := LISTEX_FLAG_NORMAL,
+                                         objrealm := _DEFAULT_REALM )
+  case ( POLCLASS )
+    POLCLASS_UOBJECT:
+      return ListObjectsInBox( x - range, y + range, z - 10, x + range, y - range,
+                               z + 10, objrealm );
+    POLCLASS_MOBILE: // I'll separate it from POLCLASS_NPC for performance purposes.
+      return ListMobilesNearLocationEx( x, y, z, range, flags, objrealm );
+    POLCLASS_NPC:
+      var result array;
+      foreach mobile in ListMobilesNearLocationEx( x, y, z, range, flags, objrealm )
+        if ( mobile.isa( POLCLASS_NPC ) )
+          result.append( mobile );
+        endif
+      endforeach
+      return result;
+    default:
+      var result array;
+      foreach item in ListItemsNearLocation( x, y, z, range, objrealm )
+        if ( item.isa( POLCLASS ) )
+          result.append( item );
+        endif
+      endforeach
+      return result;
+  endcase
 endfunction
 
 /*
@@ -294,14 +314,15 @@ endfunction
 		set back to it's original state.
 	Thanks to HellRaider <zion@uo.com.br> 2000-12-13
 */
-function MoveItemToForcedLocation (item, x, y, z)
-	if (!item.movable)
-		item.movable := 1;
-		var result := MoveObjectToLocation(item, x, y, z, item.realm, MOVEOBJECT_FORCELOCATION);
-		item.movable := 0;
-		return result;
-	endif
-	return MoveObjectToLocation(item, x, y, z, item.realm, MOVEOBJECT_FORCELOCATION);
+function MoveItemToForcedLocation( item, x, y, z )
+  if ( !item.movable )
+    item.movable := 1;
+    var result := MoveObjectToLocation( item, x, y, z, item.realm,
+                                        MOVEOBJECT_FORCELOCATION );
+    item.movable := 0;
+    return result;
+  endif
+  return MoveObjectToLocation( item, x, y, z, item.realm, MOVEOBJECT_FORCELOCATION );
 endfunction
 
 /*
@@ -324,25 +345,26 @@ endfunction
 		moved or if an invalid parameter was passed.
 	Thanks to HellRaider <zion@uo.com.br> 2000-12-13
 */
-function MoveItem (item, byref place, flags := MOVEOBJECT_NORMAL)
-	if (place.isa(POLCLASS_CONTAINER))
-		return MoveItemToContainer(item, place);
-	elseif (place == array)
-		case (place.size())
-			0:1:
-				var result := error;
-				result.+errortext := "Parameter place has less than 2 elements.";
-				return result;
-			2:
-				place[3] := GetWorldHeight(place[1], place[2], item.realm);
-				continue;
-			default:
-				return MoveObjectToLocation(item, place[1], place[2], place[3], flags);
-		endcase
-	endif
-	var result := error;
-	result.+errortext := "Invalid place: expected an ContainerRef or Array, got "+place+".";
-	return result;
+function MoveItem( item, byref place, flags := MOVEOBJECT_NORMAL )
+  if ( place.isa( POLCLASS_CONTAINER ) )
+    return MoveItemToContainer( item, place );
+  elseif ( place == array )
+    case ( place.size() )
+      0:
+      1:
+        var result := error;
+        result.+errortext := "Parameter place has less than 2 elements.";
+        return result;
+      2:
+        place[3] := GetWorldHeight( place[1], place[2], item.realm );
+        continue;
+      default:
+        return MoveObjectToLocation( item, place[1], place[2], place[3], flags );
+    endcase
+  endif
+  var result := error;
+  result.+errortext := "Invalid place: expected an ContainerRef or Array, got " + place + ".";
+  return result;
 endfunction
 
 /*
@@ -375,14 +397,14 @@ endfunction
 		Returns: random integer.
 	Thanks to HellRaider <zion@uo.com.br> 2001-01-17
 */
-function RandomListInt (tableref)
-	var elem := SplitWords(GetConfigString(tableref, "Elem"+RandomInt(tableref.Count)));
-	elem[1] := CInt(elem[1]);
-	if (elem.Size() == 1)
-		return elem[1];
-	else
-		return RandomInt(CInt(elem[2])-elem[1])+elem[1];
-	endif
+function RandomListInt( tableref )
+  var elem := SplitWords( GetConfigString( tableref, "Elem" + RandomInt( tableref.Count ) ) );
+  elem[1] := CInt( elem[1] );
+  if ( elem.Size() == 1 )
+    return elem[1];
+  else
+    return RandomInt( CInt( elem[2] ) - elem[1] ) + elem[1];
+  endif
 endfunction
 
 /*
@@ -399,16 +421,15 @@ endfunction
 	please use the constant values above to avoid problems.
 	Thanks to HellRaider <zion@uo.com.br> 2001-03-02
 */
-const SEASON_SUMMER		:= 1;
-const SEASON_FALL		:= 2;
-const SEASON_WINTER		:= 3;
-const SEASON_FELUCCA	:= 4;
-const SEASON_SPRING		:= 5;
-function Season (player, season_id)
-	// Doesn't support cursor customization, yet.
-	SendPacket(player, "BC0"+season_id+"01");
+const SEASON_SUMMER := 1;
+const SEASON_FALL := 2;
+const SEASON_WINTER := 3;
+const SEASON_FELUCCA := 4;
+const SEASON_SPRING := 5;
+function Season( player, season_id )
+  // Doesn't support cursor customization, yet.
+  SendPacket( player, "BC0" + season_id + "01" );
 endfunction
-
 
 /*
 	SubtractFromStackArray (byref arrayofobjrefs, amount)
@@ -422,19 +443,21 @@ endfunction
 		Returns: amount of items successfully subtracted.
 	Thanks to HellRaider <zion@uo.com.br> 2000-12-18
 */
-function SubtractFromStackArray (byref arrayofobjrefs, amount)
-	var needed := amount;
-	foreach item in arrayofobjrefs
-		if (!item.isa(POLCLASS_ITEM)) continue; endif
-		if (item.amount<needed)
-			needed := needed-item.amount;
-			SubtractAmount(item, item.amount);
-		else
-			SubtractAmount(item, needed);
-			return amount;
-		endif
-	endforeach
-	return (amount-needed);
+function SubtractFromStackArray( byref arrayofobjrefs, amount )
+  var needed := amount;
+  foreach item in arrayofobjrefs
+    if ( !item.isa( POLCLASS_ITEM ) )
+      continue;
+    endif
+    if ( item.amount < needed )
+      needed := needed - item.amount;
+      SubtractAmount( item, item.amount );
+    else
+      SubtractAmount( item, needed );
+      return amount;
+    endif
+  endforeach
+  return ( amount - needed );
 endfunction
 
 /*
@@ -446,36 +469,38 @@ endfunction
 	OSI uses a special rounding function for it.
 	Thanks to HellRaider <zion@uo.com.br> 2000-12-13
 */
-function ToSextant(x, y)
-	var latitude_direction, longitude_direction;
-	var latitude_degrees, longitude_degrees;
-	var latitude_minutes, longitude_minutes;
+function ToSextant( x, y )
+  var latitude_direction, longitude_direction;
+  var latitude_degrees, longitude_degrees;
+  var latitude_minutes, longitude_minutes;
 
-	latitude_degrees := (y-1624)*0.087890625;
-	longitude_degrees := (x-1323)*0.0703125;
+  latitude_degrees := ( y - 1624 ) * 0.087890625;
+  longitude_degrees := ( x - 1323 ) * 0.0703125;
 
-	if (latitude_degrees < 0)
-		latitude_direction := "N";
-	else
-		latitude_direction := "S";
-	endif
+  if ( latitude_degrees < 0 )
+    latitude_direction := "N";
+  else
+    latitude_direction := "S";
+  endif
 
-	if (longitude_degrees < 0)
-		longitude_direction := "W";
-	else
-		longitude_direction := "E";
-	endif
+  if ( longitude_degrees < 0 )
+    longitude_direction := "W";
+  else
+    longitude_direction := "E";
+  endif
 
-	latitude_degrees := Abs(latitude_degrees);
-	longitude_degrees := Abs(longitude_degrees);
+  latitude_degrees := Abs( latitude_degrees );
+  longitude_degrees := Abs( longitude_degrees );
 
-	//The next lines get the first 2 digits from the decimal part of the real variables
-	//and multiply by 60, returning an integer.
-	latitude_minutes := ((((latitude_degrees-Floor(latitude_degrees))*100)*60)/100);
-	longitude_minutes := ((((longitude_degrees-Floor(longitude_degrees))*100)*60)/100);
+  // The next lines get the first 2 digits from the decimal part of the real variables
+  // and multiply by 60, returning an integer.
+  latitude_minutes := ( ( ( ( latitude_degrees - Floor( latitude_degrees ) ) * 100 )
+                        * 60 ) / 100 );
+  longitude_minutes := ( ( ( ( longitude_degrees - Floor( longitude_degrees ) ) * 100 )
+                         * 60 ) / 100 );
 
-	return(	Floor(latitude_degrees)+"o "+latitude_minutes+"'"+latitude_direction+", "+
-			Floor(longitude_degrees)+"o "+longitude_minutes+"'"+longitude_direction);
+  return ( Floor( latitude_degrees ) + "o " + latitude_minutes + "'" + latitude_direction + ", " + Floor(
+           longitude_degrees ) + "o " + longitude_minutes + "'" + longitude_direction );
 endfunction
 
 /***************************************************************************

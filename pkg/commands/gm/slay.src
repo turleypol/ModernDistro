@@ -7,13 +7,13 @@ include ":damage:damage";
 
 program textcmd_kill( who )
 
-	var mob := Target( who, TGTOPT_NOCHECK_LOS );
-	if (mob)
-		if (!mob.dead)
-			RevokePrivilege( mob, "invul" );
-			KillMobile(mob);
-		endif
+  var mob := Target( who, TGTOPT_NOCHECK_LOS );
+  if ( mob )
+    if ( !mob.dead )
+      RevokePrivilege( mob, "invul" );
+      KillMobile( mob );
+    endif
 
-	endif
+  endif
 
 endprogram

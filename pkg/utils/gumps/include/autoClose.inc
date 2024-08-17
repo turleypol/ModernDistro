@@ -7,7 +7,7 @@
  *  GFCloseGumpTimed ( mobile, pid, timer, ret_val:=0 )
  *  GFCloseGumpOnMovedCoordinateDistance ( mobile, pid, variance:=1, ret_val:=0 )
  *  GFCloseGumpOnMovedDistance ( mobile, pid, variance:=1, ret_val:=0 )
- */
+*/
 
 /*
  * GFCloseGump(mobile, pid, ret_val:=0)
@@ -24,10 +24,10 @@
  * Returns 1 on success.
  * Returns error on failure.
  *
- */
-function GFCloseGump( mobile, pid, ret_val:=0 )
+*/
+function GFCloseGump( mobile, pid, ret_val := 0 )
 
-	return CloseGump( mobile, pid, ret_val );
+  return CloseGump( mobile, pid, ret_val );
 endfunction
 
 /*
@@ -46,9 +46,13 @@ endfunction
  * Returns 1 on success.
  * Returns error on failure.
  *
- */
-function GFCloseGumpTimed( mobile, pid, timer, ret_val:=0 )
-	return Start_Script( ":gumps:scripts/autoClose/autoClose", array{mobile, pid, timer, ret_val} );
+*/
+function GFCloseGumpTimed( mobile, pid, timer, ret_val := 0 )
+  return Start_Script( ":gumps:scripts/autoClose/autoClose", array{ mobile,
+                                                                    pid,
+                                                                    timer,
+                                                                    ret_val }
+                       );
 endfunction
 
 /*
@@ -67,9 +71,15 @@ endfunction
  * Returns 1 on success.
  * Returns error on failure.
  *
- */
-function GFCloseGumpOnMovedCoordinateDistance( mobile, pid, variance:=1, ret_val:=0 )
-	return Start_Script( ":gumps:scripts/autoClose/autoCloseOnMovedCoordinateDistance", array{mobile, pid, variance, ret_val} );
+*/
+function GFCloseGumpOnMovedCoordinateDistance( mobile, pid, variance := 1,
+                                               ret_val := 0 )
+  return Start_Script( ":gumps:scripts/autoClose/autoCloseOnMovedCoordinateDistance",
+                       array{ mobile,
+                              pid,
+                              variance,
+                              ret_val }
+                       );
 endfunction
 
 /*
@@ -89,9 +99,14 @@ endfunction
  * Returns 1 on success.
  * Returns error on failure.
  *
- */
-function GFCloseGumpOnMovedDistance( mobile, object, pid, variance:=1, ret_val:=0 )
-	return Start_Script( ":gumps:scripts/autoClose/autoCloseOnMovedDistance", array{mobile, object, pid, dist_traveled, ret_val} );
+*/
+function GFCloseGumpOnMovedDistance( mobile, object, pid, variance := 1, ret_val := 0 )
+  return Start_Script( ":gumps:scripts/autoClose/autoCloseOnMovedDistance", array{ mobile,
+                                                                                   object,
+                                                                                   pid,
+                                                                                   dist_traveled,
+                                                                                   ret_val }
+                       );
 endfunction
 
 /*
@@ -113,7 +128,15 @@ endfunction
  * Returns 1 on success.
  * Returns error on failure.
  *
- */
-function GFCloseGumpOnLeaveArea( mobile, x_1, y_1, x_2, y_2, pid, variance:=1, ret_val:=0 )
-	return Start_Script( ":gumps:scripts/autoClose/autoCloseOnLeaveArea", array{mobile, x_1, y_1, x_2, y_2, pid, ret_val} );
+*/
+function GFCloseGumpOnLeaveArea( mobile, x_1, y_1, x_2, y_2, pid, variance := 1,
+                                 ret_val := 0 )
+  return Start_Script( ":gumps:scripts/autoClose/autoCloseOnLeaveArea", array{ mobile,
+                                                                               x_1,
+                                                                               y_1,
+                                                                               x_2,
+                                                                               y_2,
+                                                                               pid,
+                                                                               ret_val }
+                       );
 endfunction

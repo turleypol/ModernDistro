@@ -22,16 +22,16 @@ use polsys;
 use storage;
 
 // * Global Variables *
-CONST CP_NOCREATE               := 0x0;
-CONST CP_CREATE                 := 0x1;
+const CP_NOCREATE := 0x0;
+const CP_CREATE := 0x1;
 
-CONST CP_AUCTION_AREA           := "Auction Storage";
-CONST CP_BANK_AREA              := "World Bank";
-CONST CP_DEFAULT_AREA           := "World Bank";
-CONST CP_KEYRING_AREA           := "Keyring Storage";
-CONST CP_MERCHANT_AREA          := "Merchant Storage";
+const CP_AUCTION_AREA := "Auction Storage";
+const CP_BANK_AREA := "World Bank";
+const CP_DEFAULT_AREA := "World Bank";
+const CP_KEYRING_AREA := "Keyring Storage";
+const CP_MERCHANT_AREA := "Merchant Storage";
 
-CONST CP_DEFAULT_PREFIX         := "[Root Container] ";
+const CP_DEFAULT_PREFIX := "[Root Container] ";
 
 /*
  * Set the 'box_type' variable to the object name of the container type
@@ -44,15 +44,15 @@ CONST CP_DEFAULT_PREFIX         := "[Root Container] ";
  *
  * Ideally, you should make an object type with the name 'BankBox' to better
  * control the number of items that can be put in the storage container.
- */
-var container_type	:= "BankBox";
+*/
+var container_type := "BankBox";
 
 // Toggles the bank related debug messages on and off.
-var STORAGE_DEBUG	:= 1;
+var STORAGE_DEBUG := 1;
 
 function CP_ListStorageAreas()
 
-    return { CP_AUCTION_AREA, CP_BANK_AREA, CP_KEYRING_AREA, CP_MERCHANT_AREA };
+  return { CP_AUCTION_AREA, CP_BANK_AREA, CP_KEYRING_AREA, CP_MERCHANT_AREA };
 endfunction
 
 /*
@@ -67,14 +67,14 @@ endfunction
  * Return value
  * String
  *
- */
+*/
 function CP_GetMobileContainerID( mobile, prefix := "Bankbox of " )
 
-	if( mobile.IsA( POLCLASS_CORPSE ))
-		return prefix + Hex( mobile.ownerserial );
-	else
-		return prefix + Hex(mobile.serial);
-	endif
+  if ( mobile.IsA( POLCLASS_CORPSE ) )
+    return prefix + Hex( mobile.ownerserial );
+  else
+    return prefix + Hex( mobile.serial );
+  endif
 endfunction
 
 /*
@@ -90,17 +90,19 @@ endfunction
  * Return Value
  * A container object
  *
- */
-function CP_GetStorageContainerForMobile( mobile, storage_area_name:=0, create:=CP_NOCREATE )
+*/
+function CP_GetStorageContainerForMobile( mobile, storage_area_name := 0,
+                                          create := CP_NOCREATE )
 
-	if(( !storage_area_name ) || ( storage_area_name == error ))
-		storage_area_name := CP_DEFAULT_AREA;
-	endif
+  if ( ( !storage_area_name ) || ( storage_area_name == error ) )
+    storage_area_name := CP_DEFAULT_AREA;
+  endif
 
-	var container_id := CP_GetMobileContainerID( mobile );
-	var root_container := CP_GetStorageAreaContainer( container_id, storage_area_name, create );
+  var container_id := CP_GetMobileContainerID( mobile );
+  var root_container := CP_GetStorageAreaContainer( container_id, storage_area_name,
+                                                    create );
 
-	return root_container;
+  return root_container;
 endfunction
 
 /*
@@ -116,20 +118,20 @@ endfunction
  * Return value
  * A storage area object
  *
- */
-function CP_GetStorageArea( storage_area_name, create:=CP_NOCREATE )
+*/
+function CP_GetStorageArea( storage_area_name, create := CP_NOCREATE )
 
-    var storage_area := FindStorageArea( storage_area_name );
-    if( !storage_area && create == CP_CREATE )
-        // The storage area does not exist - so create it.
-        storage_area := CreateStorageArea( storage_area_name );
-    endif
+  var storage_area := FindStorageArea( storage_area_name );
+  if ( !storage_area && create == CP_CREATE )
+    // The storage area does not exist - so create it.
+    storage_area := CreateStorageArea( storage_area_name );
+  endif
 
-    if( storage_area.errortext )
-        CP_StorageDebugMsg( "Error::CP_GetStorageArea() - "+storage_area.errortext );
-    endif
+  if ( storage_area.errortext )
+    CP_StorageDebugMsg( "Error::CP_GetStorageArea() - " + storage_area.errortext );
+  endif
 
-    return storage_area;
+  return storage_area;
 endfunction
 
 /*
@@ -146,31 +148,32 @@ endfunction
  * Return value
  * A container object
  *
- */
-function CP_GetStorageAreaContainer( container_id, storage_area_name:=0, create:=CP_NOCREATE )
+*/
+function CP_GetStorageAreaContainer( container_id, storage_area_name := 0,
+                                     create := CP_NOCREATE )
 
-	if(( !storage_area_name ) || ( storage_area_name == error ))
-		storage_area_name := CP_DEFAULT_AREA;
-	endif
+  if ( ( !storage_area_name ) || ( storage_area_name == error ) )
+    storage_area_name := CP_DEFAULT_AREA;
+  endif
 
-	var container_name := CP_DEFAULT_PREFIX + container_id;
-	// var container_name := container_id;
+  var container_name := CP_DEFAULT_PREFIX + container_id;
+  // var container_name := container_id;
 
-	var storage_area := FindStorageArea( storage_area_name );
-	if( !storage_area )
-		if( !create )
-			return storage_area; // Will be an error
-		else
-			return CP_CreateStorageAreaContainer( container_id, storage_area_name );
-		endif
-	endif
+  var storage_area := FindStorageArea( storage_area_name );
+  if ( !storage_area )
+    if ( !create )
+      return storage_area; // Will be an error
+    else
+      return CP_CreateStorageAreaContainer( container_id, storage_area_name );
+    endif
+  endif
 
-	var root_container := FindRootItemInStorageArea( storage_area, container_name );
-	if( !root_container && create )
-		return CP_CreateStorageAreaContainer( container_id, storage_area_name );
-	else
-		return root_container;
-	endif
+  var root_container := FindRootItemInStorageArea( storage_area, container_name );
+  if ( !root_container && create )
+    return CP_CreateStorageAreaContainer( container_id, storage_area_name );
+  else
+    return root_container;
+  endif
 endfunction
 
 /*
@@ -186,30 +189,31 @@ endfunction
  * Return value
  * A container object
  *
- */
-function CP_CreateStorageAreaContainer( container_id, storage_area_name:=0 )
+*/
+function CP_CreateStorageAreaContainer( container_id, storage_area_name := 0 )
 
-	if(( !storage_area_name ) || ( storage_area_name == error ))
-		storage_area_name := CP_DEFAULT_AREA;
-	endif
+  if ( ( !storage_area_name ) || ( storage_area_name == error ) )
+    storage_area_name := CP_DEFAULT_AREA;
+  endif
 
-	var storage_area := FindStorageArea( storage_area_name );
-	if( !storage_area )
-		// The storage area does not exist - so create it.
-		storage_area := CreateStorageArea( storage_area_name );
-	endif
+  var storage_area := FindStorageArea( storage_area_name );
+  if ( !storage_area )
+    // The storage area does not exist - so create it.
+    storage_area := CreateStorageArea( storage_area_name );
+  endif
 
-    if( storage_area_name == CP_MERCHANT_AREA || storage_area_name == CP_AUCTION_AREA )
-        container_type := "vendorbag";
-	endif
+  if ( storage_area_name == CP_MERCHANT_AREA || storage_area_name == CP_AUCTION_AREA )
+    container_type := "vendorbag";
+  endif
 
-    var container_name := CP_DEFAULT_PREFIX + container_id;
-	var root_container := CreateRootItemInStorageArea( storage_area, container_name, container_type );
-	if( root_container.errortext )
-		CP_StorageDebugMsg( "Error::CP_CreateStorageAreaContainer() - "+root_container.errortext );
-	endif
+  var container_name := CP_DEFAULT_PREFIX + container_id;
+  var root_container := CreateRootItemInStorageArea( storage_area, container_name,
+                                                     container_type );
+  if ( root_container.errortext )
+    CP_StorageDebugMsg( "Error::CP_CreateStorageAreaContainer() - " + root_container.errortext );
+  endif
 
-	return root_container;
+  return root_container;
 endfunction
 
 /*
@@ -226,17 +230,17 @@ endfunction
  * Return value
  * Returns the result of the deletion.
  *
- */
-function CP_RemoveStorageAreaContainer( container_id, storage_area_name:=0 )
+*/
+function CP_RemoveStorageAreaContainer( container_id, storage_area_name := 0 )
 
-	if(( !storage_area_name ) || ( storage_area_name == error ))
-		storage_area_name := CP_DEFAULT_AREA;
-	endif
+  if ( ( !storage_area_name ) || ( storage_area_name == error ) )
+    storage_area_name := CP_DEFAULT_AREA;
+  endif
 
-	var storage_area := FindStorageArea( storage_area_name );
-	var container_name := CP_DEFAULT_PREFIX + container_id;
+  var storage_area := FindStorageArea( storage_area_name );
+  var container_name := CP_DEFAULT_PREFIX + container_id;
 
-	return DestroyRootItemInStorageArea( storage_area, container_name );
+  return DestroyRootItemInStorageArea( storage_area, container_name );
 endfunction
 
 /*
@@ -250,18 +254,18 @@ endfunction
  * Return value
  * Array
  *
- */
+*/
 function CP_GetStorageAreaNames()
 
-	var name_list := array;
-	foreach storage_area in ( StorageAreas() )
-		// Used to fix unused var report by ecompile: storage_area;
-		storage_area := storage_area;
-		name_list.Append( _storage_area_iter );
-		SleepMS(2);
-	endforeach
+  var name_list := array;
+  foreach storage_area in ( StorageAreas() )
+    // Used to fix unused var report by ecompile: storage_area;
+    storage_area := storage_area;
+    name_list.Append( _storage_area_iter );
+    SleepMS( 2 );
+  endforeach
 
-	return name_list;
+  return name_list;
 endfunction
 
 /*
@@ -274,17 +278,17 @@ endfunction
  * Return value
  * Array
  *
- */
+*/
 function CP_GetRootContainersInStorageArea( storage_area_name )
 
-	var storage := StorageAreas();
-	var root_list := array;
-	foreach container in ( storage[storage_area_name] )
-		root_list.Append( container );
-		SleepMS(2);
-	endforeach
+  var storage := StorageAreas();
+  var root_list := array;
+  foreach container in ( storage[storage_area_name] )
+    root_list.Append( container );
+    SleepMS( 2 );
+  endforeach
 
-	return root_list;
+  return root_list;
 endfunction
 
 /*
@@ -296,13 +300,14 @@ endfunction
  *
  * Return value
  *
- */
+*/
 function CP_StorageDebugMsg( report_text )
 
-	if( STORAGE_DEBUG )
-		var script_name := GetProcess( GetPid() ).name;
-		LogToFile( "::log/storage.log", "["+script_name+"]: "+report_text, LOG_DATETIME );
-	endif
+  if ( STORAGE_DEBUG )
+    var script_name := GetProcess( GetPid() ).name;
+    LogToFile( "::log/storage.log", "[" + script_name + "]: " + report_text,
+               LOG_DATETIME );
+  endif
 
-	return 1;
+  return 1;
 endfunction

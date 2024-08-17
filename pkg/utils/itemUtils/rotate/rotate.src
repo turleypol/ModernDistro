@@ -6,12 +6,12 @@ include ":itemutils:itemdesc";
 
 program Rotate_Item( who, item )
 
-	if( !useItem_check( who, item, ITEM_WILD ))
-		return 0;
-	endif
- 
-	var cfg_info := GetItemDescInfo( item.graphic );
-	item.graphic := CInt( cfg_info.RotateTo );
+  if ( !useItem_check( who, item, ITEM_WILD ) )
+    return 0;
+  endif
 
-	return 1;
+  var cfg_info := GetItemDescInfo( item.graphic );
+  item.graphic := CInt( cfg_info.RotateTo );
+
+  return 1;
 endprogram

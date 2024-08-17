@@ -24,18 +24,18 @@ use datafile;
  * Return Values:
  * datafile_obj or error
  *
- */
-function GFOpenCacheDatafile( path:=":gumps:gumps" )
+*/
+function GFOpenCacheDatafile( path := ":gumps:gumps" )
 
-	var datafile := OpenDataFile( path );
-	if( datafile.errortext )
-		datafile := CreateDataFile( path, DF_KEYTYPE_STRING );
-		if( datafile.errortext )
-			return error{ "errortext":="Could not find or create datafile. -> "+datafile.errortext };
-		endif
-	endif
+  var datafile := OpenDataFile( path );
+  if ( datafile.errortext )
+    datafile := CreateDataFile( path, DF_KEYTYPE_STRING );
+    if ( datafile.errortext )
+      return error{ "errortext" := "Could not find or create datafile. -> " + datafile.errortext };
+    endif
+  endif
 
-	return datafile;
+  return datafile;
 endfunction
 
 /*
@@ -61,30 +61,30 @@ endfunction
  * Return Values:
  * df_elem_ref or error
  *
- */
-function GFFindCacheElem( byref elem_name, byref datafile:=0 )
+*/
+function GFFindCacheElem( byref elem_name, byref datafile := 0 )
 
-	if( TypeOfInt( datafile ) == OT_STRING )
-		datafile := GFOpenCacheDatafile( datafile );
-		if( datafile.errortext )
-			return datafile.errortext;
-		endif
-	elseif( TypeOfInt( datafile ) != OT_DATAFILEREF )
-		datafile := GFOpenCacheDatafile();
-		if( datafile.errortext )
-			return datafile.errortext;
-		endif
-	endif
+  if ( TypeOfInt( datafile ) == OT_STRING )
+    datafile := GFOpenCacheDatafile( datafile );
+    if ( datafile.errortext )
+      return datafile.errortext;
+    endif
+  elseif ( TypeOfInt( datafile ) != OT_DATAFILEREF )
+    datafile := GFOpenCacheDatafile();
+    if ( datafile.errortext )
+      return datafile.errortext;
+    endif
+  endif
 
-	var df_elem := datafile.FindElement( elem_name );
-	if( df_elem.errortext )
-		df_elem := datafile.CreateElement( elem_name );
-		if( df_elem.errortext )
-			return error{ "errortext":="Could not find or create. -> "+df_elem.errortext };
-		endif
-	endif
+  var df_elem := datafile.FindElement( elem_name );
+  if ( df_elem.errortext )
+    df_elem := datafile.CreateElement( elem_name );
+    if ( df_elem.errortext )
+      return error{ "errortext" := "Could not find or create. -> " + df_elem.errortext };
+    endif
+  endif
 
-	return df_elem;
+  return df_elem;
 endfunction
 
 /*
@@ -112,15 +112,15 @@ endfunction
  * Return Values:
  * Struct or error.
  *
- */
+*/
 function GFStoreGump( datafile, byref elem_name, byref gump_name, byref data )
 
-	var df_elem := GFFindCacheElem( elem_name, datafile );
-	if( df_elem.errortext )
-		return df_elem.errortext;
-	endif
+  var df_elem := GFFindCacheElem( elem_name, datafile );
+  if ( df_elem.errortext )
+    return df_elem.errortext;
+  endif
 
-	return df_elem.SetProp( gump_name, data );
+  return df_elem.SetProp( gump_name, data );
 endfunction
 
 /*
@@ -147,15 +147,15 @@ endfunction
  * Return Values:
  * Struct or error
  *
- */
+*/
 function GFLoadGump( datafile, byref elem_name, byref gump_name )
 
-	var df_elem := GFFindCacheElem( elem_name, datafile );
-	if( df_elem.errortext )
-		return df_elem.errortext;
-	endif
+  var df_elem := GFFindCacheElem( elem_name, datafile );
+  if ( df_elem.errortext )
+    return df_elem.errortext;
+  endif
 
-	return df_elem.GetProp( gump_name );
+  return df_elem.GetProp( gump_name );
 endfunction
 
 /*
@@ -182,15 +182,15 @@ endfunction
  * Return Values:
  * 1 or error
  *
- */
+*/
 function GFEraseGump( datafile, byref elem_name, byref gump_name )
 
-	var df_elem := GFFindCacheElem( elem_name, datafile );
-	if( df_elem.errortext )
-		return df_elem.errortext;
-	endif
+  var df_elem := GFFindCacheElem( elem_name, datafile );
+  if ( df_elem.errortext )
+    return df_elem.errortext;
+  endif
 
-	return df_elem.EraseProp( gump_name );
+  return df_elem.EraseProp( gump_name );
 endfunction
 
 /*
@@ -217,14 +217,13 @@ endfunction
  * Return Values:
  * Dictionary
  *
- */
-function GFListCachedGumps( datafile:=":gumps:gumps" )
+*/
+function GFListCachedGumps( datafile := ":gumps:gumps" )
 
-	var datafile := GFOpenCacheDatafile( datafile ),
-		info := Dictionary;
-	foreach key in ( datafile.Keys() )
-		info.Insert( key, datafile.FindElement( key ).PropNames() );
-	endforeach
+  var datafile := GFOpenCacheDatafile( datafile ), info := dictionary;
+  foreach key in ( datafile.Keys() )
+    info.Insert( key, datafile.FindElement( key ).PropNames() );
+  endforeach
 
-	return info;
+  return info;
 endfunction

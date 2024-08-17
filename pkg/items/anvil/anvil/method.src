@@ -7,9 +7,9 @@ use uo;
 
 program Install()
 
-	return 1;
+  return 1;
 endprogram
 
-exported function IsAnvil(unused  item )
-	return 1;
+exported function IsAnvil( unused item )
+  return 1;
 endfunction

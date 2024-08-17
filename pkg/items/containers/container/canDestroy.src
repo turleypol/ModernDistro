@@ -6,5 +6,5 @@
 use uo;
 
 program canDestroy( unused container )
-	return 1;
+  return 1;
 endprogram

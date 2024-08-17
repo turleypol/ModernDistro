@@ -20,12 +20,12 @@ include ":lumberjacking:settings";
  * Return value
  * Returns 1 if the object can be used.
  *
- */
-function LJ_IsTree(graphic)
-	var cfg_elem := LJ_GetSettingsCfgElem("TreeList");
-	graphic := CStr(graphic);
+*/
+function LJ_IsTree( graphic )
+  var cfg_elem := LJ_GetSettingsCfgElem( "TreeList" );
+  graphic := CStr( graphic );
 
-	return ( graphic in GetConfigStringArray(cfg_elem, "Graphic") );
+  return ( graphic in GetConfigStringArray( cfg_elem, "Graphic" ) );
 endfunction
 
 /*
@@ -41,9 +41,9 @@ endfunction
  * Return value
  * Returns 1 if the object can be destroyed.
  *
- */
-function LJ_IsFurniture(object)
-	return ( CInt(GetObjProperty(object, "furniture")) );
+*/
+function LJ_IsFurniture( object )
+  return ( CInt( GetObjProperty( object, "furniture" ) ) );
 endfunction
 
 /*
@@ -60,17 +60,15 @@ endfunction
  * Return value
  * Returns 1 if the coordinates are in the rect.
  *
- */
-function LJ_InRect(x_pos, y_pos, rect)
-	var x1 := CInt(rect[1]);
-	var y1 := CInt(rect[2]);
-	var x2 := CInt(rect[3]);
-	var y2 := CInt(rect[4]);
+*/
+function LJ_InRect( x_pos, y_pos, rect )
+  var x1 := CInt( rect[1] );
+  var y1 := CInt( rect[2] );
+  var x2 := CInt( rect[3] );
+  var y2 := CInt( rect[4] );
 
-	return ( (x_pos >= x1 && x_pos <= x2) && (y_pos >= y1 && y_pos <= y2) );
+  return ( ( x_pos >= x1 && x_pos <= x2 ) && ( y_pos >= y1 && y_pos <= y2 ) );
 endfunction
-
-
 
 /*
  * LJ_GetDataFile()
@@ -83,11 +81,11 @@ endfunction
  * Return value
  * data file
  *
- */
+*/
 function LJ_GetDataFile()
-	var data_file := DFOpenDataFile(":lumberjacking:TreeSettings", DF_CREATE);
+  var data_file := DFOpenDataFile( ":lumberjacking:TreeSettings", DF_CREATE );
 
-	return data_file;
+  return data_file;
 endfunction
 
 /*
@@ -102,12 +100,12 @@ endfunction
  * Return value
  * Data elem
  *
- */
-function LJ_GetDataElem(elem_name)
-	var data_file := LJ_GetDataFile();
-	var data_elem := DFFindElement(data_file, elem_name, DF_CREATE);
+*/
+function LJ_GetDataElem( elem_name )
+  var data_file := LJ_GetDataFile();
+  var data_elem := DFFindElement( data_file, elem_name, DF_CREATE );
 
-	return data_elem;
+  return data_elem;
 endfunction
 
 /*
@@ -124,19 +122,19 @@ endfunction
  * Return value
  * returns an object type number
  *
- */
-function LJ_GetWoodType(realm, x_pos, y_pos)
-	var pos_string := CStr(realm+" "+x_pos+"x"+y_pos);
+*/
+function LJ_GetWoodType( realm, x_pos, y_pos )
+  var pos_string := CStr( realm + " " + x_pos + "x" + y_pos );
 
-	var data_elem := LJ_GetDataElem(pos_string);
+  var data_elem := LJ_GetDataElem( pos_string );
 
-	var type := data_elem.GetProp("Type");
-	if ( !type )
-		type := LJ_PickWoodType(realm, x_pos, y_pos);
-		LJ_SetWoodType(realm, x_pos, y_pos, type);
-	endif
+  var type := data_elem.GetProp( "Type" );
+  if ( !type )
+    type := LJ_PickWoodType( realm, x_pos, y_pos );
+    LJ_SetWoodType( realm, x_pos, y_pos, type );
+  endif
 
-	return type;
+  return type;
 endfunction
 
 /*
@@ -154,13 +152,13 @@ endfunction
  * Return value
  * Returns 1
  *
- */
-function LJ_SetWoodType(realm, x_pos, y_pos, wood_type)
-	var pos_string := CStr(realm+" "+x_pos+"x"+y_pos);
-	
-	var data_elem := LJ_GetDataElem(pos_string);
-	
-	return data_elem.SetProp("Type", wood_type);
+*/
+function LJ_SetWoodType( realm, x_pos, y_pos, wood_type )
+  var pos_string := CStr( realm + " " + x_pos + "x" + y_pos );
+
+  var data_elem := LJ_GetDataElem( pos_string );
+
+  return data_elem.SetProp( "Type", wood_type );
 endfunction
 
 /*
@@ -178,13 +176,13 @@ endfunction
  * Return value
  * Returns 1
  *
- */
-function LJ_SetWoodAmount(realm, x_pos, y_pos, amount)
-	var pos_string := CStr(realm+" "+x_pos+"x"+y_pos);
-	
-	var data_elem := LJ_GetDataElem(pos_string);
-	
-	data_elem.SetProp("Amount", CInt(amount));
+*/
+function LJ_SetWoodAmount( realm, x_pos, y_pos, amount )
+  var pos_string := CStr( realm + " " + x_pos + "x" + y_pos );
+
+  var data_elem := LJ_GetDataElem( pos_string );
+
+  data_elem.SetProp( "Amount", CInt( amount ) );
 endfunction
 
 /*
@@ -201,20 +199,20 @@ endfunction
  * Return value
  * returns a number
  *
- */
-function LJ_GetWoodAmount(realm, x_pos, y_pos)
-	var pos_string := CStr(realm+" "+x_pos+"x"+y_pos);
-	
-	var data_elem := LJ_GetDataElem(pos_string);
-	
-	var amount := data_elem.GetProp("Amount");
-	if ( amount == error )
-		var settings := LJ_GetSettingsCfgElem("Settings");
-		amount := CInt(settings.MaxWood);
-		LJ_SetWoodAmount(realm, x_pos, y_pos, amount);
-	endif
-	
-	return CInt(amount);
+*/
+function LJ_GetWoodAmount( realm, x_pos, y_pos )
+  var pos_string := CStr( realm + " " + x_pos + "x" + y_pos );
+
+  var data_elem := LJ_GetDataElem( pos_string );
+
+  var amount := data_elem.GetProp( "Amount" );
+  if ( amount == error )
+    var settings := LJ_GetSettingsCfgElem( "Settings" );
+    amount := CInt( settings.MaxWood );
+    LJ_SetWoodAmount( realm, x_pos, y_pos, amount );
+  endif
+
+  return CInt( amount );
 endfunction
 
 /*
@@ -232,69 +230,69 @@ endfunction
  * Return value
  * returns an object type number
  *
- */
-function LJ_PickWoodType(realm, x_pos, y_pos)
-	var wood_cfg := ReadConfigFile(":lumberjacking:wood-"+realm);
-	if ( !wood_cfg )
-		return GetObjTypeByName("Log");
-	endif
+*/
+function LJ_PickWoodType( realm, x_pos, y_pos )
+  var wood_cfg := ReadConfigFile( ":lumberjacking:wood-" + realm );
+  if ( !wood_cfg )
+    return GetObjTypeByName( "Log" );
+  endif
 
-	var wood_found := array{"Log"};
-	foreach region_name in ( GetConfigStringKeys(wood_cfg) )
-		var region_elem := wood_cfg[region_name];
-		if ( !LJ_InRect(x_pos, y_pos, region_elem.Rect) )
-			continue;
-		endif
+  var wood_found := array{ "Log" };
+  foreach region_name in ( GetConfigStringKeys( wood_cfg ) )
+    var region_elem := wood_cfg[region_name];
+    if ( !LJ_InRect( x_pos, y_pos, region_elem.Rect ) )
+      continue;
+    endif
 
-		var wood_types := GetConfigStringArray(region_elem, "WoodType");
-		if ( wood_types.Size() >= 1 )
-			wood_found := wood_found+wood_types;
-		endif
-		SleepMS(2);
-	endforeach
+    var wood_types := GetConfigStringArray( region_elem, "WoodType" );
+    if ( wood_types.Size() >= 1 )
+      wood_found := wood_found + wood_types;
+    endif
+    SleepMS( 2 );
+  endforeach
 
-	var selected_wood := wood_found[RandomInt(wood_found.Size())+1];
-	selected_wood := GetObjTypeByName(selected_wood);
-	if ( !selected_wood )
-		return GetObjTypeByName("Log");
-	endif
-	
+  var selected_wood := wood_found[RandomInt( wood_found.Size() ) + 1];
+  selected_wood := GetObjTypeByName( selected_wood );
+  if ( !selected_wood )
+    return GetObjTypeByName( "Log" );
+  endif
+
 endfunction
 
-function ChopFurniture(who, furniture)
-	if ( !ReserveItem(furniture) )
-		SendSysMessage(who, "That is already in use.");
-		return 0;
-	endif
+function ChopFurniture( who, furniture )
+  if ( !ReserveItem( furniture ) )
+    SendSysMessage( who, "That is already in use." );
+    return 0;
+  endif
 
-	var sign;
-	if ( GetObjProperty(furniture, "lockeddown") || GetObjProperty(furniture, "secure") )
-		SendSysMessage(who, "You cannot destroy secure or locked down items.");
-		return 0;
-	endif
-	if ( furniture.objtype == 0x7007 )
-		var houseserial := GetObjProperty(furniture, "houseserial");
-		sign := SystemFindObjectBySerial(houseserial);
-		if ( GetObjProperty(sign, "barrelserial") == furniture.serial )
-			EraseObjProperty(sign, "barrelserial");
-			DestroyItem(furniture);
-			return 1;
-		endif
-	endif
+  var sign;
+  if ( GetObjProperty( furniture, "lockeddown" ) || GetObjProperty( furniture, "secure" ) )
+    SendSysMessage( who, "You cannot destroy secure or locked down items." );
+    return 0;
+  endif
+  if ( furniture.objtype == 0x7007 )
+    var houseserial := GetObjProperty( furniture, "houseserial" );
+    sign := SystemFindObjectBySerial( houseserial );
+    if ( GetObjProperty( sign, "barrelserial" ) == furniture.serial )
+      EraseObjProperty( sign, "barrelserial" );
+      DestroyItem( furniture );
+      return 1;
+    endif
+  endif
 
-	var owner_serial := GetObjProperty(furniture , "DeedOwnerSerial");
-	if( !owner_serial )
-		return 0;
-	endif
-	if ( (who.serial != owner_serial) )
-		if ( !who.multi || (GetObjProperty(who.multi, "ownerserial") != who.serial) )
-			SendSysMessage(who, "You can only re-deed this decoration if you are the house owner or originally placed the decoration.");
-			return 0;
-		endif
-	endif
+  var owner_serial := GetObjProperty( furniture, "DeedOwnerSerial" );
+  if ( !owner_serial )
+    return 0;
+  endif
+  if ( ( who.serial != owner_serial ) )
+    if ( !who.multi || ( GetObjProperty( who.multi, "ownerserial" ) != who.serial ) )
+      SendSysMessage( who, "You can only re-deed this decoration if you are the house owner or originally placed the decoration." );
+      return 0;
+    endif
+  endif
 
-	// FIXME: Need to upgrade this section for 097 Trap system!!!!!!
-/*
+  // FIXME: Need to upgrade this section for 097 Trap system!!!!!!
+  /*
 	if(furniture.usescript == ":tinkering:tinkerTraps")
 		var traptype := GetObjProperty(furniture,"trap_type");
 		var trapstrength := GetObjProperty(furniture,"trap_strength");
@@ -327,55 +325,56 @@ function ChopFurniture(who, furniture)
 	endif
 */
 
-	var the_serials  := GetObjProperty( furniture , "ItemsCreatedSerials" );
-	var deed_objtype := GetObjProperty( furniture , "FromDeed" );
-	if( !the_serials or !deed_objtype )
-		return 0;
-	endif
-	
-	var created := {};
-	foreach serial in the_serials
-		// We search both flags, in case a key exists for the furniture,
-		// and needs to be found and destroyed!
-		var part := SystemFindObjectBySerial( serial, SYSFIND_SEARCH_OFFLINE_MOBILES );
-		if( part )
-			created.append( part );
-		endif
-	endforeach
-	if( !len(created) )
-		return 0;
-	endif
-	
-	var item_name, the_color;
-	foreach item in created
-		if( item.objtype != 0x100E )
-			if( !item_name || item_name.errortext )
-				item_name := GetObjProperty( item , "BaseName" );
-			endif
-			if( !the_color || the_color.errortext )
-				the_color := GetObjProperty( item , "DeedColor" );
-			endif
-		endif
-		if ( item.isa(POLCLASS_CONTAINER) )
-			foreach thing in EnumerateItemsInContainer(item, ENUMERATE_ROOT_ONLY)
-				if ( item.container )
-					MoveItemToContainer(thing, item.container);
-				else
-					MoveObjectToLocation(thing, item.x, item.y, item.z, item.realm, MOVEOBJECT_FORCELOCATION);
-				endif
-			endforeach
-		endif
-		DestroyItem( item );
-	endforeach
+  var the_serials := GetObjProperty( furniture, "ItemsCreatedSerials" );
+  var deed_objtype := GetObjProperty( furniture, "FromDeed" );
+  if ( !the_serials or !deed_objtype )
+    return 0;
+  endif
 
-	var the_deed := CreateItemInBackpack( who , deed_objtype );
-	if( the_color && !the_color.errortext )
-		the_deed.color := the_color;
-	endif
-	if( item_name && !item_name.errortext )
-		SetName( the_deed , item_name );
-	endif
-	
-	PlaySoundEffect(who, 0x13a);
-	return 1;
+  var created := {};
+  foreach serial in the_serials
+    // We search both flags, in case a key exists for the furniture,
+    // and needs to be found and destroyed!
+    var part := SystemFindObjectBySerial( serial, SYSFIND_SEARCH_OFFLINE_MOBILES );
+    if ( part )
+      created.append( part );
+    endif
+  endforeach
+  if ( !len( created ) )
+    return 0;
+  endif
+
+  var item_name, the_color;
+  foreach item in created
+    if ( item.objtype != 0x100E )
+      if ( !item_name || item_name.errortext )
+        item_name := GetObjProperty( item, "BaseName" );
+      endif
+      if ( !the_color || the_color.errortext )
+        the_color := GetObjProperty( item, "DeedColor" );
+      endif
+    endif
+    if ( item.isa( POLCLASS_CONTAINER ) )
+      foreach thing in EnumerateItemsInContainer( item, ENUMERATE_ROOT_ONLY )
+        if ( item.container )
+          MoveItemToContainer( thing, item.container );
+        else
+          MoveObjectToLocation( thing, item.x, item.y, item.z, item.realm,
+                                MOVEOBJECT_FORCELOCATION );
+        endif
+      endforeach
+    endif
+    DestroyItem( item );
+  endforeach
+
+  var the_deed := CreateItemInBackpack( who, deed_objtype );
+  if ( the_color && !the_color.errortext )
+    the_deed.color := the_color;
+  endif
+  if ( item_name && !item_name.errortext )
+    SetName( the_deed, item_name );
+  endif
+
+  PlaySoundEffect( who, 0x13a );
+  return 1;
 endfunction

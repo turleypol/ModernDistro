@@ -1,12 +1,5 @@
 use polsys;
 
-
-
-
-
-
-
-
 //////////////////////////////////////////////////
 //
 // GetFacetNames()
@@ -21,12 +14,12 @@ use polsys;
 /////////////////////////////////////////////////
 function GetFacetNames()
 
-	var AllFacets := Dictionary;
-	var AllFacetsKeys := array;
-	AllFacets := Realms();
-	AllFacetsKeys := AllFacets.keys();
-	return AllFacetsKeys;
-	
+  var AllFacets := dictionary;
+  var AllFacetsKeys := array;
+  AllFacets := Realms();
+  AllFacetsKeys := AllFacets.keys();
+  return AllFacetsKeys;
+
 endfunction
 
 /////////////////////////////////////////////////
@@ -58,26 +51,26 @@ endfunction
 /////////////////////////////////////////////////
 function GetFacetInfo( FacetName := "" )
 
-	var Facets := Dictionary;
-	var EachFacet := Dictionary;
-	var AllFacetsKeys := array;
+  var Facets := dictionary;
+  var EachFacet := dictionary;
+  var AllFacetsKeys := array;
 
-	if(!FacetName)
-		return Realms();
-	else
-		EachFacet := Realms(FacetName);
-		if(!EachFacet)
-			EachFacet.errortext := "Facet does not exist";
-		endif
-		return EachFacet;
-	endif
+  if ( !FacetName )
+    return Realms();
+  else
+    EachFacet := Realms( FacetName );
+    if ( !EachFacet )
+      EachFacet.errortext := "Facet does not exist";
+    endif
+    return EachFacet;
+  endif
 
 endfunction
 
 //////////////////////////////////////////////////
 //
 // GetFacetDiemensions(FacetName)
-// Purpose: Find the dimensions of a facet. 
+// Purpose: Find the dimensions of a facet.
 //
 // Parameters: String containing the name of
 // the facet..
@@ -87,17 +80,16 @@ endfunction
 // the facet.
 //
 /////////////////////////////////////////////////
-function GetFacetDimensions(FacetName)
+function GetFacetDimensions( FacetName )
 
-	var Dimensions := array;
-	var Facet := struct;
-	
-	if(!FacetName)
-		return 0;
-	endif
-	Facet := GetFacetInfo(FacetName);
-	Dimensions := {Facet.width, Facet.height};
-	return Dimensions;
+  var Dimensions := array;
+  var Facet := struct;
+
+  if ( !FacetName )
+    return 0;
+  endif
+  Facet := GetFacetInfo( FacetName );
+  Dimensions := { Facet.width, Facet.height };
+  return Dimensions;
 
 endfunction
-

@@ -33,24 +33,23 @@ include ":gumps:gumps";
 //////////////////////////////////////////////////////////////////////////////////////////
 function SendCmdHelpWindow( byref mobile, byref file_loc )
 
-	var text_lines := ReadFile( file_loc ),
-		text := "";
-	if ( text_lines.errortext )
-		text := "Could not access "+file_loc+"... ERROR -> "+text_lines.errortext;
-		Print(text);
-	endif
+  var text_lines := ReadFile( file_loc ), text := "";
+  if ( text_lines.errortext )
+    text := "Could not access " + file_loc + "... ERROR -> " + text_lines.errortext;
+    Print( text );
+  endif
 
-	text := ImplodeArray("\n", text_lines);
-	if( !text )
-		text := "There is no help info for this command defined.";
-	endif
+  text := ImplodeArray( "\n", text_lines );
+  if ( !text )
+    text := "There is no help info for this command defined.";
+  endif
 
-	var gump := GFCreateGump( 50, 50 );
-	GFPage( gump, 0 );
-	GFResizePic( gump, 0, 0, 9250, 300, 350 );
-	GFPicTiled( gump, 13, 13, 274, 324, 3004 );
-	GFHTMLArea( gump, 18, 18, 264, 287, text, 1, 1 );
-	GFAddButton( gump, 135, 310, 4023, 4025, GF_CLOSE_BTN, 0 );
+  var gump := GFCreateGump( 50, 50 );
+  GFPage( gump, 0 );
+  GFResizePic( gump, 0, 0, 9250, 300, 350 );
+  GFPicTiled( gump, 13, 13, 274, 324, 3004 );
+  GFHTMLArea( gump, 18, 18, 264, 287, text, 1, 1 );
+  GFAddButton( gump, 135, 310, 4023, 4025, GF_CLOSE_BTN, 0 );
 
-	GFSendGump( mobile, gump );
+  GFSendGump( mobile, gump );
 endfunction

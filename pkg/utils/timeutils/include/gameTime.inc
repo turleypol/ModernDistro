@@ -1,7 +1,7 @@
 /* $Id: gameTime.inc 375 2006-06-17 19:26:32Z austinheilman $
  *
  *
- */
+*/
 
 use uo;
 use os;
@@ -18,7 +18,7 @@ use os;
  * Return Value
  * Returns a string
  *
- */
-function TIME_GetGameTime(day_length)
-	var cur_time := ReadGameClock();
+*/
+function TIME_GetGameTime( day_length )
+  var cur_time := ReadGameClock();
 endfunction

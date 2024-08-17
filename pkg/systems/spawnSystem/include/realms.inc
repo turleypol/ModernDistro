@@ -25,11 +25,11 @@ include ":datafile:datafile";
  * Return Value
  * Data file reference
  *
- */
+*/
 function SS_GetRealmDataFile()
 
-	var data_file := DFOpenDataFile( ":spawnsystem:Realms", DF_CREATE );
-	return data_file;
+  var data_file := DFOpenDataFile( ":spawnsystem:Realms", DF_CREATE );
+  return data_file;
 endfunction
 
 /*
@@ -44,13 +44,13 @@ endfunction
  * Return Value
  * A datafile elem reference.
  *
- */
+*/
 function SS_GetRealmDataElem( elem_name )
 
-	var data_file := SS_GetRealmDataFile();
-	var realm_elem := DFFindElement( data_file, elem_name, DF_NO_CREATE );
+  var data_file := SS_GetRealmDataFile();
+  var realm_elem := DFFindElement( data_file, elem_name, DF_NO_CREATE );
 
-	return realm_elem;
+  return realm_elem;
 endfunction
 
 /*
@@ -65,22 +65,22 @@ endfunction
  * Return Value
  * Returns 1 on success.
  *
- */
+*/
 function SS_AddRealm( realm_name )
 
-	var core_realms := Realms();
-	realm_name := Lower( realm_name );
+  var core_realms := Realms();
+  realm_name := Lower( realm_name );
 
-	if( !core_realms.Exists( Lower( realm_name )))
-		return error{"errortext":="'"+realm_name+"' is not a valid realm name."};
-	endif
+  if ( !core_realms.Exists( Lower( realm_name ) ) )
+    return error{ "errortext" := "'" + realm_name + "' is not a valid realm name." };
+  endif
 
-	var data_file := SS_GetRealmDataFile();
-	if( data_file.FindElement( realm_name ) != error )
-		return error{"errortext":="Realm already exists."};
-	endif
+  var data_file := SS_GetRealmDataFile();
+  if ( data_file.FindElement( realm_name ) != error )
+    return error{ "errortext" := "Realm already exists." };
+  endif
 
-	return data_file.CreateElement( realm_name );
+  return data_file.CreateElement( realm_name );
 endfunction
 
 /*
@@ -95,11 +95,11 @@ endfunction
  * Return Value
  * Result of the elem deletion.
  *
- */
+*/
 function SS_RemoveRealm( realm_name )
 
-	var data_file := SS_GetRealmDataFile();
-	return data_file.DeleteElement( Lower( realm_name ));
+  var data_file := SS_GetRealmDataFile();
+  return data_file.DeleteElement( Lower( realm_name ) );
 endfunction
 
 /*
@@ -116,17 +116,17 @@ endfunction
  * Return Value
  * An array of strings
  *
- */
-function SS_GetRealmNames( index:=0 )
+*/
+function SS_GetRealmNames( index := 0 )
 
-	var data_file := SS_GetRealmDataFile();
-	var realm_names := DFGetElemNames( data_file );
+  var data_file := SS_GetRealmDataFile();
+  var realm_names := DFGetElemNames( data_file );
 
-	if( index )
-		return realm_names[index];
-	else
-		return realm_names;
-	endif
+  if ( index )
+    return realm_names[index];
+  else
+    return realm_names;
+  endif
 endfunction
 
 /*
@@ -142,19 +142,19 @@ endfunction
  * Return Value
  * 1 on success
  *
- */
+*/
 function SS_AddRegionToRealm( realm_name, region_name )
 
-	var realm_elem := SS_GetRealmDataElem( realm_name );
-	var region_list := SS_GetRegionsInRealm( realm_name );
-	region_name := Lower( region_name );
+  var realm_elem := SS_GetRealmDataElem( realm_name );
+  var region_list := SS_GetRegionsInRealm( realm_name );
+  region_name := Lower( region_name );
 
-	if( region_list.Exists( region_name ))
-		return error{"errortext":="Region already exists in that realm."};
-	else
-		region_list.Insert( region_name, 1 );
-		return realm_elem.SetProp( "Regions", region_list );
-	endif
+  if ( region_list.Exists( region_name ) )
+    return error{ "errortext" := "Region already exists in that realm." };
+  else
+    region_list.Insert( region_name, 1 );
+    return realm_elem.SetProp( "Regions", region_list );
+  endif
 endfunction
 
 /*
@@ -173,19 +173,19 @@ endfunction
  * Notes:
  *    See SS_FullRemoveRegion() in commontasks.inc
  *
- */
+*/
 function SS_RemoveRegionFromRealm( realm_name, region_name )
 
-	var realm_elem := SS_GetRealmDataElem( realm_name );
-	var region_list := SS_GetRegionsInRealm( realm_name );
-	region_name := Lower( region_name );
+  var realm_elem := SS_GetRealmDataElem( realm_name );
+  var region_list := SS_GetRegionsInRealm( realm_name );
+  region_name := Lower( region_name );
 
-	if( !region_list.Exists( region_name ))
-		return error{"errortext":="No region exists by that name."};
-	else
-		region_list.Erase( region_name );
-		return realm_elem.SetProp( "Regions", region_list );
-	endif
+  if ( !region_list.Exists( region_name ) )
+    return error{ "errortext" := "No region exists by that name." };
+  else
+    region_list.Erase( region_name );
+    return realm_elem.SetProp( "Regions", region_list );
+  endif
 endfunction
 
 /*
@@ -200,14 +200,14 @@ endfunction
  * Return Value
  * Returns an array of spawn region names in the realm.
  *
- */
+*/
 function SS_GetRegionsInRealm( realm_name )
 
-	var realm_elem := SS_GetRealmDataElem( realm_name );
-	var region_list := realm_elem.GetProp( "Regions" );
-	if( !region_list )
-		region_list := dictionary;
-	endif
+  var realm_elem := SS_GetRealmDataElem( realm_name );
+  var region_list := realm_elem.GetProp( "Regions" );
+  if ( !region_list )
+    region_list := dictionary;
+  endif
 
-	return region_list;
+  return region_list;
 endfunction

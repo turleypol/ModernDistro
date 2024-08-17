@@ -39,24 +39,24 @@ use uo;
 //SetQuestArrow( who, active, xLoc, yLoc )         Sets if the player has a 'quest arrow', and where its pointing to.
 ////////////////////////////////////////////////
 
-Const CURSOR_NORM := 0; //Felucca / Old UO
-Const CURSOR_GOLD := 1; //Trammel i think...
+const CURSOR_NORM := 0; // Felucca / Old UO
+const CURSOR_GOLD := 1; // Trammel i think...
 
-Const SEASON_SPRING := 0;     //Trammel.
-Const SEASON_SUMMER := 1;     //Old Britannia
-Const SEASON_FALL := 2;       //Fall
-Const SEASON_WINTER := 3;     //Screwed attempt by OSI for snow. Snow has no edges and looks fucked.
-Const SEASON_DESOLATION := 4; //Felucca - no leaves on trees, gravestones everywhere...
+const SEASON_SPRING := 0; // Trammel.
+const SEASON_SUMMER := 1; // Old Britannia
+const SEASON_FALL := 2; // Fall
+const SEASON_WINTER := 3; // Screwed attempt by OSI for snow. Snow has no edges and looks fucked.
+const SEASON_DESOLATION := 4; // Felucca - no leaves on trees, gravestones everywhere...
 
-Const WEATHER_STARTS_TO_RAIN := 0;
-Const WEATHER_FIERCE_STORM   := 1;
-Const WEATHER_BEGINS_SNOW    := 2;
-Const WEATHER_STORM_BREWING  := 3;
-Const WEATHER_DISABLE        := 0xFF;
+const WEATHER_STARTS_TO_RAIN := 0;
+const WEATHER_FIERCE_STORM := 1;
+const WEATHER_BEGINS_SNOW := 2;
+const WEATHER_STORM_BREWING := 3;
+const WEATHER_DISABLE := 0xFF;
 
-Const ANIM_DIR_FORWARDS  := 0; //The animation will run the frames in normal order.
-Const ANIM_DIR_BACKWARDS := 1; //The animation will run the frames in reverse.
-Const ANIM_DEF_SPEED     := 0; //0 = fastest, 30 = way too fucken slow, 70 = wtf are you doing?
+const ANIM_DIR_FORWARDS := 0; // The animation will run the frames in normal order.
+const ANIM_DIR_BACKWARDS := 1; // The animation will run the frames in reverse.
+const ANIM_DEF_SPEED := 0; // 0 = fastest, 30 = way too fucken slow, 70 = wtf are you doing?
 
 //////////////////////////////////////////////////////////////////////////////
 //Sets a characters war mode. Value:
@@ -64,14 +64,14 @@ Const ANIM_DEF_SPEED     := 0; //0 = fastest, 30 = way too fucken slow, 70 = wtf
 //  0     Peace
 //////////////////////////////////////////////////////////////////////////////
 function SetPlayerWarMode( who, value )
-  if( !who.acctname )
-    if( who.IsA(POLCLASS_NPC) )
-      return who.SetWarMode(value);
+  if ( !who.acctname )
+    if ( who.IsA( POLCLASS_NPC ) )
+      return who.SetWarMode( value );
     endif
   else
-    var packetString := "72" + fixPacketLength(value, 1);
+    var packetString := "72" + fixPacketLength( value, 1 );
     packetString := packetString + "003200";
-    return SendPacket(who, packetString);
+    return SendPacket( who, packetString );
   endif
 endfunction
 
@@ -82,7 +82,7 @@ endfunction
 //have an aux package listening in to enable chat though.
 //////////////////////////////////////////////////////////////////////////////
 function EnableChatButton( who )
-  return SendPacket(who, "B90001");
+  return SendPacket( who, "B90001" );
 endfunction
 
 //////////////////////////////////////////////////////////////////////////////
@@ -91,7 +91,7 @@ endfunction
 // within the next minute, you will be logged out."
 //////////////////////////////////////////////////////////////////////////////
 function SendIdleWarning( who )
-  return SendPacket(who, "5307");
+  return SendPacket( who, "5307" );
 endfunction
 
 //////////////////////////////////////////////////////////////////////////////
@@ -101,21 +101,21 @@ endfunction
 //  graphic    New graphic to show
 //////////////////////////////////////////////////////////////////////////////
 function UpdatePlayer( who, forwho, graphic )
-    if( !graphic )
-        graphic := who.graphic;
-    endif
-    
-    var packetString := "77";
-    packetString := packetString + fixPacketLength(hex(who.serial),4);
-    packetString := packetString + fixPacketLength(hex(graphic),2);
-    packetString := packetString + fixPacketLength(hex(who.x),2);
-    packetString := packetString + fixPacketLength(hex(who.y),2);
-    packetString := packetString + fixPacketLength(hex(who.z),1);
-    packetString := packetString + fixPacketLength(hex(who.facing),1);
-    packetString := packetString + fixPacketLength(hex(0),2); //Colour (doesnt work)
-    packetString := packetString + fixPacketLength(hex(0),1); //Flag... dunno?
-    packetString := packetString + fixPacketLength(hex(0),1); //Highlight colour (doesnt work)
-    return SendPacket( forwho, packetString );
+  if ( !graphic )
+    graphic := who.graphic;
+  endif
+
+  var packetString := "77";
+  packetString := packetString + fixPacketLength( hex( who.serial ), 4 );
+  packetString := packetString + fixPacketLength( hex( graphic ), 2 );
+  packetString := packetString + fixPacketLength( hex( who.x ), 2 );
+  packetString := packetString + fixPacketLength( hex( who.y ), 2 );
+  packetString := packetString + fixPacketLength( hex( who.z ), 1 );
+  packetString := packetString + fixPacketLength( hex( who.facing ), 1 );
+  packetString := packetString + fixPacketLength( hex( 0 ), 2 ); // Colour (doesnt work)
+  packetString := packetString + fixPacketLength( hex( 0 ), 1 ); // Flag... dunno?
+  packetString := packetString + fixPacketLength( hex( 0 ), 1 ); // Highlight colour (doesnt work)
+  return SendPacket( forwho, packetString );
 endfunction
 
 //////////////////////////////////////////////////////////////////////////////
@@ -126,18 +126,18 @@ endfunction
 //  dir    Play frames backwards or forwards? (use constants at header!!!)
 //////////////////////////////////////////////////////////////////////////////
 function PlayCharAnim( who, anim, speed := ANIM_DEF_SPEED, dir := ANIM_DIR_FORWARDS )
-    var packetString := "6E";
-    packetString := packetString + fixPacketLength(hex(who.serial),4);
-    packetString := packetString + fixPacketLength(hex(anim),2);
-    packetString := packetString + "00";
-    packetString := packetString + fixPacketLength(hex(who.facing),1);
-    packetString := packetString + "0001"; //Repitition
-    packetString := packetString + fixPacketLength(hex(dir),1);
-    packetString := packetString + "00"; //Does this animation repeat?
-    packetString := packetString + fixPacketLength(hex(speed),1);
-    foreach chr in ListMobilesNearLocation( who.x, who.y, who.z, 16 );
-        SendPacket( chr, packetString );
-    endforeach
+  var packetString := "6E";
+  packetString := packetString + fixPacketLength( hex( who.serial ), 4 );
+  packetString := packetString + fixPacketLength( hex( anim ), 2 );
+  packetString := packetString + "00";
+  packetString := packetString + fixPacketLength( hex( who.facing ), 1 );
+  packetString := packetString + "0001"; // Repitition
+  packetString := packetString + fixPacketLength( hex( dir ), 1 );
+  packetString := packetString + "00"; // Does this animation repeat?
+  packetString := packetString + fixPacketLength( hex( speed ), 1 );
+  foreach chr in ListMobilesNearLocation( who.x, who.y, who.z, 16 )
+    SendPacket( chr, packetString );
+  endforeach
 endfunction
 
 //////////////////////////////////////////////////////////////////////////////
@@ -148,17 +148,18 @@ endfunction
 //  speed  Frame delay (lesser = faster)
 //  dir    Play frames backwards or forwards? (use constants at header!!!)
 //////////////////////////////////////////////////////////////////////////////
-function PlayCharAnimPrivate( who, anim, forwho, speed := ANIM_DEF_SPEED, dir := ANIM_DIR_FORWARDS )
-    var packetString := "6E";
-    packetString := packetString + fixPacketLength(hex(who.serial),4);
-    packetString := packetString + fixPacketLength(hex(anim),2);
-    packetString := packetString + "00";
-    packetString := packetString + fixPacketLength(hex(who.facing),1);
-    packetString := packetString + "0001"; //Repitition
-    packetString := packetString + fixPacketLength(hex(dir),1);
-    packetString := packetString + "00"; //Does this animation repeat?
-    packetString := packetString + fixPacketLength(hex(speed),1);
-    SendPacket( forwho, packetString );
+function PlayCharAnimPrivate( who, anim, forwho, speed := ANIM_DEF_SPEED,
+                              dir := ANIM_DIR_FORWARDS )
+  var packetString := "6E";
+  packetString := packetString + fixPacketLength( hex( who.serial ), 4 );
+  packetString := packetString + fixPacketLength( hex( anim ), 2 );
+  packetString := packetString + "00";
+  packetString := packetString + fixPacketLength( hex( who.facing ), 1 );
+  packetString := packetString + "0001"; // Repitition
+  packetString := packetString + fixPacketLength( hex( dir ), 1 );
+  packetString := packetString + "00"; // Does this animation repeat?
+  packetString := packetString + fixPacketLength( hex( speed ), 1 );
+  SendPacket( forwho, packetString );
 endfunction
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -168,35 +169,38 @@ endfunction
 //Anyway its handy if you pass "reptimes" as "1", because it will play an animation, then the same in reverse.
 // eg. A person falling over, then flying back up again :D
 /////////////////////////////////////////////////////////////////////////////////////////
-function PlayCharAnimWithRepitition( who, anim, reptimes, speed := ANIM_DEF_SPEED, dir := ANIM_DIR_FORWARDS )
-    var packetString := "6E";
-    packetString := packetString + fixPacketLength(hex(who.serial),4);
-    packetString := packetString + fixPacketLength(hex(anim),2);
-    packetString := packetString + "00";
-    packetString := packetString + fixPacketLength(hex(who.facing),1);
-    packetString := packetString + fixPacketLength(hex(reptimes),2);
-    packetString := packetString + fixPacketLength(hex(dir),1);
-    packetString := packetString + "01"; //Does this animation repeat?
-    packetString := packetString + fixPacketLength(hex(speed),1);
-    foreach chr in ListMobilesNearLocation( who.x, who.y, who.z, 16 );
-        SendPacket( chr, packetString );
-    endforeach
+function PlayCharAnimWithRepitition( who, anim, reptimes, speed := ANIM_DEF_SPEED,
+                                     dir := ANIM_DIR_FORWARDS )
+  var packetString := "6E";
+  packetString := packetString + fixPacketLength( hex( who.serial ), 4 );
+  packetString := packetString + fixPacketLength( hex( anim ), 2 );
+  packetString := packetString + "00";
+  packetString := packetString + fixPacketLength( hex( who.facing ), 1 );
+  packetString := packetString + fixPacketLength( hex( reptimes ), 2 );
+  packetString := packetString + fixPacketLength( hex( dir ), 1 );
+  packetString := packetString + "01"; // Does this animation repeat?
+  packetString := packetString + fixPacketLength( hex( speed ), 1 );
+  foreach chr in ListMobilesNearLocation( who.x, who.y, who.z, 16 )
+    SendPacket( chr, packetString );
+  endforeach
 endfunction
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //Above, but only seen by 'forwho'
 /////////////////////////////////////////////////////////////////////////////////////////
-function PlayCharAnimWithRepititionPrivate( who, anim, reptimes, forwho, speed := ANIM_DEF_SPEED, dir := ANIM_DIR_FORWARDS )
-    var packetString := "6E";
-    packetString := packetString + fixPacketLength(hex(who.serial),4);
-    packetString := packetString + fixPacketLength(hex(anim),2);
-    packetString := packetString + "00";
-    packetString := packetString + fixPacketLength(hex(who.facing),1);
-    packetString := packetString + fixPacketLength(hex(reptimes),2);
-    packetString := packetString + fixPacketLength(hex(dir),1);
-    packetString := packetString + "01"; //Does this animation repeat?
-    packetString := packetString + fixPacketLength(hex(speed),1);
-    SendPacket( forwho, packetString );
+function PlayCharAnimWithRepititionPrivate( who, anim, reptimes, forwho,
+                                            speed := ANIM_DEF_SPEED,
+                                            dir := ANIM_DIR_FORWARDS )
+  var packetString := "6E";
+  packetString := packetString + fixPacketLength( hex( who.serial ), 4 );
+  packetString := packetString + fixPacketLength( hex( anim ), 2 );
+  packetString := packetString + "00";
+  packetString := packetString + fixPacketLength( hex( who.facing ), 1 );
+  packetString := packetString + fixPacketLength( hex( reptimes ), 2 );
+  packetString := packetString + fixPacketLength( hex( dir ), 1 );
+  packetString := packetString + "01"; // Does this animation repeat?
+  packetString := packetString + fixPacketLength( hex( speed ), 1 );
+  SendPacket( forwho, packetString );
 endfunction
 
 //////////////////////////////////////////////////
@@ -205,8 +209,8 @@ endfunction
 //  musicID  MIDI to play, same as "playmusic.inc"
 //////////////////////////////////////////////////
 function PlayMidiMusic( who, musicID )
-    var packetString := "6D" + fixPacketLength(hex(musicID),2);
-    return SendPacket(who,packetString);
+  var packetString := "6D" + fixPacketLength( hex( musicID ), 2 );
+  return SendPacket( who, packetString );
 endfunction
 
 ///////////////////////////////////////////////////////
@@ -216,18 +220,18 @@ endfunction
 //  temp   Temperature. Currently has no effect...
 ///////////////////////////////////////////////////////
 function SetWeatherForAll( type, num, temp := 0 )
-    if( num > 70 )
-        num := 70;
-    endif
-    
-    var packetString := "65";
-    packetString := packetString + fixPacketLength(hex(type),1);
-    packetString := packetString + fixPacketLength(hex(num),1);
-    packetString := packetString + fixPacketLength(hex(temp),1);
-    
-    foreach chr in EnumerateOnlineCharacters()
-        SendPacket( chr, packetString );
-    endforeach
+  if ( num > 70 )
+    num := 70;
+  endif
+
+  var packetString := "65";
+  packetString := packetString + fixPacketLength( hex( type ), 1 );
+  packetString := packetString + fixPacketLength( hex( num ), 1 );
+  packetString := packetString + fixPacketLength( hex( temp ), 1 );
+
+  foreach chr in EnumerateOnlineCharacters()
+    SendPacket( chr, packetString );
+  endforeach
 endfunction
 
 ///////////////////////////////////////////////////////
@@ -237,15 +241,15 @@ endfunction
 //  temp   Temperature. Currently has no effect...
 ///////////////////////////////////////////////////////
 function SetWeatherForPlayer( who, type, num, temp := 0 )
-    if( num > 70 )
-        num := 70;
-    endif
-    
-    var packetString := "65";
-    packetString := packetString + fixPacketLength(hex(type),1);
-    packetString := packetString + fixPacketLength(hex(num),1);
-    packetString := packetString + fixPacketLength(hex(temp),1);
-    return SendPacket(who,packetString);
+  if ( num > 70 )
+    num := 70;
+  endif
+
+  var packetString := "65";
+  packetString := packetString + fixPacketLength( hex( type ), 1 );
+  packetString := packetString + fixPacketLength( hex( num ), 1 );
+  packetString := packetString + fixPacketLength( hex( temp ), 1 );
+  return SendPacket( who, packetString );
 endfunction
 
 ////////////////////////////////////////////////////
@@ -256,18 +260,18 @@ endfunction
 //  colour  Colour for the clients body
 ////////////////////////////////////////////////////
 function DrawGamePlayer( who, body, colour )
-    var packetString := "20";
-    packetString := packetString + fixPacketLength(hex(who.serial),4);
-    packetString := packetString + fixPacketLength(hex(body),2);
-    packetString := packetString + "00";
-    packetString := packetString + fixPacketLength(hex(colour),2);
-    packetString := packetString + "00";
-    packetString := packetString + fixPacketLength(hex(who.x),2);
-    packetString := packetString + fixPacketLength(hex(who.y),2);
-    packetString := packetString + "0000";
-    packetString := packetString + fixPacketLength(hex(who.facing),1);
-    packetString := packetString + fixPacketLength(hex(who.z),1);
-    return SendPacket( who, packetString );
+  var packetString := "20";
+  packetString := packetString + fixPacketLength( hex( who.serial ), 4 );
+  packetString := packetString + fixPacketLength( hex( body ), 2 );
+  packetString := packetString + "00";
+  packetString := packetString + fixPacketLength( hex( colour ), 2 );
+  packetString := packetString + "00";
+  packetString := packetString + fixPacketLength( hex( who.x ), 2 );
+  packetString := packetString + fixPacketLength( hex( who.y ), 2 );
+  packetString := packetString + "0000";
+  packetString := packetString + fixPacketLength( hex( who.facing ), 1 );
+  packetString := packetString + fixPacketLength( hex( who.z ), 1 );
+  return SendPacket( who, packetString );
 endfunction
 
 ///////////////////////////////////////////////////////
@@ -275,7 +279,7 @@ endfunction
 //  who    Person to send to
 ///////////////////////////////////////////////////////
 function NormaliseGamePlayer( who )
-    return DrawGamePlayer( who, who.graphic, who.color );
+  return DrawGamePlayer( who, who.graphic, who.color );
 endfunction
 
 ///////////////////////////////////////////////////////
@@ -283,10 +287,10 @@ endfunction
 //  light    Light level. 0 = daylight, 30 = black.
 ///////////////////////////////////////////////////////
 function SetOverallLightForAll( light )
-    var packetString := "4F" + fixPacketLength(hex(light),1);
-    foreach chr in EnumerateOnlineCharacters()
-        SendPacket(chr,packetString);
-    endforeach
+  var packetString := "4F" + fixPacketLength( hex( light ), 1 );
+  foreach chr in EnumerateOnlineCharacters()
+    SendPacket( chr, packetString );
+  endforeach
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -295,8 +299,8 @@ endfunction
 //  light   Light level. 0 = daylight, 30 = black.
 ///////////////////////////////////////////////////////////
 function SetOverallLightForPlayer( who, light )
-    var packetString := "4F" + fixPacketLength(hex(light),1);
-    return SendPacket(who,packetString);
+  var packetString := "4F" + fixPacketLength( hex( light ), 1 );
+  return SendPacket( who, packetString );
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -305,11 +309,11 @@ endfunction
 //  hue      Hue type, see constants at header.
 ///////////////////////////////////////////////////////////
 function SetCursorHue( who, hue )
-    var packetString := "BF";
-    packetString := packetString + fixPacketLength(6,2);
-    packetString := packetString + fixPacketLength("8",2);
-    packetString := packetString + fixPacketLength(hue,1);
-    return SendPacket(who,packetString);
+  var packetString := "BF";
+  packetString := packetString + fixPacketLength( 6, 2 );
+  packetString := packetString + fixPacketLength( "8", 2 );
+  packetString := packetString + fixPacketLength( hue, 1 );
+  return SendPacket( who, packetString );
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -317,10 +321,10 @@ endfunction
 //  season    Season type. Constants at header.
 ///////////////////////////////////////////////////////////
 function SetSeasonForAll( season )
-    var packetString := "BC" + fixPacketLength(season,1) + "01";
-    foreach chr in EnumerateOnlineCharacters()
-        SendPacket(chr,packetString);
-    endforeach
+  var packetString := "BC" + fixPacketLength( season, 1 ) + "01";
+  foreach chr in EnumerateOnlineCharacters()
+    SendPacket( chr, packetString );
+  endforeach
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -329,9 +333,9 @@ endfunction
 //  season   Season type. Constants at header.
 ///////////////////////////////////////////////////////////
 function SetSeasonForPlayer( who, season )
-    var packetString := "BC" + fixPacketLength(season,1) + "01";
-    SendPacket(who,packetString);
-    return;
+  var packetString := "BC" + fixPacketLength( season, 1 ) + "01";
+  SendPacket( who, packetString );
+  return;
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -342,11 +346,11 @@ endfunction
 //  yLoc      Y Location to point to.
 ///////////////////////////////////////////////////////////
 function SetQuestArrow( who, active, xLoc, yLoc )
-    var packetString := "BA" + fixPacketLength(active,1);
-    packetString := packetString + fixPacketLength(hex(xLoc),2);
-    packetString := packetString + fixPacketLength(hex(yLoc),2);
-    print( packetString );
-    return SendPacket(who,packetString);
+  var packetString := "BA" + fixPacketLength( active, 1 );
+  packetString := packetString + fixPacketLength( hex( xLoc ), 2 );
+  packetString := packetString + fixPacketLength( hex( yLoc ), 2 );
+  print( packetString );
+  return SendPacket( who, packetString );
 endfunction
 
 ///////////////////////////////////////////////////////////////
@@ -355,139 +359,113 @@ endfunction
 //  byteLength     number of bytes. Byte counted as two chars.
 ///////////////////////////////////////////////////////////////
 function fixPacketLength( packetString, byteLength )
-    if( !packetString || packetString == error )
-        packetString := 0;
-    endif
-    packetString := cStr(packetString);
-    
-    if( packetString[1,2] == "0x" )
-        packetString := cStr(packetString[3,len(packetString)]);
-    endif
-    
-    if( len(packetString) > byteLength * 2 )
-//		var extraBytes := (byteLength*2) - len(packetString);
-		var extraBytes := len(packetString) - (byteLength*2) + 1;
-		return cStr(packetString[extraBytes,len(packetString)]);
-    endif
-    
-    while( len(packetString) < byteLength * 2 )
-        packetString := "0" + packetString;
-    endwhile
-    
-    return packetString;
+  if ( !packetString || packetString == error )
+    packetString := 0;
+  endif
+  packetString := cStr( packetString );
+
+  if ( packetString[1, 2] == "0x" )
+    packetString := cStr( packetString[3, len( packetString )] );
+  endif
+
+  if ( len( packetString ) > byteLength * 2 )
+    // var extraBytes := (byteLength*2) - len(packetString);
+    var extraBytes := len( packetString ) - ( byteLength * 2 ) + 1;
+    return cStr( packetString[extraBytes, len( packetString )] );
+  endif
+
+  while ( len( packetString ) < byteLength * 2 )
+    packetString := "0" + packetString;
+  endwhile
+
+  return packetString;
 endfunction
 
-
-function PlayObjectCenteredEffectHuefx( center, effect, speed, 
-loop := 0, color := 0, translucent := 0 )
-var packetString := "C0";
-packetString := packetString + "03"; 
-packetString := packetString + fixPacketLength(hex
-(center.serial),4);
-packetString := packetString + fixPacketLength(hex(0),4);
-packetString := packetString + fixPacketLength(hex(effect),2);
-packetString := packetString + fixPacketLength(hex(0),10);
-packetString := packetString + fixPacketLength(hex
-(speed),1); //speed
-packetString := packetString + fixPacketLength(hex
-(loop),1); //loop
-packetString := packetString + "000000000000" ;
-packetString := packetString + fixPacketLength(hex
-(color),2); //color
-packetString := packetString + "000000";
-packetString := packetString + fixPacketLength(hex
-(translucent),1); //tran
-foreach chr in ListMobilesNearLocation( center.x, center.y, 
-center.z, 16 );
-SendPacket( chr, packetString );
-endforeach
+function PlayObjectCenteredEffectHuefx( center, effect, speed, loop := 0, color := 0,
+                                        translucent := 0 )
+  var packetString := "C0";
+  packetString := packetString + "03";
+  packetString := packetString + fixPacketLength( hex( center.serial ), 4 );
+  packetString := packetString + fixPacketLength( hex( 0 ), 4 );
+  packetString := packetString + fixPacketLength( hex( effect ), 2 );
+  packetString := packetString + fixPacketLength( hex( 0 ), 10 );
+  packetString := packetString + fixPacketLength( hex( speed ), 1 ); // speed
+  packetString := packetString + fixPacketLength( hex( loop ), 1 ); // loop
+  packetString := packetString + "000000000000";
+  packetString := packetString + fixPacketLength( hex( color ), 2 ); // color
+  packetString := packetString + "000000";
+  packetString := packetString + fixPacketLength( hex( translucent ), 1 ); // tran
+  foreach chr in ListMobilesNearLocation( center.x, center.y, center.z, 16 )
+    SendPacket( chr, packetString );
+  endforeach
 endfunction
 
-function PlayMovingEffectHuefx( source, dest, effect, speed, loop := 
-0, explode := 0, color := 0, translucent := 0)
-var packetString := "C0";
-packetString := packetString + "00"; 
-packetString := packetString + fixPacketLength(hex
-(source.serial),4);
-packetString := packetString + fixPacketLength(hex
-(dest.serial),4);
-packetString := packetString + fixPacketLength(hex(effect),2);
-packetString := packetString + fixPacketLength(hex(0),10);
-packetString := packetString + fixPacketLength(hex
-(speed),1); //speed
-packetString := packetString + fixPacketLength(hex
-(loop),1); //loop
-packetString := packetString + "000000" ;
-packetString := packetString + fixPacketLength(hex
-(explode),1); //explode
-packetString := packetString + "0000";
-packetString := packetString + fixPacketLength(hex
-(color),2); //color
-packetString := packetString + "000000";
-packetString := packetString + fixPacketLength(hex
-(translucent),1); //tran
-foreach chr in ListMobilesNearLocation( source.x, source.y, 
-source.z, 16 );
-SendPacket( chr, packetString );
-endforeach
+function PlayMovingEffectHuefx( source, dest, effect, speed, loop := 0, explode := 0,
+                                color := 0, translucent := 0 )
+  var packetString := "C0";
+  packetString := packetString + "00";
+  packetString := packetString + fixPacketLength( hex( source.serial ), 4 );
+  packetString := packetString + fixPacketLength( hex( dest.serial ), 4 );
+  packetString := packetString + fixPacketLength( hex( effect ), 2 );
+  packetString := packetString + fixPacketLength( hex( 0 ), 10 );
+  packetString := packetString + fixPacketLength( hex( speed ), 1 ); // speed
+  packetString := packetString + fixPacketLength( hex( loop ), 1 ); // loop
+  packetString := packetString + "000000";
+  packetString := packetString + fixPacketLength( hex( explode ), 1 ); // explode
+  packetString := packetString + "0000";
+  packetString := packetString + fixPacketLength( hex( color ), 2 ); // color
+  packetString := packetString + "000000";
+  packetString := packetString + fixPacketLength( hex( translucent ), 1 ); // tran
+  foreach chr in ListMobilesNearLocation( source.x, source.y, source.z, 16 )
+    SendPacket( chr, packetString );
+  endforeach
 endfunction
 
-function PlayMovingEffectXYZHuefx(source, sourcex, sourcey, sourcez, 
-destx, desty, destz, effect, speed, loop := 0, explode := 0, color := 
-0, translucent := 0)
-var packetString := "C0";
-packetString := packetString + "00"; 
-packetString := packetString + fixPacketLength(hex(0),8);
-packetString := packetString + fixPacketLength(hex(effect),2);
-packetString := packetString + fixPacketLength(hex(sourcex),2);
-packetString := packetString + fixPacketLength(hex(sourcey),2);
-packetString := packetString + fixPacketLength(hex(sourcez),1);
-packetString := packetString + fixPacketLength(hex(destx),2);
-packetString := packetString + fixPacketLength(hex(desty),2);
-packetString := packetString + fixPacketLength(hex(destz),1);
-packetString := packetString + fixPacketLength(hex
-(speed),1); //speed
-packetString := packetString + fixPacketLength(hex
-(loop),1); //loop
-packetString := packetString + "000000";
-packetString := packetString + fixPacketLength(hex
-(explode),1); //explode
-packetString := packetString + "0000";
-packetString := packetString + fixPacketLength(hex
-(color),2); //color
-packetString := packetString + "000000";
-packetString := packetString + fixPacketLength(hex
-(translucent),1); //tran
-foreach chr in ListMobilesNearLocation( source.x, source.y, 
-source.z, 16 );
-SendPacket( chr, packetString );
-endforeach
+function PlayMovingEffectXYZHuefx( source, sourcex, sourcey, sourcez, destx, desty,
+                                   destz, effect, speed, loop := 0, explode := 0,
+                                   color := 0, translucent := 0 )
+  var packetString := "C0";
+  packetString := packetString + "00";
+  packetString := packetString + fixPacketLength( hex( 0 ), 8 );
+  packetString := packetString + fixPacketLength( hex( effect ), 2 );
+  packetString := packetString + fixPacketLength( hex( sourcex ), 2 );
+  packetString := packetString + fixPacketLength( hex( sourcey ), 2 );
+  packetString := packetString + fixPacketLength( hex( sourcez ), 1 );
+  packetString := packetString + fixPacketLength( hex( destx ), 2 );
+  packetString := packetString + fixPacketLength( hex( desty ), 2 );
+  packetString := packetString + fixPacketLength( hex( destz ), 1 );
+  packetString := packetString + fixPacketLength( hex( speed ), 1 ); // speed
+  packetString := packetString + fixPacketLength( hex( loop ), 1 ); // loop
+  packetString := packetString + "000000";
+  packetString := packetString + fixPacketLength( hex( explode ), 1 ); // explode
+  packetString := packetString + "0000";
+  packetString := packetString + fixPacketLength( hex( color ), 2 ); // color
+  packetString := packetString + "000000";
+  packetString := packetString + fixPacketLength( hex( translucent ), 1 ); // tran
+  foreach chr in ListMobilesNearLocation( source.x, source.y, source.z, 16 )
+    SendPacket( chr, packetString );
+  endforeach
 endfunction
 
-function PlayStationaryEffectHuefx( x, y, z, effect, speed, loop := 
-0, explode := 0, color := 0,translucent := 0)
-var packetString := "C0";
-packetString := packetString + "02"; 
-packetString := packetString + fixPacketLength(hex(0),8);
-packetString := packetString + fixPacketLength(hex(effect),2);
-packetString := packetString + fixPacketLength(hex(x),2);
-packetString := packetString + fixPacketLength(hex(y),2);
-packetString := packetString + fixPacketLength(hex(z),1);
-packetString := packetString + fixPacketLength(hex(0),5);
-packetString := packetString + fixPacketLength(hex
-(speed),1); //speed
-packetString := packetString + fixPacketLength(hex
-(loop),1); //loop
-packetString := packetString + "000000";
-packetString := packetString + fixPacketLength(hex
-(explode),1); //explode
-packetString := packetString + "0000";
-packetString := packetString + fixPacketLength(hex
-(color),2); //color
-packetString := packetString + "000000";
-packetString := packetString + fixPacketLength(hex
-(translucent),1); //tran
-foreach chr in ListMobilesNearLocation( x, y, z, 16 );
-SendPacket( chr, packetString );
-endforeach
+function PlayStationaryEffectHuefx( x, y, z, effect, speed, loop := 0, explode := 0,
+                                    color := 0, translucent := 0 )
+  var packetString := "C0";
+  packetString := packetString + "02";
+  packetString := packetString + fixPacketLength( hex( 0 ), 8 );
+  packetString := packetString + fixPacketLength( hex( effect ), 2 );
+  packetString := packetString + fixPacketLength( hex( x ), 2 );
+  packetString := packetString + fixPacketLength( hex( y ), 2 );
+  packetString := packetString + fixPacketLength( hex( z ), 1 );
+  packetString := packetString + fixPacketLength( hex( 0 ), 5 );
+  packetString := packetString + fixPacketLength( hex( speed ), 1 ); // speed
+  packetString := packetString + fixPacketLength( hex( loop ), 1 ); // loop
+  packetString := packetString + "000000";
+  packetString := packetString + fixPacketLength( hex( explode ), 1 ); // explode
+  packetString := packetString + "0000";
+  packetString := packetString + fixPacketLength( hex( color ), 2 ); // color
+  packetString := packetString + "000000";
+  packetString := packetString + fixPacketLength( hex( translucent ), 1 ); // tran
+  foreach chr in ListMobilesNearLocation( x, y, z, 16 )
+    SendPacket( chr, packetString );
+  endforeach
 endfunction

@@ -26,13 +26,13 @@ include ":spawnsystem:settings";
  * Return Value
  * Array of strings
  *
- */
+*/
 function SS_GetEnginesList()
 
-	var cfg_file := SS_GetSettingsCfgFile();
-	var cfg_elem := SS_GetSettingsCfgElem( cfg_file, "EngineList" );
+  var cfg_file := SS_GetSettingsCfgFile();
+  var cfg_elem := SS_GetSettingsCfgElem( cfg_file, "EngineList" );
 
-	return GetConfigStringArray( cfg_elem, "Engine" );
+  return GetConfigStringArray( cfg_elem, "Engine" );
 endfunction
 
 /*
@@ -47,13 +47,13 @@ endfunction
  * Return Value
  * 1 if the engine is enabled
  *
- */
+*/
 function SS_EngineEnabled( engine_name )
 
-	var settings := SS_GetSettingsCfgFile( engine_name );
-	settings := settings["Settings"];
+  var settings := SS_GetSettingsCfgFile( engine_name );
+  settings := settings["Settings"];
 
-	return CInt( settings.Enabled );
+  return CInt( settings.Enabled );
 endfunction
 
 /*
@@ -71,13 +71,13 @@ endfunction
  * Return Value
  * 1 on engine start
  *
- */
+*/
 function SS_StartSpawnEngine( engine_name, realm_name, region_name, group_name )
 
-	var params := array{engine_name, realm_name, region_name, group_name};
-	var script := Start_Script( SS_GetEnginePath( engine_name ), params );
+  var params := array{ engine_name, realm_name, region_name, group_name };
+  var script := Start_Script( SS_GetEnginePath( engine_name ), params );
 
-	return script;
+  return script;
 endfunction
 
 /*
@@ -92,8 +92,8 @@ endfunction
  * Return Value
  * String
  *
- */
+*/
 function SS_GetEnginePath( engine_name )
 
-	return ":spawnsystem:engines/"+engine_name+"/spawnCycle";
+  return ":spawnsystem:engines/" + engine_name + "/spawnCycle";
 endfunction

@@ -9,13 +9,13 @@ include "include/unequip";
 
 program OnDestroy( item )
 
-	var equipped := CInt( GetObjProperty( item, "EquippedOn" ));
-	if( !equipped )
-		return 1;
-	endif
+  var equipped := CInt( GetObjProperty( item, "EquippedOn" ) );
+  if ( !equipped )
+    return 1;
+  endif
 
-	var mobile := SystemFindObjectBySerial( equipped );
-        UnEquipEffect( mobile, item );
+  var mobile := SystemFindObjectBySerial( equipped );
+  UnEquipEffect( mobile, item );
 
-	return 1;
+  return 1;
 endprogram

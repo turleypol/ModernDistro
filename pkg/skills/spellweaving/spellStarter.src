@@ -4,7 +4,6 @@ use cliloc;
 
 include ":attributes:attributes";
 
-
 /******************************************************
 *
 *	spellStarter( parms )
@@ -28,22 +27,23 @@ include ":attributes:attributes";
 *******************************************************/
 
 program spellStarter( parms )
-	var mobile, cast_from, info;
+  var mobile, cast_from, info;
 
-	case(parms[1])
-		"#book":
-		"#scroll":	mobile		:=	parms[2];
-								cast_from :=	parms[3];
-								info			:=	parms[4];
-								break;
-		"#npc":		 //To be written.
-	endcase
+  case ( parms[1] )
+    "#book":
+    "#scroll":
+      mobile := parms[2];
+      cast_from := parms[3];
+      info := parms[4];
+      break;
+    "#npc": // To be written.
+  endcase
 
-	EraseObjProperty(mobile, "IsMeditating");
-	EraseObjProperty(mobile, "HealTimer");
-	EraseObjProperty(mobile, "#Medding");
+  EraseObjProperty( mobile, "IsMeditating" );
+  EraseObjProperty( mobile, "HealTimer" );
+  EraseObjProperty( mobile, "#Medding" );
 
-	/*****************************************
+  /*****************************************
 	*
 	*	CHECK BLOCK:
 	*		1.	Check if they are casting.
@@ -55,102 +55,108 @@ program spellStarter( parms )
 	*
 	******************************************/
 
-	if ( GetObjProperty(mobile, "#Casting") )
-		SendSysMessageCL(mobile, 502642, uc_text:= 0, font:= _DEFAULT_CLFONT, color := 33); // You are already casting a spell.
-		return 0;
-	elseif ( mobile.squelched && !mobile.npctemplate )
-		SendSysMessageCL(mobile, 1005567, uc_text:= 0, font:= _DEFAULT_CLFONT, color := 33); // Your conscience prevents you from putting the spell together properly!
-		//FailSpell(mobile);
-		return 0;
-	/*elseif ( !EquipmentCheck(mobile) )
+  if ( GetObjProperty( mobile, "#Casting" ) )
+    SendSysMessageCL( mobile, 502642, uc_text := 0, font := _DEFAULT_CLFONT,
+                      color := 33 ); // You are already casting a spell.
+    return 0;
+  elseif ( mobile.squelched && !mobile.npctemplate )
+    SendSysMessageCL( mobile, 1005567, uc_text := 0, font := _DEFAULT_CLFONT,
+                      color := 33 ); // Your conscience prevents you from putting the spell together properly!
+    // FailSpell(mobile);
+    return 0;
+  /* elseif ( !EquipmentCheck(mobile) )
 		SendSysMessageCL(mobile, 502626, uc_text:= 0, font:= _DEFAULT_CLFONT, color := 33); // Your hands must be free to cast spells or meditate.
 		//FailSpell(mobile);
-		return 0;*/
-	elseif ( mobile.frozen )
-		SendSysMessageCL(mobile, 502643, uc_text:= 0, font:= _DEFAULT_CLFONT, color := 33); // You cannot cast a spell while frozen.
-		//FailSpell(mobile);
-		return 0;
-	endif
-	if (parms[1] == "#scroll")
-		if( !ConsumeSubstance(mobile.backpack, cast_from.objtype, amount := 1 ) )
-			SendSysMessageCL(mobile, 501625, uc_text:= 0, font:= _DEFAULT_CLFONT, color := 33); // You seem to have lost track of your scroll.
-			return 0;
-		endif
-	endif
+		return 0; */
+  elseif ( mobile.frozen )
+    SendSysMessageCL( mobile, 502643, uc_text := 0, font := _DEFAULT_CLFONT,
+                      color := 33 ); // You cannot cast a spell while frozen.
+    // FailSpell(mobile);
+    return 0;
+  endif
+  if ( parms[1] == "#scroll" )
+    if ( !ConsumeSubstance( mobile.backpack, cast_from.objtype, amount := 1 ) )
+      SendSysMessageCL( mobile, 501625, uc_text := 0, font := _DEFAULT_CLFONT,
+                        color := 33 ); // You seem to have lost track of your scroll.
+      return 0;
+    endif
+  endif
 
-	// Added to support necro spell mind rot.
-	var mana_cost := info.ManaCost;
-	if(GetObjProperty(mobile, "#mindrot"))
-		if(mobile.isA(POLCLASS_NPC))
-			mana_cost := mana_cost * 2;
-		else
-			mana_cost := mana_cost * 1.25;
-		endif
-	endif
+  // Added to support necro spell mind rot.
+  var mana_cost := info.ManaCost;
+  if ( GetObjProperty( mobile, "#mindrot" ) )
+    if ( mobile.isA( POLCLASS_NPC ) )
+      mana_cost := mana_cost * 2;
+    else
+      mana_cost := mana_cost * 1.25;
+    endif
+  endif
 
-	/********************************************
+  /********************************************
 	*
 	* Insert LMC calcs here once added to distro/core
 	*
 	********************************************/
 
-	if ( !AP_ConsumeVital(mobile, VITALID_MANA, mana_cost) )
-		SendSysMessageCL(mobile, 501903, uc_text:= 0, font:= _DEFAULT_CLFONT, color := 33); // You don't have enough mana to cast that spell!
-		//FailSpell(mobile);
-		return 0;
-	endif
+  if ( !AP_ConsumeVital( mobile, VITALID_MANA, mana_cost ) )
+    SendSysMessageCL( mobile, 501903, uc_text := 0, font := _DEFAULT_CLFONT,
+                      color := 33 ); // You don't have enough mana to cast that spell!
+    // FailSpell(mobile);
+    return 0;
+  endif
 
-	/****************
+  /****************
 	*END CHECK BLOCK
 	****************/
 
-	SetObjProperty(mobile, "#Casting", GetPid());
-	mobile.frozen := 1;
-	mobile.hidden := 0;
-	PrintTextAbove( mobile, info.PowerWords );
-	var delay := info.Delay;
-	var mod := 0;
-	var protection := GetObjProperty(mobile, "Protection");
-	var orig_hp := AP_GetVital(mobile, "Hits");
-	//DELAY
+  SetObjProperty( mobile, "#Casting", GetPid() );
+  mobile.frozen := 1;
+  mobile.hidden := 0;
+  PrintTextAbove( mobile, info.PowerWords );
+  var delay := info.Delay;
+  var mod := 0;
+  var protection := GetObjProperty( mobile, "Protection" );
+  var orig_hp := AP_GetVital( mobile, "Hits" );
+  // DELAY
 
-	while ( delay > 0 )
-		if ( !protection )
-			// There is a small chance, perhaps, that the mobile is damaged and then regens
-			// or is healed enough in the ~50ms delay between checking. It could be more
-			// accurate to grab the pid from ApplyDamageEX and send a damaged event to this
-			// script, on top of also checking the health.
-			if ( orig_hp > AP_GetVital(mobile, "Hits")  )
-				SendSysMessage(mobile, "Your concentration is disturbed, thus ruining thy spell.", color := 33);
-				//FailSpell(mobile);
-				//PlaySoundEffect(mobile, SFX_SPELL_FAIL);
-				//PlayObjectCenteredEffect(mobile, FX_SPELL_FAIL, 5, 50);
-				return 0;
-			endif
-		endif
+  while ( delay > 0 )
+    if ( !protection )
+      // There is a small chance, perhaps, that the mobile is damaged and then regens
+      // or is healed enough in the ~50ms delay between checking. It could be more
+      // accurate to grab the pid from ApplyDamageEX and send a damaged event to this
+      // script, on top of also checking the health.
+      if ( orig_hp > AP_GetVital( mobile, "Hits" ) )
+        SendSysMessage( mobile, "Your concentration is disturbed, thus ruining thy spell.",
+                        color := 33 );
+        // FailSpell(mobile);
+        // PlaySoundEffect(mobile, SFX_SPELL_FAIL);
+        // PlayObjectCenteredEffect(mobile, FX_SPELL_FAIL, 5, 50);
+        return 0;
+      endif
+    endif
 
-		mod := delay % 50;
-		if ( mod )
-				SleepMS(mod);
-				delay := delay - (mod);
-		else
-				SleepMS(50);
-				delay := delay - 50;
-		endif
-	endwhile
+    mod := delay % 50;
+    if ( mod )
+      SleepMS( mod );
+      delay := delay - ( mod );
+    else
+      SleepMS( 50 );
+      delay := delay - 50;
+    endif
+  endwhile
 
-	//SKILLCHECK
+  // SKILLCHECK
 
-	var skill_check := SkillCheck(mobile, SPELLWEAVING, info.difficulty, 30);
+  var skill_check := SkillCheck( mobile, SPELLWEAVING, info.difficulty, 30 );
 
-	// Added to support necro wraith form can recall regardless of their magery skill level.
-	if(GetObjProperty(mobile, "wraith") && info.spellId == 32)
-		skill_check := 1;
-	endif
-	mobile.frozen := 0;
+  // Added to support necro wraith form can recall regardless of their magery skill level.
+  if ( GetObjProperty( mobile, "wraith" ) && info.spellId == 32 )
+    skill_check := 1;
+  endif
+  mobile.frozen := 0;
 
-	start_script(":spellweaving:"+info.Script, parms);
+  start_script( ":spellweaving:" + info.Script, parms );
 
-	return 0;
+  return 0;
 
 endprogram

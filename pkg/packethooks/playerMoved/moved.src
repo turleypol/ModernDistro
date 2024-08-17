@@ -2,6 +2,6 @@ use uo;
 
 program Moved( who )
 
-	Print(who.name + " has moved.");
+  Print( who.name + " has moved." );
 
 endprogram

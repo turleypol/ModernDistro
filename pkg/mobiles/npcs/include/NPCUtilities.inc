@@ -1,10 +1,8 @@
 
-
-
 use uo;
 use cfgfile;
 
-var npc_cfg := ReadConfigFile(":*:npcdesc");
+var npc_cfg := ReadConfigFile( ":*:npcdesc" );
 
 ///////////////////////////////////////////////////////////
 //
@@ -19,21 +17,21 @@ var npc_cfg := ReadConfigFile(":*:npcdesc");
 // Returns: 1 or 0::integer
 //
 ///////////////////////////////////////////////////////////
-function IsUndead(mobile)
+function IsUndead( mobile )
 
-	var template := mobile.npctemplate;
-	if(!template)
-		return 0;
-	endif
-	// Strip off any package info.
-	template := StripPkg(template);
-	var elem := FindConfigElem(npc_cfg, template);
-	var elemental := GetConfigString(elem, "elemental");
-	if(Lower(elemental) == "undead")
-		return 1;
-	else
-		return 0;
-	endif
+  var template := mobile.npctemplate;
+  if ( !template )
+    return 0;
+  endif
+  // Strip off any package info.
+  template := StripPkg( template );
+  var elem := FindConfigElem( npc_cfg, template );
+  var elemental := GetConfigString( elem, "elemental" );
+  if ( Lower( elemental ) == "undead" )
+    return 1;
+  else
+    return 0;
+  endif
 
 endfunction
 
@@ -52,21 +50,23 @@ endfunction
 //
 ///////////////////////////////////////////////////////////
 
-function GetAlignment(mobile)
+function GetAlignment( mobile )
 
-	var align := mobile.alignment;
-	if(!mobile.npctemplate)
-		return "not NPC";
-	endif
+  var align := mobile.alignment;
+  if ( !mobile.npctemplate )
+    return "not NPC";
+  endif
 
-	case(align)
-		0: return "neutral";
-		1: return "evil";
-		2: return "good";
-	endcase
+  case ( align )
+    0:
+      return "neutral";
+    1:
+      return "evil";
+    2:
+      return "good";
+  endcase
 
 endfunction
-
 
 ///////////////////////////////////////////////////////////
 //
@@ -81,15 +81,15 @@ endfunction
 // Returns:	clean template::string
 //
 ///////////////////////////////////////////////////////////
-function StripPkg(template)
+function StripPkg( template )
 
-	// Strip off any package info.
-	var i, j;
-	i := template.Find(":", 1);
-	if(i)
-		j := template.find(":", 2);
-		template := template[j + 1, Len(template)];
-	endif
-	return template;
+  // Strip off any package info.
+  var i, j;
+  i := template.Find( ":", 1 );
+  if ( i )
+    j := template.find( ":", 2 );
+    template := template[j + 1, Len( template )];
+  endif
+  return template;
 
 endfunction
