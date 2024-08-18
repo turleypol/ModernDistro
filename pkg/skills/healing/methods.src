@@ -6,22 +6,21 @@ include ":itemutils:itemdesc";
 
 program Install()
 
-	return 1;
+  return 1;
 endprogram
 
 exported function IsBandage( item )
 
-	item := item;
-		return 1;
+  item := item;
+  return 1;
 endfunction
 
 exported function IsEnhancedBandage( item )
 
-	item := item;
-	if(item.objtype == 0xC1000)
-		return 1;
-	else
-		return 0;
-	endif
+  item := item;
+  if ( item.objtype == 0xC1000 )
+    return 1;
+  else
+    return 0;
+  endif
 endfunction
-

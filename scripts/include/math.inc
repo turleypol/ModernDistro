@@ -23,21 +23,21 @@
 // History:
 //
 // v2.0:
-//	- Added Min and Max functions.
-//	- Added Bounded function.
-//	- Added SplitLog function.
+//  - Added Min and Max functions.
+//  - Added Bounded function.
+//  - Added SplitLog function.
 //
 // v1.5:
-//	- Factorial(x) now returns 1 if x==0.
-//	- Log(x, y) now uses Log10 instead of successive
-//	  approximation.
+//  - Factorial(x) now returns 1 if x==0.
+//  - Log(x, y) now uses Log10 instead of successive
+//    approximation.
 //
 // v1.4:
-//	- Fixed errors in Mean and StdDev.
-//	- Minor code cleanup across include.
+//  - Fixed errors in Mean and StdDev.
+//  - Minor code cleanup across include.
 //
 // v1.3:
-//	- Removed items duplicated in math.em.
+//  - Removed items duplicated in math.em.
 //
 // 2.0:
 // There were a couple of functions added that brought
@@ -56,13 +56,12 @@
 
 use math;
 
-
 const CONST_E := 2.718282;
 const CONST_PI := 3.141592;
 
 // Used in FormulateDiceString() function
-CONST SIDE_CNT    := 0;
-CONST DICE_CNT    := 1;
+const SIDE_CNT := 0;
+const DICE_CNT := 1;
 
 // Used in the RoundToTens() function
 const ROUND_NORMAL := 0;
@@ -76,12 +75,12 @@ const ROUND_UP := 2;
 // Finds the logarithm to base <b> of <x>.
 //
 ///////////////////////////////////////////////////////////
-function Log(b, x)
+function Log( b, x )
 
-	if (x<=0)
-		return 0;
-	endif
-	return (Log10(x) / Log10(b));
+  if ( x <= 0 )
+    return 0;
+  endif
+  return ( Log10( x ) / Log10( b ) );
 
 endfunction
 
@@ -94,9 +93,9 @@ endfunction
 // mantissa is (0.12345)
 //
 ///////////////////////////////////////////////////////////
-function SplitLog(x)
+function SplitLog( x )
 
-	return { (CInt(x)), (x - CInt(x)) };
+  return { ( CInt( x ) ), ( x - CInt( x ) ) };
 
 endfunction
 
@@ -109,20 +108,20 @@ endfunction
 // the function will return true if (i==x) || (i==y).
 //
 ///////////////////////////////////////////////////////////
-function Bounded(x, i, y, inclusive := 1)
-	if (inclusive)
-		if ( (i >= Min({x, y})) && (i <= Max({x, y})) )
-			return 1;
-		else
-			return 0;
-		endif
-	else
-		if ( (i > Min({x, y})) && (i < Max({x, y})) )
-			return 1;
-		else
-			return 0;
-		endif
-	endif
+function Bounded( x, i, y, inclusive := 1 )
+  if ( inclusive )
+    if ( ( i >= Min( { x, y } ) ) && ( i <= Max( { x, y } ) ) )
+      return 1;
+    else
+      return 0;
+    endif
+  else
+    if ( ( i > Min( { x, y } ) ) && ( i < Max( { x, y } ) ) )
+      return 1;
+    else
+      return 0;
+    endif
+  endif
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -132,14 +131,14 @@ endfunction
 // Truncates a dbl to a fixed amount of decimal places.
 //
 ///////////////////////////////////////////////////////////
-function Trunc(number, places)
+function Trunc( number, places )
 
-	var base := Pow(10, places);
+  var base := Pow( 10, places );
 
-	number := CDbl(CInt(number * Pow(10, places)));
-	number := number / base;
+  number := CDbl( CInt( number * Pow( 10, places ) ) );
+  number := number / base;
 
-	return number;
+  return number;
 
 endfunction
 
@@ -151,16 +150,16 @@ endfunction
 // Factorial(10) == 10 * 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1
 //
 ///////////////////////////////////////////////////////////
-function Factorial(N)
+function Factorial( N )
 
-	N := CInt(N);
-	var x := 1;
+  N := CInt( N );
+  var x := 1;
 
-	while (N > 0)
-		x := x * N;
-		N := N - 1;
-	endwhile
-	return x;
+  while ( N > 0 )
+    x := x * N;
+    N := N - 1;
+  endwhile
+  return x;
 
 endfunction
 
@@ -171,36 +170,36 @@ endfunction
 // Returns the <y> root of a number <x>:
 //
 ///////////////////////////////////////////////////////////
-function YRoot(x, y)
+function YRoot( x, y )
 
-	var i := 0.000;
-	var n := 0.000;
-	var root := 2.000;
-	var a := CInt(Sqr(x));
+  var i := 0.000;
+  var n := 0.000;
+  var root := 2.000;
+  var a := CInt( Sqr( x ) );
 
-	if (a < 4)
-		a := 4;
-	endif
+  if ( a < 4 )
+    a := 4;
+  endif
 
-	var success := 0;
-	while (!success)
-		n := Pow(root, y);
-		i := x - n;
-		i := i / (a * root);
-		i := Trunc(i, 3);
-		root := root + i;
-		if (i == 0)
-			success := 1;
-			if ( Pow(Root, y) > x )
-				root := root - 0.001;
-			endif
-			if ( Pow((root + 0.001), y) == x)
-				root := root + 0.001;
-			endif
-		endif
-	endwhile
+  var success := 0;
+  while ( !success )
+    n := Pow( root, y );
+    i := x - n;
+    i := i / ( a * root );
+    i := Trunc( i, 3 );
+    root := root + i;
+    if ( i == 0 )
+      success := 1;
+      if ( Pow( Root, y ) > x )
+        root := root - 0.001;
+      endif
+      if ( Pow( ( root + 0.001 ), y ) == x )
+        root := root + 0.001;
+      endif
+    endif
+  endwhile
 
-	return root;
+  return root;
 
 endfunction
 
@@ -211,15 +210,15 @@ endfunction
 // Returns the arithmatic mean (average) of an array of numbers.
 //
 ///////////////////////////////////////////////////////////
-function Mean(ArrayX)
+function Mean( ArrayX )
 
-	var n, i:=0.000;
+  var n, i := 0.000;
 
-	foreach n in ArrayX
-		i := i + n;
-	endforeach
+  foreach n in ArrayX
+    i := i + n;
+  endforeach
 
-	return (i / Len(ArrayX));
+  return ( i / Len( ArrayX ) );
 
 endfunction
 
@@ -230,22 +229,22 @@ endfunction
 // Returns the Standard Deviation of an array of numbers.
 //
 ///////////////////////////////////////////////////////////
-function StdDev(ArrayX)
+function StdDev( ArrayX )
 
-	var m, n, i := 0.000;
-	var ArrayMean := Mean(ArrayX);
-	var ArrayLen := Len(ArrayX);
+  var m, n, i := 0.000;
+  var ArrayMean := Mean( ArrayX );
+  var ArrayLen := Len( ArrayX );
 
-	foreach m in ArrayX
-		n := m - ArrayMean;
-		n := Pow(n, 2);
-		i := i + n;
-	endforeach
+  foreach m in ArrayX
+    n := m - ArrayMean;
+    n := Pow( n, 2 );
+    i := i + n;
+  endforeach
 
-	i := i / (ArrayLen - 1);
-	n := Sqr (i);
+  i := i / ( ArrayLen - 1 );
+  n := Sqr( i );
 
-	return n;
+  return n;
 
 endfunction
 
@@ -258,7 +257,7 @@ endfunction
 // mean and standard deviation for the population must be known.
 // The z-statistic is computed as follows:
 //
-//	z==(mean - mu) / (sigma / (Sqr(n))
+//  z==(mean - mu) / (sigma / (Sqr(n))
 //
 // mean==the mean of the ArrayX data
 // mu==the mean of the entire population
@@ -266,19 +265,19 @@ endfunction
 // n==the number of samples in the data
 //
 ///////////////////////////////////////////////////////////
-function ZTest(ArrayX, mu, sigma)
+function ZTest( ArrayX, mu, sigma )
 
-	var i, n;
-	var z:= 0.000;
-	var ArrayMean := Mean(ArrayX);
-	var ArrayLen := Len(ArrayX);
+  var i, n;
+  var z := 0.000;
+  var ArrayMean := Mean( ArrayX );
+  var ArrayLen := Len( ArrayX );
 
-	i := ArrayMean - mu;
-	n := sigma / Sqr(ArrayLen);
+  i := ArrayMean - mu;
+  n := sigma / Sqr( ArrayLen );
 
-	z := i/n;
+  z := i / n;
 
-	return z;
+  return z;
 
 endfunction
 
@@ -291,7 +290,7 @@ endfunction
 // the mean and standard deviation for the entire population are
 // unknown.  The t-statistic is computed as follows:
 //
-//	t==(mean - mu) / (s / (Sqr(n))
+//  t==(mean - mu) / (s / (Sqr(n))
 //
 // mean==the mean of the ArrayX data
 // mu==the estimated mean of the entire population
@@ -299,24 +298,22 @@ endfunction
 // n==the number of samples in the data
 //
 ///////////////////////////////////////////////////////////
-function TTest(ArrayX, mu)
+function TTest( ArrayX, mu )
 
-	var i, n, s;
-	var t:= 0.000;
-	var ArrayMean := Mean(ArrayX);
-	var ArrayLen := Len(ArrayX);
-	var s := StdDev(ArrayX);
+  var i, n, s;
+  var t := 0.000;
+  var ArrayMean := Mean( ArrayX );
+  var ArrayLen := Len( ArrayX );
+  var s := StdDev( ArrayX );
 
-	i := ArrayMean - mu;
-	n := s / Sqr(ArrayLen);
+  i := ArrayMean - mu;
+  n := s / Sqr( ArrayLen );
 
-	t := i/n;
+  t := i / n;
 
-	return t;
+  return t;
 
 endfunction
-
-
 
 /////////////////////////////////////////////////////////////////////
 // BITWISE FUNCTIONS: These are very old, and not very efficient.  //
@@ -335,24 +332,24 @@ endfunction
 // 128, 64, 32, 16, 8, 4, 2, 1.
 //
 ///////////////////////////////////////////////////////////
-function BitIn(ArrayX)
+function BitIn( ArrayX )
 
-	var i := 8;
-	var n;
-	var loop := 1;
-	var bitvalue := 0;
+  var i := 8;
+  var n;
+  var loop := 1;
+  var bitvalue := 0;
 
-	While (i >= 0)
+  while ( i >= 0 )
 
-		n := 8 - i;
-		if (ArrayX[i]==1)
-			bitvalue := bitvalue + Pow(2, n);
-		endif
-		i := i - 1;
+    n := 8 - i;
+    if ( ArrayX[i] == 1 )
+      bitvalue := bitvalue + Pow( 2, n );
+    endif
+    i := i - 1;
 
-	endwhile
+  endwhile
 
-	return bitvalue;
+  return bitvalue;
 
 endfunction
 
@@ -366,27 +363,27 @@ endfunction
 // bit, and so on down.   See the desc for BitIn for the details.
 //
 ///////////////////////////////////////////////////////////
-function BitOut(x)
+function BitOut( x )
 
-	x := Cint(x);
-	var loop := 1;
-	var bitvalue := 0;
-	var ArrayX := {0,0,0,0,0,0,0,0};
-	var n;
+  x := Cint( x );
+  var loop := 1;
+  var bitvalue := 0;
+  var ArrayX := { 0, 0, 0, 0, 0, 0, 0, 0 };
+  var n;
 
-	while (loop <= 8)
+  while ( loop <= 8 )
 
-		n := 8 - loop;
-		bitvalue := Pow(2, n);
-		if ( (x - bitvalue) >= 0)
-			ArrayX[loop] := 1;
-			x := x - bitvalue;
-		endif
-		loop := loop + 1;
+    n := 8 - loop;
+    bitvalue := Pow( 2, n );
+    if ( ( x - bitvalue ) >= 0 )
+      ArrayX[loop] := 1;
+      x := x - bitvalue;
+    endif
+    loop := loop + 1;
 
-	endwhile
+  endwhile
 
-	return ArrayX;
+  return ArrayX;
 
 endfunction
 
@@ -399,25 +396,25 @@ endfunction
 // the position in the result is reset.
 //
 ///////////////////////////////////////////////////////////
-function BitAnd(x, y)
+function BitAnd( x, y )
 
-	var ArrayX := BitOut(x);
-	var ArrayY := BitOut(y);
-	var z := 0;
-	var loop := 1;
-	var n;
+  var ArrayX := BitOut( x );
+  var ArrayY := BitOut( y );
+  var z := 0;
+  var loop := 1;
+  var n;
 
-	while (loop <= 8)
+  while ( loop <= 8 )
 
-		n := loop - 1;
-		if ( (ArrayX[loop]==1) AND (ArrayY[loop]==1) )
-			z := z + Pow(2, n);
-		endif
-		loop := loop + 1;
+    n := loop - 1;
+    if ( ( ArrayX[loop] == 1 ) AND ( ArrayY[loop] == 1 ) )
+      z := z + Pow( 2, n );
+    endif
+    loop := loop + 1;
 
-	endwhile
+  endwhile
 
-	return z;
+  return z;
 
 endfunction
 
@@ -431,25 +428,25 @@ endfunction
 // both are reset, then the position in the result is reset.
 //
 ///////////////////////////////////////////////////////////
-function BitOr(x, y)
+function BitOr( x, y )
 
-	var ArrayX := BitOut(x);
-	var ArrayY := BitOut(y);
-	var z := 0;
-	var loop := 1;
-	var n;
+  var ArrayX := BitOut( x );
+  var ArrayY := BitOut( y );
+  var z := 0;
+  var loop := 1;
+  var n;
 
-	while (loop <= 8)
+  while ( loop <= 8 )
 
-		n := loop - 1;
-		if ( (ArrayX[loop]==1) OR (ArrayY[loop]==1) )
-			z := z + Pow(2, n);
-		endif
-		loop := loop + 1;
+    n := loop - 1;
+    if ( ( ArrayX[loop] == 1 ) OR ( ArrayY[loop] == 1 ) )
+      z := z + Pow( 2, n );
+    endif
+    loop := loop + 1;
 
-	endwhile
+  endwhile
 
-	return z;
+  return z;
 
 endfunction
 
@@ -463,25 +460,25 @@ endfunction
 // either set or reset, then the position in the result is reset.
 //
 ///////////////////////////////////////////////////////////
-function BitXor(x, y)
+function BitXor( x, y )
 
-	var ArrayX := BitOut(x);
-	var ArrayY := BitOut(y);
-	var z := 0;
-	var loop := 1;
-	var n;
+  var ArrayX := BitOut( x );
+  var ArrayY := BitOut( y );
+  var z := 0;
+  var loop := 1;
+  var n;
 
-	while (loop <= 8)
+  while ( loop <= 8 )
 
-		n := loop - 1;
-		if (ArrayX[loop] - ArrayY[loop] <> 0)
-			z := z + Pow(2, n);
-		endif
-		loop := loop + 1;
+    n := loop - 1;
+    if ( ArrayX[loop] - ArrayY[loop] <> 0 )
+      z := z + Pow( 2, n );
+    endif
+    loop := loop + 1;
 
-	endwhile
+  endwhile
 
-	return z;
+  return z;
 
 endfunction
 
@@ -495,25 +492,25 @@ endfunction
 // either set or reset, then the position in the result is set.
 //
 ///////////////////////////////////////////////////////////
-function BitEqv(x, y)
+function BitEqv( x, y )
 
-	var ArrayX := BitOut(x);
-	var ArrayY := BitOut(y);
-	var z := 0;
-	var loop := 1;
-	var n;
+  var ArrayX := BitOut( x );
+  var ArrayY := BitOut( y );
+  var z := 0;
+  var loop := 1;
+  var n;
 
-	while (loop <= 8)
+  while ( loop <= 8 )
 
-		n := loop - 1;
-		if (ArrayX[loop] - ArrayY[loop]==0)
-			z := z + Pow(2, n);
-		endif
-		loop := loop + 1;
+    n := loop - 1;
+    if ( ArrayX[loop] - ArrayY[loop] == 0 )
+      z := z + Pow( 2, n );
+    endif
+    loop := loop + 1;
 
-	endwhile
+  endwhile
 
-	return z;
+  return z;
 
 endfunction
 
@@ -528,25 +525,25 @@ endfunction
 // will result in the value being set.
 //
 ///////////////////////////////////////////////////////////
-function BitImp(x, y)
+function BitImp( x, y )
 
-	var ArrayX := BitOut(x);
-	var ArrayY := BitOut(y);
-	var z := 0;
-	var loop := 1;
-	var n;
+  var ArrayX := BitOut( x );
+  var ArrayY := BitOut( y );
+  var z := 0;
+  var loop := 1;
+  var n;
 
-	while (loop <= 8)
+  while ( loop <= 8 )
 
-		n := loop - 1;
-		if (ArrayX[loop] - ArrayY[loop] < 1)
-			z := z + Pow(2, n);
-		endif
-		loop := loop + 1;
+    n := loop - 1;
+    if ( ArrayX[loop] - ArrayY[loop] < 1 )
+      z := z + Pow( 2, n );
+    endif
+    loop := loop + 1;
 
-	endwhile
+  endwhile
 
-	return z;
+  return z;
 
 endfunction
 
@@ -560,28 +557,28 @@ endfunction
 // reset, then that position in the result is set.
 //
 ///////////////////////////////////////////////////////////
-function BitNot(x)
+function BitNot( x )
 
-	var ArrayX := BitOut(x);
-	var z := 0;
-	var loop := 1;
-	var n;
+  var ArrayX := BitOut( x );
+  var z := 0;
+  var loop := 1;
+  var n;
 
-	while (loop <= 8)
+  while ( loop <= 8 )
 
-		n := loop - 1;
-		if (ArrayX[loop]==0)
-			ArrayX[loop] := 1;
-			z := z + Pow(2, n);
-		else
-			ArrayX[loop] := 0;
-		endif
+    n := loop - 1;
+    if ( ArrayX[loop] == 0 )
+      ArrayX[loop] := 1;
+      z := z + Pow( 2, n );
+    else
+      ArrayX[loop] := 0;
+    endif
 
-		loop := loop + 1;
+    loop := loop + 1;
 
-	endwhile
+  endwhile
 
-	return z;
+  return z;
 
 endfunction
 
@@ -593,16 +590,16 @@ endfunction
 // Both <flag> and <bit> are integers.
 //
 ///////////////////////////////////////////////////////////
-function FlagSet(flag, bit)
+function FlagSet( flag, bit )
 
-	bit := 9 - bit;
+  bit := 9 - bit;
 
-	var FlagArray := BitOut(flag);
-	FlagArray[bit] := 1;
+  var FlagArray := BitOut( flag );
+  FlagArray[bit] := 1;
 
-	bit := BitIn(FlagArray);
+  bit := BitIn( FlagArray );
 
-	return bit;
+  return bit;
 
 endfunction
 
@@ -614,16 +611,16 @@ endfunction
 // Both <flag> and <bit> are integers.
 //
 ///////////////////////////////////////////////////////////
-function FlagReset(flag, bit)
+function FlagReset( flag, bit )
 
-	bit := 9 - bit;
+  bit := 9 - bit;
 
-	var FlagArray := BitOut(flag);
-	FlagArray[bit] := 0;
+  var FlagArray := BitOut( flag );
+  FlagArray[bit] := 0;
 
-	bit := BitIn(FlagArray);
+  bit := BitIn( FlagArray );
 
-	return bit;
+  return bit;
 
 endfunction
 
@@ -636,16 +633,16 @@ endfunction
 // if the flag is reset.  Both <flag> and <bit> are integers.
 //
 ///////////////////////////////////////////////////////////
-function FlagCheck(flag, bit)
+function FlagCheck( flag, bit )
 
-	var FlagArray := BitOut(flag);
-	bit := 9 - bit;
+  var FlagArray := BitOut( flag );
+  bit := 9 - bit;
 
-	if (FlagArray[bit] == 1)
-		return 1;
-	else
-		return 0;
-	endif
+  if ( FlagArray[bit] == 1 )
+    return 1;
+  else
+    return 0;
+  endif
 
 endfunction
 
@@ -664,33 +661,33 @@ endfunction
  * Return value:
  * string dice roll representation of the minimum and maximum numbers passed.
  *
- */
-function equal_probability_dice ( minimum, maximum )
-	var val := "";
-	minimum := CInt(minimum);
-	maximum := CInt(maximum);
+*/
+function equal_probability_dice( minimum, maximum )
+  var val := "";
+  minimum := CInt( minimum );
+  maximum := CInt( maximum );
 
-	if ( minimum < 1 || maximum < 1 )
-		return 0;
-	endif
+  if ( minimum < 1 || maximum < 1 )
+    return 0;
+  endif
 
-	if ( minimum > maximum )
-		var temp := minimum;
-		minimum := maximum;
-		maximum := temp;
-	endif
+  if ( minimum > maximum )
+    var temp := minimum;
+    minimum := maximum;
+    maximum := temp;
+  endif
 
-	var x := 1;
-	var z := minimum - 1;
-	var y := ( maximum - minimum + 1 );
+  var x := 1;
+  var z := minimum - 1;
+  var y := ( maximum - minimum + 1 );
 
-	if ( z > 0 )
-		val := CStr ( x+"d"+y+"+"+z );
-	else
-		val := CStr ( x+"d"+y );
-	endif
+  if ( z > 0 )
+    val := CStr( x + "d" + y + "+" + z );
+  else
+    val := CStr( x + "d" + y );
+  endif
 
-	return val;
+  return val;
 endfunction
 
 /*
@@ -708,43 +705,42 @@ endfunction
  *
  * Thanks to Nando for the formulae for these dice roll functions
  *
- */
-function normal_distribution_dice ( minimum, maximum )
-	var val := "";
-	minimum := CInt(minimum);
-	maximum := CInt(maximum);
+*/
+function normal_distribution_dice( minimum, maximum )
+  var val := "";
+  minimum := CInt( minimum );
+  maximum := CInt( maximum );
 
-	if ( minimum < 1 || maximum < 1 )
-		return 0;
-	endif
+  if ( minimum < 1 || maximum < 1 )
+    return 0;
+  endif
 
-	if ( minimum > maximum )
-		var temp := minimum;
-		minimum := maximum;
-		maximum := temp;
-	endif
+  if ( minimum > maximum )
+    var temp := minimum;
+    minimum := maximum;
+    maximum := temp;
+  endif
 
-	var x := 0;
-	var y := 0;
-	var z := 0;
+  var x := 0;
+  var y := 0;
+  var z := 0;
 
-	for ( z; z < minimum; z += 1 )
-		x := minimum - z;
-		if ( ( maximum - z ) % x == 0 )
-			y := ( maximum - z ) / x;
-			break;
-		endif
-	endfor
+  for ( z; z < minimum; z += 1 )
+    x := minimum - z;
+    if ( ( maximum - z ) % x == 0 )
+      y := ( maximum - z ) / x;
+      break;
+    endif
+  endfor
 
-	if ( z > 0 )
-		val := CStr ( x+"d"+y+"+"+z );
-	else
-		val := CStr ( x+"d"+y );
-	endif
+  if ( z > 0 )
+    val := CStr( x + "d" + y + "+" + z );
+  else
+    val := CStr( x + "d" + y );
+  endif
 
-	return val;
+  return val;
 endfunction
-
 
 /*
  *
@@ -758,7 +754,7 @@ endfunction
  * Purpose:
  * Formulates a dice string based on a max value and either a total number of sides or a number of dice.
  *
- * Date: 2021-11-23	00:59:43
+ * Date: 2021-11-23    00:59:43
  * Shard Name: Pangaea
  *
  * Author: Oden (ThisIsMe)
@@ -770,30 +766,29 @@ endfunction
  * Return Values:
  * string/error
  *
- */
+*/
 function FormulateDiceString( byref mod, byref amount, byref setting := SIDE_CNT )
 
-	if( mod > amount )
-		return error{ "errortext":="'mod' cannot exceed amount." };
-	endif
+  if ( mod > amount )
+    return error{ "errortext" := "'mod' cannot exceed amount." };
+  endif
 
-	var remainder := amount%mod,
-		val := CInt( amount / mod );
-	if( setting == SIDE_CNT ) // Original functionality...
-		if( !remainder )
-			return CStr( val+"d"+mod );
-		else
-			return CStr( val+"d"+mod+"+"+remainder );
-		endif
-	elseif( setting == DICE_CNT )
-		if( !remainder )
-			return CStr( mod+"d"+val );
-		else
-			return CStr( mod+"d"+val+"+"+remainder );
-		endif
-	endif
+  var remainder := amount % mod, val := CInt( amount / mod );
+  if ( setting == SIDE_CNT ) // Original functionality...
+    if ( !remainder )
+      return CStr( val + "d" + mod );
+    else
+      return CStr( val + "d" + mod + "+" + remainder );
+    endif
+  elseif ( setting == DICE_CNT )
+    if ( !remainder )
+      return CStr( mod + "d" + val );
+    else
+      return CStr( mod + "d" + val + "+" + remainder );
+    endif
+  endif
 
-	return error{ "errortext":="Invalid 'setting' parameter." };
+  return error{ "errortext" := "Invalid 'setting' parameter." };
 endfunction
 
 ///////////////////////////////////////
@@ -807,13 +802,13 @@ endfunction
 //
 //////////////////////////////////////
 
-function Round ( num )
- var checker := CDbl ( num - Floor ( num ) );
- if ( checker < 0.5 )
-  return Floor ( num );
- else
-  return Ceil ( num );
- endif
+function Round( num )
+  var checker := CDbl( num - Floor( num ) );
+  if ( checker < 0.5 )
+    return Floor( num );
+  else
+    return Ceil( num );
+  endif
 endfunction
 
 /*
@@ -823,52 +818,52 @@ endfunction
  * Returns a 1 if the binary digit at the shift_by location is set, e.g. equal to 1.
  * Otherwise it returns a 0.
  *
- * value:		The number on which to perform the test.
- * shift_by:	The bit position to test.
- */
-function IsBitOn ( value, shift_by )
-	return ( 1 & ( value >> shift_by ) );
+ * value:      The number on which to perform the test.
+ * shift_by:   The bit position to test.
+*/
+function IsBitOn( value, shift_by )
+  return ( 1 & ( value >> shift_by ) );
 endfunction
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //
 // function RoundToTens( n, behaviour := NORMAL )
 // Purpose: Round the passed number to an even multiple of 10.
-// Examples:	RoundToTen( 145 ) will return 140.
-//						RoundToTen( 146 ) will return 150.
-// Parameters:	n - Is converted to an integer.
-//						behaviour - constant as defined below.
-//						ROUND_NORMAL will round up or down using normal rounding
-//						rules, ie. if n is in the range of 140 - 145 it will return140.
-//						if n is in the range of 146 to 150 it will return 150.
-//						ROUND_DOWN will always round down to the nearest tens
-//						place, ie. if n is between 140 - 149 it will return 140.
-//						ROUND_UP will always round up to the nearest tens
-//						place, ie. if n is between 140 - 149 it will return 150.
+// Examples:    RoundToTen( 145 ) will return 140.
+//                      RoundToTen( 146 ) will return 150.
+// Parameters:  n - Is converted to an integer.
+//                      behaviour - constant as defined below.
+//                      ROUND_NORMAL will round up or down using normal rounding
+//                      rules, ie. if n is in the range of 140 - 145 it will return140.
+//                      if n is in the range of 146 to 150 it will return 150.
+//                      ROUND_DOWN will always round down to the nearest tens
+//                      place, ie. if n is between 140 - 149 it will return 140.
+//                      ROUND_UP will always round up to the nearest tens
+//                      place, ie. if n is between 140 - 149 it will return 150.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 function RoundToTens( n, behaviour := ROUND_NORMAL )
-	n := CInt(n);
+  n := CInt( n );
 
-    // Smaller multiple
-    var a := (n / 10) * 10;
+  // Smaller multiple
+  var a := ( n / 10 ) * 10;
 
-    // Larger multiple
-    var b := a + 10;
+  // Larger multiple
+  var b := a + 10;
 
-    // Return to even tens place
-	if(behaviour  == ROUND_NORMAL)
-		if(n-a > b -n)
-			return b;
-		else
-			return a;
-		endif
-	elseif(behaviour == ROUND_DOWN)
-			return a;
-	elseif(behaviour == ROUND_UP)
-			return b;
-	endif
+  // Return to even tens place
+  if ( behaviour == ROUND_NORMAL )
+    if ( n - a > b - n )
+      return b;
+    else
+      return a;
+    endif
+  elseif ( behaviour == ROUND_DOWN )
+    return a;
+  elseif ( behaviour == ROUND_UP )
+    return b;
+  endif
 
 endfunction
 
@@ -882,7 +877,7 @@ endfunction
  * Purpose:
  * Converts a string fraction to a double.
  *
- * Date: 2021-06-19	23:46:54
+ * Date: 2021-06-19    23:46:54
  * Shard Name: Pangaea
  *
  * Author: Oden (ThisIsMe)
@@ -894,23 +889,23 @@ endfunction
  * Return Values:
  * double
  *
- */
+*/
 function FractionToDouble( fraction )
 
-    var parts := SplitWords( fraction, "/" ),
-        whole := 0,
-        numerator := parts[1],
-        denominator := CDbl( parts[2] );
+  var parts := SplitWords( fraction, "/" ),
+      whole := 0,
+      numerator := parts[1],
+      denominator := CDbl( parts[2] );
 
-    if( Len( numerator ) == 3 )
-        parts := SplitWords( numerator, " " );
-        whole := CDbl( parts[1] );
-        numerator := CDbl( parts[2] );
-    else
-        numerator := CDbl( numerator );
-    endif
+  if ( Len( numerator ) == 3 )
+    parts := SplitWords( numerator, " " );
+    whole := CDbl( parts[1] );
+    numerator := CDbl( parts[2] );
+  else
+    numerator := CDbl( numerator );
+  endif
 
-    return CDbl( whole + ( numerator / denominator ) );
+  return CDbl( whole + ( numerator / denominator ) );
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -918,7 +913,7 @@ endfunction
 // FunctionName: IsPrime( byref n )
 //
 // Purpose: Determines if a number sent to the function
-//			is a prime number.
+//          is a prime number.
 //
 // Parameter: n:: integer
 //
@@ -927,24 +922,23 @@ endfunction
 ///////////////////////////////////////////////////////////
 function IsPrime( byref n )
 
-	if(TypeOf(n) != "Integer")
-		return error{"errortext" := "The value passed was not an integer."};
-	endif
-	if( n == 2 )
-        return 1;
-    endif
-
-    if( n < 2 || ( n % 2 == 0 ) )
-        return 0;
-    endif
-
-    var i := 3;
-    for( i:=3; i*i<=n; i+=2 )
-        if( n % i == 0 )
-            return 0;
-        endif
-    endfor
-
+  if ( TypeOf( n ) != "Integer" )
+    return error{ "errortext" := "The value passed was not an integer." };
+  endif
+  if ( n == 2 )
     return 1;
-endfunction
+  endif
 
+  if ( n < 2 || ( n % 2 == 0 ) )
+    return 0;
+  endif
+
+  var i := 3;
+  for ( i := 3; i * i <= n; i += 2 )
+    if ( n % i == 0 )
+      return 0;
+    endif
+  endfor
+
+  return 1;
+endfunction

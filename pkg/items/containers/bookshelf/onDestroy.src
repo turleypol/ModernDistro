@@ -1,9 +1,9 @@
 /*
-		onDestroy.src for bookshelves.
+       onDestroy.src for bookshelves.
 
-		This programme removes a bookshelf from the
-		spawnedbookshelves data file when the shelf
-		is destroyed.
+       This programme removes a bookshelf from the
+       spawnedbookshelves data file when the shelf
+       is destroyed.
 
         Maintained by The POL Distro Team
 
@@ -14,11 +14,10 @@ use datafile;
 
 include ":sysbook:spawnShelf";
 
+program onBookshelfDestroy( bookshelf )
 
-program onBookshelfDestroy( bookshelf)
+  var shelves := RetrieveOrInitBookshelfDB();
+  shelves.DeleteElement( bookshelf.serial );
 
-	var shelves := RetrieveOrInitBookshelfDB();
-	shelves.DeleteElement(bookshelf.serial);
-
-	return 1;
+  return 1;
 endprogram

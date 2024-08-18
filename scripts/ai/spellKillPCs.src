@@ -22,15 +22,15 @@ include "ai/main/sleepMode";
 include "ai/main/closeDistance";
 
 const HALT_THRESHOLD := 15;
-var npccfgfile     := ReadConfigFile( "npcdesc" );
-var LAST_BREATH    := ReadGameClock();
+var npccfgfile := ReadConfigFile( "npcdesc" );
+var LAST_BREATH := ReadGameClock();
 var FLAME_STRENGTH := npccfgfile[me.npctemplate].flamestrength;
-var idlesnd1       := CInt(npccfgfile[me.npctemplate].idlesound1);
-var idlesnd2       := CInt(npccfgfile[me.npctemplate].idlesound2);
+var idlesnd1 := CInt( npccfgfile[me.npctemplate].idlesound1 );
+var idlesnd2 := CInt( npccfgfile[me.npctemplate].idlesound2 );
 
 program KillPlayers()
-  if(GetObjProperty(me, "frozen"))
-	me.frozen := 1;
+  if ( GetObjProperty( me, "frozen" ) )
+    me.frozen := 1;
   endif
   SetWarMode( 0 );
   main_AI_loop();

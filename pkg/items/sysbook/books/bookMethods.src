@@ -1,77 +1,77 @@
 use uo;
 use os;
 
-exported function IsWritable(book)
-  if(GetObjProperty(book, "NoWrite") || (book.container.IsBookshelf()))
+exported function IsWritable( book )
+  if ( GetObjProperty( book, "NoWrite" ) || ( book.container.IsBookshelf() ) )
     return 0;
   else
-//    if(book.movable == 0)
-//      return 0;
-//    endif
+    //    if(book.movable == 0)
+    //      return 0;
+    //    endif
     return 1;
   endif
 endfunction
 
-exported function GetNumLines(book)
-  return book.getprop("maxpages") * 8;
+exported function GetNumLines( book )
+  return book.getprop( "maxpages" ) * 8;
 endfunction
 
-exported function GetTitle(book)
-  var res := book.getprop("title");
-  if(res)
+exported function GetTitle( book )
+  var res := book.getprop( "title" );
+  if ( res )
     return res;
   else
     return "";
   endif
 endfunction
 
-exported function SetTitle(book, title)
+exported function SetTitle( book, title )
 
-  if(GetObjProperty(book, "NoWrite") || (book.container.IsBookshelf()))
+  if ( GetObjProperty( book, "NoWrite" ) || ( book.container.IsBookshelf() ) )
     return 0;
   endif
 
-  title := Cleans(title);
+  title := Cleans( title );
 
-  book.setprop("title", title);
+  book.setprop( "title", title );
   book.name := title;
 endfunction
 
-exported function GetAuthor(book)
-  var res := book.getprop("author");
-  if(res)
+exported function GetAuthor( book )
+  var res := book.getprop( "author" );
+  if ( res )
     return res;
   else
     return "";
   endif
 endfunction
 
-exported function SetAuthor(book, author)
+exported function SetAuthor( book, author )
 
-  if(GetObjProperty(book, "NoWrite") || (book.container.IsBookshelf()))
+  if ( GetObjProperty( book, "NoWrite" ) || ( book.container.IsBookshelf() ) )
     return 0;
   endif
-  author := Cleans(author);
+  author := Cleans( author );
 
-  book.setprop("author", author);
+  book.setprop( "author", author );
 endfunction
 
-exported function GetContents(book)
-  var contents := book.getprop("contents");
-  if(contents == error)
+exported function GetContents( book )
+  var contents := book.getprop( "contents" );
+  if ( contents == error )
     contents := array;
   endif
   return contents;
 endfunction
 
-exported function GetLine(book, line)
-  var contents := book.getprop("contents");
-  if(contents == error)
+exported function GetLine( book, line )
+  var contents := book.getprop( "contents" );
+  if ( contents == error )
     contents := array;
   endif
-  if(line <= contents.size())
+  if ( line <= contents.size() )
     var text := contents[line];
-    if(text)
+    if ( text )
       return text;
     else
       return "";
@@ -81,45 +81,44 @@ exported function GetLine(book, line)
   endif
 endfunction
 
-exported function SetLine(book, line, text)
+exported function SetLine( book, line, text )
 
-  if(GetObjProperty(book, "NoWrite") || (book.container.IsBookshelf()))
+  if ( GetObjProperty( book, "NoWrite" ) || ( book.container.IsBookshelf() ) )
     return 0;
   endif
-  var contents := book.getprop("contents");
-  if(contents == error)
+  var contents := book.getprop( "contents" );
+  if ( contents == error )
     contents := array;
   endif
-  contents[ line ] := Cleans(text);
-  book.setprop("contents", contents);
+  contents[line] := Cleans( text );
+  book.setprop( "contents", contents );
   return 1;
 endfunction
 
-exported function IsBook(book)
-	book := book;
-	return 1;
+exported function IsBook( book )
+  book := book;
+  return 1;
 endfunction
 
-function Cleans(chain)
- var tabchaine := CascZ(chain);
- var result := "";
- var i := 1;
- var bon := 1;
+function Cleans( chain )
+  var tabchaine := CascZ( chain );
+  var result := "";
+  var i := 1;
+  var bon := 1;
 
- while (bon == 1)
-  var car := tabchaine[i];
-  if (car > 0)
-   result := result + Cchr(car);
-   i := i + 1;
-  else
-   bon := 0;
-  endif
- endwhile
+  while ( bon == 1 )
+    var car := tabchaine[i];
+    if ( car > 0 )
+      result := result + Cchr( car );
+      i := i + 1;
+    else
+      bon := 0;
+    endif
+  endwhile
 
- return result;
+  return result;
 endfunction
 
 program BookInterface()
   return 1;
 endprogram
-

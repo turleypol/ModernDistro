@@ -1,4 +1,4 @@
-/**
+/* *
  * Localizable data constants. Do not localize constant names, but
  * you can localize the string values.
  *
@@ -7,8 +7,8 @@
  * @url        http://www.andromeda-uo.net/
  * @version    1.0 (%G%)
  * @copyright  (C) Copyright 2002-2003
- */
- 
+*/
+
 // constants //
 
 const DateSeparator := "-";
@@ -55,4 +55,3 @@ const SLongDayNameWed := "Wednesday";
 const SLongDayNameThu := "Thursday";
 const SLongDayNameFri := "Friday";
 const SLongDayNameSat := "Saturday";
-

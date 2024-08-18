@@ -4,10 +4,9 @@
 ///////////////////////////////////////
 use uo;
 
-
-program use_basin(who, basin)
-	basin := basin;
-	SendSysMessage(who, "You wash your face and hands.", 3, 88);
-	SendSysMessage(who, "You feel refreshed.", 3, 88);
+program use_basin( who, basin )
+  basin := basin;
+  SendSysMessage( who, "You wash your face and hands.", 3, 88 );
+  SendSysMessage( who, "You feel refreshed.", 3, 88 );
 
 endprogram

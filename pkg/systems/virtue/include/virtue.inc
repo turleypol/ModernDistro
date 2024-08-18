@@ -11,26 +11,28 @@ include ":virtue:settings";
 include "include/findCity";
 
 // virtues are the canonical names of the eight virtues.
-var virtues :=	{"valor", "honor", "compassion", "justice", "honesty", "spirituality", "sacrifice", "humility"};
+var virtues := { "valor", "honor", "compassion", "justice", "honesty",
+                 "spirituality", "sacrifice", "humility" };
 
 // mantras are the words that must be spokenafter using the meditation skill near a shrine.
 // Their order corresponds to the order of the virtues above, ie. Ra must be spoken at the Valor shine,
 // Summ at the Honor shrint etc.
-var mantras :=  {"Ra",    "Summ",   "Mu",        "Beh",     "Ahm",     "Om",           "Cah",       "Lum"};
+var mantras := { "Ra", "Summ", "Mu", "Beh", "Ahm", "Om", "Cah", "Lum" };
 
 // words_of_power - These are never used in game but they are documented and are included here
 // for possible future expansion of the Distro. Their order corresponds to the order of the virtues above.
-var words_of_power := {"Inopia", "Infama", "Vilis", "Malum", "Fallax", "Ignavus", "Avidus", "Veramocor"};
+var words_of_power := { "Inopia", "Infama", "Vilis", "Malum", "Fallax",
+                        "Ignavus", "Avidus", "Veramocor" };
 
-var settings := VS_GetSettingsCfgElem("Settings");
+var settings := VS_GetSettingsCfgElem( "Settings" );
 
 // virtuemax is the maximum absolute virtuescore a player can earn
 // in a virtue (+/- virtuemax)
-var virtuemax := CInt(settings.MaxRange);
+var virtuemax := CInt( settings.MaxRange );
 
 // virtueamt is the default virtue points that are awarded if
 // the calling programme does noy send a value for amt.
-var virtueamt := CInt(settings.VirtueAdjustAmount);
+var virtueamt := CInt( settings.VirtueAdjustAmount );
 
 ///////////////////////////////
 //
@@ -50,15 +52,15 @@ var virtueamt := CInt(settings.VirtueAdjustAmount);
 //
 ///////////////////////////////
 
-function VS_GetMantra(virtue_name)
+function VS_GetMantra( virtue_name )
 
-	foreach virtue in virtues
-		if(virtue_name == virtue)
-			return Lower(mantras[_virtue_iter]);
-		endif
-	endforeach
-	// We did not find a matching virtue, so return "_Error".
-	return "_Error";
+  foreach virtue in virtues
+    if ( virtue_name == virtue )
+      return Lower( mantras[_virtue_iter] );
+    endif
+  endforeach
+  // We did not find a matching virtue, so return "_Error".
+  return "_Error";
 endfunction
 
 ///////////////////////////////
@@ -87,46 +89,47 @@ endfunction
 //
 ///////////////////////////////
 
-function VS_AdjustVirtue(who, virtue, amt := 0, prob := 102)
+function VS_AdjustVirtue( who, virtue, amt := 0, prob := 102 )
 
-	virtue := Lower(virtue);
+  virtue := Lower( virtue );
 
-	if(TypeOf(amt) == "String")
-		amt := Lower(amt);
-		if(amt.Find("d",2))
-			amt := RandomDiceRoll(amt);
-			if(amt.errortext)
-				SysLog("The D-String string sent to VS_AdjustVirtue() in :virtue:virtue.inc is improperly formatted.\n" + amt.errortext);
-				return 0;
-			endif
-		else
-			SysLog("The value for 'amt' sent to VS_AdjustVirtue() in :virtue:virtue.inc was a string but not properly formatted for RandomDiceRoll().");
-		endif
-	endif
+  if ( TypeOf( amt ) == "String" )
+    amt := Lower( amt );
+    if ( amt.Find( "d", 2 ) )
+      amt := RandomDiceRoll( amt );
+      if ( amt.errortext )
+        SysLog( "The D-String string sent to VS_AdjustVirtue() in :virtue:virtue.inc is improperly formatted.\n"
+              + amt.errortext );
+        return 0;
+      endif
+    else
+      SysLog( "The value for 'amt' sent to VS_AdjustVirtue() in :virtue:virtue.inc was a string but not properly formatted for RandomDiceRoll()." );
+    endif
+  endif
 
-	// If the mobile is not a player character or the random dice roll here is greater than prob no virtue is awarded.
-	if ( (!who.acctname) or (RandomInt(100) + 1 > prob) )
-		return 0;
-	endif
+  // If the mobile is not a player character or the random dice roll here is greater than prob no virtue is awarded.
+  if ( ( !who.acctname ) or ( RandomInt( 100 ) + 1 > prob ) )
+    return 0;
+  endif
 
-	if(!amt)
-		amt := CInt(virtueamt);
-	endif
+  if ( !amt )
+    amt := CInt( virtueamt );
+  endif
 
-	var virtuescore := VS_GetVirtueAmount(who, virtue);
-	if (!virtuescore)
-		virtuescore := 0;
-	endif
+  var virtuescore := VS_GetVirtueAmount( who, virtue );
+  if ( !virtuescore )
+    virtuescore := 0;
+  endif
 
-	virtuescore := virtuescore + amt;
-	if (virtuescore > virtuemax)
-		virtuescore := virtuemax;
-	elseif (virtuescore < (-1 * virtuemax))
-		virtuescore := (-1 * virtuemax);
-	endif
+  virtuescore := virtuescore + amt;
+  if ( virtuescore > virtuemax )
+    virtuescore := virtuemax;
+  elseif ( virtuescore < ( -1 * virtuemax ) )
+    virtuescore := ( -1 * virtuemax );
+  endif
 
-	VS_SetVirtueAmount(who, virtue, virtuescore);
-	return 1;
+  VS_SetVirtueAmount( who, virtue, virtuescore );
+  return 1;
 
 endfunction
 
@@ -144,9 +147,9 @@ endfunction
 // returns the integer value attached to the CProp "Virtue_" + <virtue>
 ///////////////////////////////
 
-function VS_GetVirtueAmount(who, virtue)
+function VS_GetVirtueAmount( who, virtue )
 
-  return CInt(GetObjProperty(who, "Virtue_" + VS_Capitalize(virtue)));
+  return CInt( GetObjProperty( who, "Virtue_" + VS_Capitalize( virtue ) ) );
 
 endfunction
 
@@ -164,9 +167,10 @@ endfunction
 // returns the integer value attached to the CProp "Virtue_" + <virtue>
 ///////////////////////////////
 
-function VS_SetVirtueAmount(who, virtue, virtuescore)
+function VS_SetVirtueAmount( who, virtue, virtuescore )
 
-  return CInt(SetObjProperty(who, "Virtue_" + VS_Capitalize(virtue), virtuescore));
+  return CInt( SetObjProperty( who, "Virtue_" + VS_Capitalize( virtue ),
+                               virtuescore ) );
 
 endfunction
 
@@ -188,4 +192,3 @@ Humility: 1153, 2403, 2405
  * 1073281 - 'Truth, Love and Courage are the three principles that make up the eight Virtues.'
  *
 */
-
