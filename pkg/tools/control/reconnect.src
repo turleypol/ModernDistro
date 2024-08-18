@@ -11,9 +11,9 @@ include ":control:internal/cmdbar";
 
 program Reconnect( who )
 
-	if( !ICP_LoadUserSetting( who, "NoCmdBarLogin" ) && !who.dead && who.cmdlevel )
-		Start_Script( ":control:commands/coun/cmdbar", who );
-	endif
+  if ( !ICP_LoadUserSetting( who, "NoCmdBarLogin" ) && !who.dead && who.cmdlevel )
+    Start_Script( ":control:commands/coun/cmdbar", who );
+  endif
 
-	return 1;
+  return 1;
 endprogram

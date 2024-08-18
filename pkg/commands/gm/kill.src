@@ -6,16 +6,16 @@ include ":attributes:attributes";
 include ":damage:damage";
 
 program textcmd_kill( who )
-    var tgt := TargetCoordinates( who );
-    if (tgt.mobile)
-        var mob := tgt.mobile;
+  var tgt := TargetCoordinates( who );
+  if ( tgt.mobile )
+    var mob := tgt.mobile;
 
-        if (!mob.dead)
-            RevokePrivilege( mob, "invul" );
-            SetObjProperty(mob, "guardkill", 1);
-            KillMobile(mob);
-        else
-            SendSysMessage( who, "That Tickles!" );
-        endif
+    if ( !mob.dead )
+      RevokePrivilege( mob, "invul" );
+      SetObjProperty( mob, "guardkill", 1 );
+      KillMobile( mob );
+    else
+      SendSysMessage( who, "That Tickles!" );
     endif
+  endif
 endprogram

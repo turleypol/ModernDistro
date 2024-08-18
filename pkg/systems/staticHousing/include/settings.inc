@@ -1,6 +1,6 @@
-//$Id: settings.inc 373 2006-06-17 18:27:33Z austinheilman $
+// $Id: settings.inc 373 2006-06-17 18:27:33Z austinheilman $
 
-/*===============================================================
+/* ===============================================================
 * Current Version
 * SETTINGS.INC - v1.0
 * Updated 9/27/2005 2:54PM
@@ -8,7 +8,7 @@
 * -- Revision v1.0 --
 * Austin:
 *  Created include file
-===============================================================*/
+=============================================================== */
 
 use uo;
 use os;
@@ -25,43 +25,44 @@ use cfgfile;
  * Return value
  * A config file reference.
  *
- */
+*/
 function SH_GetSettingsCfgFile()
-	UnloadConfigFile(":staticHousing:settings");
-	var cfg := ReadConfigFile(":staticHousing:settings");
+  UnloadConfigFile( ":staticHousing:settings" );
+  var cfg := ReadConfigFile( ":staticHousing:settings" );
 
-	if ( cfg.errortext )
-		SysLog("Error::SH_GetSettingsCfgFile() - Unable to open [:staticHousing:settings.cfg] ->"+cfg.errortext);
-	endif
+  if ( cfg.errortext )
+    SysLog( "Error::SH_GetSettingsCfgFile() - Unable to open [:staticHousing:settings.cfg] ->"
+          + cfg.errortext );
+  endif
 
-	return cfg;
+  return cfg;
 endfunction
 
 /*
  * SH_GetSettingsCfgElem(elem_name, cfg_file)
  *
  * Purpose
- * Retrieves an elem from a config file. 
+ * Retrieves an elem from a config file.
  *
  * Parameters
- * elem_name:	A string matching the elem name to be retrieved.
- * cfg_file:	Optional parameter - reference to a config already read in by SH_GetSettingsCfgFile()
+ * elem_name:  A string matching the elem name to be retrieved.
+ * cfg_file:   Optional parameter - reference to a config already read in by SH_GetSettingsCfgFile()
  *
  * Return value
  * A config file elem reference.
  *
- */
-function SH_GetSettingsCfgElem(elem_name, byref cfg_file:=0)
+*/
+function SH_GetSettingsCfgElem( elem_name, byref cfg_file := 0 )
 
   if ( !cfg_file )
-		cfg_file := SH_GetSettingsCfgFile();
-	endif
-	
-	var elem := cfg_file[elem_name];
+    cfg_file := SH_GetSettingsCfgFile();
+  endif
+
+  var elem := cfg_file[elem_name];
 
   if ( elem.errortext )
-		SysLog("Error::SH_GetSettingsCfgElem() - Unable to find elem ["+elem_name+"] ->"+elem.errortext);
-	endif
+    SysLog( "Error::SH_GetSettingsCfgElem() - Unable to find elem [" + elem_name + "] ->" + elem.errortext );
+  endif
 
-	return elem;
+  return elem;
 endfunction

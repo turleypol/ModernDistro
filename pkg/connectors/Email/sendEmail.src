@@ -4,44 +4,72 @@ use cfgfile;
 use file;
 
 program testconnection( connection, params )
-	
-var ev;
-var i:=1;
-var LogLevel := params.LL;
-broadcast("LL: "+LogLevel);
 
-	while (connection)
-		ev := wait_for_event( 5 );
-		if (ev)
-			if( LogLevel >= 4 )
-			LogToFile("::log/emailer.log", "[Recieved]: "+ev.value, LOG_DATETIME);
-			endif
-			if( LogLevel >= 10 )
-				print("[:Emailer:Recieved] "+ev.value);
-			endif
-			if(ev.errortext)
-				if( LogLevel >= 1 )
-					LogToFile("::log/emailer.log", "[Recieve Error]: "+ev.errortext, LOG_DATETIME);
-				endif
-				if( LogLevel >= 10 )
-					print("[:Emailer:Recieved:Error] "+ev.errortext);
-				endif
-				break;
-			endif
-			case(i)
-				1: if( SubStr(ev.value, 1, 3) == "220" ) ProccessTransmit(connection, "HELO", LogLevel); else ProccessError(ev.value, LogLevel);  endif
-			  2: if( SubStr(ev.value, 1, 3) == "250" ) ProccessTransmit(connection, "MAIL FROM: "+params.FromEmail, LogLevel); else ProccessError(ev.value, LogLevel);   endif
-				3: if( SubStr(ev.value, 1, 3) == "250" ) SendRecipients( connection, params ); else ProccessError(ev.value, LogLevel);   endif
-				4: if( SubStr(ev.value, 1, 3) == "250" ) ProccessTransmit(connection, "DATA", LogLevel); else ProccessError(ev.value, LogLevel);   endif
-				5: if( SubStr(ev.value, 1, 3) == "354" ) SendContents( connection, params ); else ProccessError(ev.value, LogLevel);   endif	
-				6: break;
-			endcase
-			if( i == 7 )
-				break;
-			endif
-			i+= 1;
-		endif
-	endwhile
+  var ev;
+  var i := 1;
+  var LogLevel := params.LL;
+  broadcast( "LL: " + LogLevel );
+
+  while ( connection )
+    ev := wait_for_event( 5 );
+    if ( ev )
+      if ( LogLevel >= 4 )
+        LogToFile( "::log/emailer.log", "[Recieved]: " + ev.value, LOG_DATETIME );
+      endif
+      if ( LogLevel >= 10 )
+        print( "[:Emailer:Recieved] " + ev.value );
+      endif
+      if ( ev.errortext )
+        if ( LogLevel >= 1 )
+          LogToFile( "::log/emailer.log", "[Recieve Error]: " + ev.errortext,
+                     LOG_DATETIME );
+        endif
+        if ( LogLevel >= 10 )
+          print( "[:Emailer:Recieved:Error] " + ev.errortext );
+        endif
+        break;
+      endif
+      case ( i )
+        1:
+          if ( SubStr( ev.value, 1, 3 ) == "220" )
+            ProccessTransmit( connection, "HELO", LogLevel );
+          else
+            ProccessError( ev.value, LogLevel );
+          endif
+        2:
+          if ( SubStr( ev.value, 1, 3 ) == "250" )
+            ProccessTransmit( connection, "MAIL FROM: " + params.FromEmail,
+                              LogLevel );
+          else
+            ProccessError( ev.value, LogLevel );
+          endif
+        3:
+          if ( SubStr( ev.value, 1, 3 ) == "250" )
+            SendRecipients( connection, params );
+          else
+            ProccessError( ev.value, LogLevel );
+          endif
+        4:
+          if ( SubStr( ev.value, 1, 3 ) == "250" )
+            ProccessTransmit( connection, "DATA", LogLevel );
+          else
+            ProccessError( ev.value, LogLevel );
+          endif
+        5:
+          if ( SubStr( ev.value, 1, 3 ) == "354" )
+            SendContents( connection, params );
+          else
+            ProccessError( ev.value, LogLevel );
+          endif
+        6:
+          break;
+      endcase
+      if ( i == 7 )
+        break;
+      endif
+      i += 1;
+    endif
+  endwhile
 endprogram
 
 /*
@@ -58,20 +86,20 @@ endprogram
  * Return value
  * Nothing, error checking is done after this by the parent function.
  *
- */
+*/
 
 function SendRecipients( connection, params )
-	
-	ProccessTransmit(connection, "RCPT TO:<"+params.ToEmail+">", params.LL);
-	if( params.CC )
-		ProccessTransmit(connection, "RCPT TO:<"+params.CC+">", params.LL);
-	endif 
-	
-	if( params.BCC )
-		ProccessTransmit(connection, "RCPT TO:<"+params.BCC+">", params.LL);
-	endif
-	return 1;
-	
+
+  ProccessTransmit( connection, "RCPT TO:<" + params.ToEmail + ">", params.LL );
+  if ( params.CC )
+    ProccessTransmit( connection, "RCPT TO:<" + params.CC + ">", params.LL );
+  endif
+
+  if ( params.BCC )
+    ProccessTransmit( connection, "RCPT TO:<" + params.BCC + ">", params.LL );
+  endif
+  return 1;
+
 endfunction
 
 /*
@@ -88,36 +116,35 @@ endfunction
  * Return value
  * Nothing, error checking is done after this by the parent script.
  *
- */
- 
+*/
+
 function SendContents( connection, params )
-	
-	var tostring;
-	if( params.ToContactName )
-		tostring :=  params.ToContactName+"<"+params.ToEmail+">";
-	else
-		tostring := "<"+params.ToEmail+">";
-	endif
-		ProccessTransmit(connection, "To: "+tostring, params.LL);
-	if( params.CC )
-		ProccessTransmit(connection, "cc: "+params.CC, params.LL);
-	endif 
-	
-	if( params.BCC )
-		ProccessTransmit(connection, "bcc: "+params.BCC, params.LL);
-	endif
-	
-	if( params.ReplyTo )
-		ProccessTransmit(connection, "Reply-To: "+params.ReplyTo, params.LL);
-	endif
-		
-	
-	ProccessTransmit(connection, "SUBJECT: "+params.Subject, params.LL);
-	
-	ProccessTransmit(connection, params.Body, params.LL);
-	//Closure Block - This is currently not logged//
-	connection.transmit("");
-	connection.transmit(".");
+
+  var tostring;
+  if ( params.ToContactName )
+    tostring := params.ToContactName + "<" + params.ToEmail + ">";
+  else
+    tostring := "<" + params.ToEmail + ">";
+  endif
+  ProccessTransmit( connection, "To: " + tostring, params.LL );
+  if ( params.CC )
+    ProccessTransmit( connection, "cc: " + params.CC, params.LL );
+  endif
+
+  if ( params.BCC )
+    ProccessTransmit( connection, "bcc: " + params.BCC, params.LL );
+  endif
+
+  if ( params.ReplyTo )
+    ProccessTransmit( connection, "Reply-To: " + params.ReplyTo, params.LL );
+  endif
+
+  ProccessTransmit( connection, "SUBJECT: " + params.Subject, params.LL );
+
+  ProccessTransmit( connection, params.Body, params.LL );
+  // Closure Block - This is currently not logged//
+  connection.transmit( "" );
+  connection.transmit( "." );
 endfunction
 
 /*
@@ -135,20 +162,19 @@ endfunction
  * Return value
  * Nothing, error checking is done after this by the parent function.
  *
- */
- 
-function ProccessTransmit(connection, command, LogLevel)
-		
-		if( LogLevel >= 3 )
-			LogToFile("::log/emailer.log", "[Transmit]: "+command, LOG_DATETIME);
-		endif
-		if( LogLevel >= 10 )
-			Print("[:Emailer:Transmit]: "+command);
-		endif
-		
-		connection.transmit(command); 
-		
-		
+*/
+
+function ProccessTransmit( connection, command, LogLevel )
+
+  if ( LogLevel >= 3 )
+    LogToFile( "::log/emailer.log", "[Transmit]: " + command, LOG_DATETIME );
+  endif
+  if ( LogLevel >= 10 )
+    Print( "[:Emailer:Transmit]: " + command );
+  endif
+
+  connection.transmit( command );
+
 endfunction
 
 /*
@@ -165,15 +191,15 @@ endfunction
  * Return value
  * Nothing, error checking shouldn't be required, the error has already happened.
  *
- */
- 
-function ProccessError(ErrorMessage, LogLevel)
-		
-		if( LogLevel >= 1 )
-			LogToFile("::log/emailer.log", "[Error] "+ErrorMessage, LOG_DATETIME);
-		endif
-		if( LogLevel >= 10 )
-			Print("[:Emailer:Error] "+ErrorMessage);
-		endif
-		
+*/
+
+function ProccessError( ErrorMessage, LogLevel )
+
+  if ( LogLevel >= 1 )
+    LogToFile( "::log/emailer.log", "[Error] " + ErrorMessage, LOG_DATETIME );
+  endif
+  if ( LogLevel >= 10 )
+    Print( "[:Emailer:Error] " + ErrorMessage );
+  endif
+
 endfunction

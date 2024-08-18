@@ -4,10 +4,10 @@ include ":datafile:datafile";
 
 program charProfile_onDelete( who )
 
-	var cp_data_file  := DFOpenDataFile( ":jailKeeper:jailKeeper", DF_NO_CREATE );
-	if( cp_data_file )
-		return cp_data_file.DeleteElement( Hex( who.serial ));
-	endif
- 
-	return 1;
+  var cp_data_file := DFOpenDataFile( ":jailKeeper:jailKeeper", DF_NO_CREATE );
+  if ( cp_data_file )
+    return cp_data_file.DeleteElement( Hex( who.serial ) );
+  endif
+
+  return 1;
 endprogram

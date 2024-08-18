@@ -6,11 +6,8 @@ use uo;
 
 include ":npcs:garment";
 
-
 program textcmd_action( who, template )
 
-    Habille (who, template);
-
-
+  Habille( who, template );
 
 endprogram

@@ -3,7 +3,7 @@
  * Purpose
  * Provide various functions and constants for the shard's behaviour.
  *
- */
+*/
 use cfgfile;
 use os;
 
@@ -17,22 +17,22 @@ use os;
  * default elem name.
  *
  * Parameters
- * what:	The name of the config elem to return
- * cfg_file:	Optional. Packaged name of the config file.
- * elem_name:	Optional. Elem name to look up in the config.
+ * what:   The name of the config elem to return
+ * cfg_file:   Optional. Packaged name of the config file.
+ * elem_name:  Optional. Elem name to look up in the config.
  *
  * Return value
  * The config file's value for the desired elem.
  *
- */
-function QueryConfigString(what, cfg_file, elem_name)
-	var ret_value := GetConfigString(FindConfigElem(ReadConfigFile(cfg_file), elem_name), what);
-	if( ret_value.errortext )
-		SysLog("Error::QueryConfigString() - Unable to open ["+cfg_file+"] ->"+ret_value.errortext);
-	endif
-	return ret_value;
+*/
+function QueryConfigString( what, cfg_file, elem_name )
+  var ret_value := GetConfigString( FindConfigElem( ReadConfigFile( cfg_file ),
+                                                    elem_name ), what );
+  if ( ret_value.errortext )
+    SysLog( "Error::QueryConfigString() - Unable to open [" + cfg_file + "] ->" + ret_value.errortext );
+  endif
+  return ret_value;
 endfunction
-
 
 /*
  * QueryConfigInt(what)
@@ -43,18 +43,19 @@ endfunction
  * default elem name.
  *
  * Parameters
- * what:	The name of the config elem to return
- * cfg_file:	Optional. Packaged name of the config file.
- * elem_name:	Optional. Elem name to look up in the config.
+ * what:   The name of the config elem to return
+ * cfg_file:   Optional. Packaged name of the config file.
+ * elem_name:  Optional. Elem name to look up in the config.
  *
  * Return value
  * The config file's value for the desired elem.
  *
- */
-function QueryConfigInt(what, cfg_file, elem_name)
-	var ret_value := GetConfigInt(FindConfigElem(ReadConfigFile(cfg_file), elem_name), what);
-	if( ret_value.errortext )
-		SysLog("Error::QueryConfigInt() - Unable to open ["+cfg_file+"] ->"+ret_value.errortext);
-	endif
-	return ret_value;
+*/
+function QueryConfigInt( what, cfg_file, elem_name )
+  var ret_value := GetConfigInt( FindConfigElem( ReadConfigFile( cfg_file ),
+                                                 elem_name ), what );
+  if ( ret_value.errortext )
+    SysLog( "Error::QueryConfigInt() - Unable to open [" + cfg_file + "] ->" + ret_value.errortext );
+  endif
+  return ret_value;
 endfunction

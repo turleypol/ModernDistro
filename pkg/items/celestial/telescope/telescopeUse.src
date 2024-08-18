@@ -6,18 +6,18 @@ use os;
 
 include ":gumps:gumps";
 
-program gump_gump(who)
+program gump_gump( who )
 
-	var gump := GFCreateGump();
+  var gump := GFCreateGump();
 
-	GFPage(gump, 0);
+  GFPage( gump, 0 );
 
-	//Image 1
-	GFGumpPic(gump, 55, -6, 1664, 0);
+  // Image 1
+  GFGumpPic( gump, 55, -6, 1664, 0 );
 
-	//Image 2
-	GFGumpPic(gump, 225, 140, 1725, 0);
+  // Image 2
+  GFGumpPic( gump, 225, 140, 1725, 0 );
 
-	GFSendGump(who, gump);
+  GFSendGump( who, gump );
 
 endprogram

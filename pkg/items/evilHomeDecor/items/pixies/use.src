@@ -4,11 +4,11 @@ use util;
 
 include ":itemutils:itemdesc";
 
-program Pixie_use ( unused who, pixie )
-	var sounds := GetObjTypeArray ( pixie.graphic, "Sounds" );
-	
-	var playsound := sounds.randomentry();
-	
-	PlaySoundEffect ( pixie, CInt ( playsound ) );
-	return 1;
+program Pixie_use( unused who, pixie )
+  var sounds := GetObjTypeArray( pixie.graphic, "Sounds" );
+
+  var playsound := sounds.randomentry();
+
+  PlaySoundEffect( pixie, CInt( playsound ) );
+  return 1;
 endprogram

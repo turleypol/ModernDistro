@@ -8,9 +8,9 @@ use util;
 
 program OnCreate_Debris( debris )
 
-        var debris_graphics := array(3117, 3118, 3119, 3120);
-        
-	debris.graphic := debris_graphics.RandomEntry();
-	
-	return 1;
+  var debris_graphics := array( 3117, 3118, 3119, 3120 );
+
+  debris.graphic := debris_graphics.RandomEntry();
+
+  return 1;
 endprogram
