@@ -1,6 +1,6 @@
-//$Id: vitals.inc 1064 2007-08-01 16:17:29Z tekproxy $
+// $Id: vitals.inc 1064 2007-08-01 16:17:29Z tekproxy $
 
-/*===============================================================
+/* ===============================================================
 * Current Version
 * VITALS.INC - v1.0
 * Updated 9/24/2005 6:52PM
@@ -8,7 +8,7 @@
 * -- Revision v1.0 --
 * Austin:
 *  Created include file
-===============================================================*/
+=============================================================== */
 
 use uo;
 use os;
@@ -25,15 +25,15 @@ use cfgfile;
  * Return value
  * Config file
  *
- */
+*/
 function AP_GetVitalsCfgFile()
 
-	var cfg_file := ReadConfigFile( ":attributes:vitals" );
-	if( cfg_file.errortext )
-		SysLog( "Error::AP_GetVitalsCfgFile() - Unable to open vitals.cfg ->"+cfg_file.errortext );
-	endif
+  var cfg_file := ReadConfigFile( ":attributes:vitals" );
+  if ( cfg_file.errortext )
+    SysLog( "Error::AP_GetVitalsCfgFile() - Unable to open vitals.cfg ->" + cfg_file.errortext );
+  endif
 
-	return cfg_file;
+  return cfg_file;
 endfunction
 
 /*
@@ -49,19 +49,19 @@ endfunction
  * Return value
  * Returns a config file elem.
  *
- */
-function AP_GetVitalCfgElem( vital_name, byref cfg_file:=0 )
+*/
+function AP_GetVitalCfgElem( vital_name, byref cfg_file := 0 )
 
-	if( !cfg_file )
-		cfg_file := AP_GetVitalsCfgFile();
-	endif
+  if ( !cfg_file )
+    cfg_file := AP_GetVitalsCfgFile();
+  endif
 
-	var cfg_elem := cfg_file[vital_name];
-	if( cfg_elem.errortext )
-		SysLog( "Error::AP_GetVitalsCfgElem() - unable to find cfg elem ["+vital_name+"] ->"+cfg_elem.errortext );
-	endif
+  var cfg_elem := cfg_file[vital_name];
+  if ( cfg_elem.errortext )
+    SysLog( "Error::AP_GetVitalsCfgElem() - unable to find cfg elem [" + vital_name + "] ->" + cfg_elem.errortext );
+  endif
 
-	return cfg_elem;
+  return cfg_elem;
 endfunction
 
 /*
@@ -75,10 +75,10 @@ endfunction
  * Return value
  * Returns an array of strings
  *
- */
+*/
 function AP_GetVitalNames()
 
-	return GetConfigStringKeys( AP_GetVitalsCfgFile() );
+  return GetConfigStringKeys( AP_GetVitalsCfgFile() );
 endfunction
 
 /*
@@ -94,10 +94,10 @@ endfunction
  * Return value
  * Returns a double.
  *
- */
+*/
 function AP_GetVital( mobile, vital_name )
 
-	return CDbl( GetVital( mobile, vital_name )) / 100.0;
+  return CDbl( GetVital( mobile, vital_name ) ) / 100.0;
 endfunction
 
 /*
@@ -113,10 +113,10 @@ endfunction
  * Return value
  * Returns an integer.
  *
- */
+*/
 function AP_GetVitalMaximumValue( mobile, vital_name )
 
-	return CDbl( GetVitalMaximumValue( mobile, vital_name )) / 100.0;
+  return CDbl( GetVitalMaximumValue( mobile, vital_name ) ) / 100.0;
 endfunction
 
 /*
@@ -132,10 +132,10 @@ endfunction
  * Return value
  * Returns an integer.
  *
- */
+*/
 function AP_GetVitalRegenRate( mobile, vital_name )
 
-	return GetVitalRegenRate( mobile, vital_name );
+  return GetVitalRegenRate( mobile, vital_name );
 endfunction
 
 /*
@@ -152,10 +152,10 @@ endfunction
  * Return value
  * Returns result of the SetVital() core function.
  *
- */
+*/
 function AP_SetVital( mobile, vital_name, amount )
 
-	return SetVital( mobile, vital_name, CInt( CDbl( amount ) * 100.0 ));
+  return SetVital( mobile, vital_name, CInt( CDbl( amount ) * 100.0 ) );
 endfunction
 
 /*
@@ -172,19 +172,19 @@ endfunction
  * Return value
  * Returns 1 on success
  *
- */
+*/
 function AP_ConsumeVital( mobile, vital_name, points )
 
-	points := CDbl( points );
-	var cur_amount := AP_GetVital( mobile, vital_name );
+  points := CDbl( points );
+  var cur_amount := AP_GetVital( mobile, vital_name );
 
-	if( points > cur_amount )
-		return error{ "errortext":="Insufficient points - unable to consume." };
-	else
-		cur_amount := cur_amount - points;
-		AP_SetVital( mobile, vital_name, cur_amount );
-		return 1;
-	endif
+  if ( points > cur_amount )
+    return error{ "errortext" := "Insufficient points - unable to consume." };
+  else
+    cur_amount := cur_amount - points;
+    AP_SetVital( mobile, vital_name, cur_amount );
+    return 1;
+  endif
 endfunction
 
 /*
@@ -199,19 +199,17 @@ endfunction
  * Return value
  * Returns 1
  *
- */
+*/
 function AP_RefreshVitals( mobile )
 
-	var vital_cfg := ReadConfigFile( ":attributes:vitals" );
-	foreach elem_name in GetConfigStringKeys( vital_cfg )
-		AP_SetVital( mobile, elem_name, AP_GetVitalMaximumValue( mobile, elem_name ));
-		SleepMS(2);
-	endforeach
+  var vital_cfg := ReadConfigFile( ":attributes:vitals" );
+  foreach elem_name in GetConfigStringKeys( vital_cfg )
+    AP_SetVital( mobile, elem_name, AP_GetVitalMaximumValue( mobile, elem_name ) );
+    SleepMS( 2 );
+  endforeach
 
-	return 1;
+  return 1;
 endfunction
-
-
 
 //////////////////////////////////////////////////////
 //
@@ -229,109 +227,103 @@ const CORE_SETTINGS_MIN_REGEN_RATE := -30000;
 const CORE_SETTINGS_MAX_REGEN_RATE := 30000;
 const CPROP_NAME_PREFIX_REGEN_RATE := "NewRegenRateFor";
 
-
-
-function GetHP(who)
-  return AP_GetVital(who, VITALID_LIFE);
+function GetHP( who )
+  return AP_GetVital( who, VITALID_LIFE );
 endfunction
 
-function GetStamina(who)
-  return AP_GetVital(who, VITALID_STAMINA);
+function GetStamina( who )
+  return AP_GetVital( who, VITALID_STAMINA );
 endfunction
 
-function GetMana(who)
-  return AP_GetVital(who, VITALID_MANA);
+function GetMana( who )
+  return AP_GetVital( who, VITALID_MANA );
 endfunction
 
-function GetMaxHp(who)
-  return Cint(GetVitalMaximumValue(who, VITALID_LIFE)/ 100);
+function GetMaxHp( who )
+  return Cint( GetVitalMaximumValue( who, VITALID_LIFE ) / 100 );
 endfunction
 
-function GetMaxMana(who)
-  return Cint(GetVitalMaximumValue(who, VITALID_MANA)/ 100);
+function GetMaxMana( who )
+  return Cint( GetVitalMaximumValue( who, VITALID_MANA ) / 100 );
 endfunction
 
-function GetMaxStamina(who)
-  return Cint(GetVitalMaximumValue(who, VITALID_STAMINA)/ 100);
+function GetMaxStamina( who )
+  return Cint( GetVitalMaximumValue( who, VITALID_STAMINA ) / 100 );
 endfunction
 
-
-function SetHP(who, stamina)
-  return AP_SetVital(who, VITALID_LIFE, stamina);
+function SetHP( who, stamina )
+  return AP_SetVital( who, VITALID_LIFE, stamina );
 endfunction
 
-function SetStamina(who, stamina)
-  return AP_SetVital(who, VITALID_STAMINA, stamina);
+function SetStamina( who, stamina )
+  return AP_SetVital( who, VITALID_STAMINA, stamina );
 endfunction
 
-function SetMana(who, stamina)
-  return AP_SetVital(who, VITALID_MANA, stamina);
+function SetMana( who, stamina )
+  return AP_SetVital( who, VITALID_MANA, stamina );
 endfunction
 
-function ApplyManaDamage(who, dmg)
-  return SetMana(who, GetMana(who)-dmg);
+function ApplyManaDamage( who, dmg )
+  return SetMana( who, GetMana( who ) - dmg );
 endfunction
 
-function ApplyStaminaDamage(who, dmg)
-  return SetStamina(who, GetStamina(who)-dmg);
+function ApplyStaminaDamage( who, dmg )
+  return SetStamina( who, GetStamina( who ) - dmg );
 endfunction
 
-
-
-//function GetStaminaRegenRate(who)
+// function GetStaminaRegenRate(who)
 //  return GetVitalRegenRate(who, VITALID_STAMINA);
 //endfunction
 
-function SetHpRegenRate(who, hundreth_per_minute)
-  if(hundreth_per_minute < CORE_SETTINGS_MIN_REGEN_RATE)
+function SetHpRegenRate( who, hundreth_per_minute )
+  if ( hundreth_per_minute < CORE_SETTINGS_MIN_REGEN_RATE )
     hundreth_per_minute := CORE_SETTINGS_MIN_REGEN_RATE;
-  elseif(hundreth_per_minute > CORE_SETTINGS_MAX_REGEN_RATE)
+  elseif ( hundreth_per_minute > CORE_SETTINGS_MAX_REGEN_RATE )
     hundreth_per_minute := CORE_SETTINGS_MAX_REGEN_RATE;
   endif
-  SetObjProperty(who, CPROP_NAME_PREFIX_REGEN_RATE+VITALID_LIFE, hundreth_per_minute);
-  return DoRecalcVitals(who);
+  SetObjProperty( who, CPROP_NAME_PREFIX_REGEN_RATE + VITALID_LIFE, hundreth_per_minute );
+  return DoRecalcVitals( who );
 endfunction
 
-function SetManaRegenRate(who, hundreth_per_minute)
-  if(hundreth_per_minute < CORE_SETTINGS_MIN_REGEN_RATE)
+function SetManaRegenRate( who, hundreth_per_minute )
+  if ( hundreth_per_minute < CORE_SETTINGS_MIN_REGEN_RATE )
     hundreth_per_minute := CORE_SETTINGS_MIN_REGEN_RATE;
-  elseif(hundreth_per_minute > CORE_SETTINGS_MAX_REGEN_RATE)
+  elseif ( hundreth_per_minute > CORE_SETTINGS_MAX_REGEN_RATE )
     hundreth_per_minute := CORE_SETTINGS_MAX_REGEN_RATE;
   endif
-  SetObjProperty(who, CPROP_NAME_PREFIX_REGEN_RATE+VITALID_MANA, hundreth_per_minute);
-  return DoRecalcVitals(who);
+  SetObjProperty( who, CPROP_NAME_PREFIX_REGEN_RATE + VITALID_MANA, hundreth_per_minute );
+  return DoRecalcVitals( who );
 endfunction
 
-function SetStaminaRegenRate(who, hundreth_per_minute)
-  if(hundreth_per_minute < CORE_SETTINGS_MIN_REGEN_RATE)
+function SetStaminaRegenRate( who, hundreth_per_minute )
+  if ( hundreth_per_minute < CORE_SETTINGS_MIN_REGEN_RATE )
     hundreth_per_minute := CORE_SETTINGS_MIN_REGEN_RATE;
-  elseif(hundreth_per_minute > CORE_SETTINGS_MAX_REGEN_RATE)
+  elseif ( hundreth_per_minute > CORE_SETTINGS_MAX_REGEN_RATE )
     hundreth_per_minute := CORE_SETTINGS_MAX_REGEN_RATE;
   endif
-  SetObjProperty(who, CPROP_NAME_PREFIX_REGEN_RATE+VITALID_STAMINA, hundreth_per_minute);
-  return DoRecalcVitals(who);
+  SetObjProperty( who, CPROP_NAME_PREFIX_REGEN_RATE + VITALID_STAMINA,
+                  hundreth_per_minute );
+  return DoRecalcVitals( who );
 endfunction
 
-function SetVitalRegenRate(who, vitalid, hundreth_per_minute)
-  if(hundreth_per_minute < CORE_SETTINGS_MIN_REGEN_RATE)
+function SetVitalRegenRate( who, vitalid, hundreth_per_minute )
+  if ( hundreth_per_minute < CORE_SETTINGS_MIN_REGEN_RATE )
     hundreth_per_minute := CORE_SETTINGS_MIN_REGEN_RATE;
-  elseif(hundreth_per_minute > CORE_SETTINGS_MAX_REGEN_RATE)
+  elseif ( hundreth_per_minute > CORE_SETTINGS_MAX_REGEN_RATE )
     hundreth_per_minute := CORE_SETTINGS_MAX_REGEN_RATE;
   endif
-  SetObjProperty(who, CPROP_NAME_PREFIX_REGEN_RATE+vitalid, hundreth_per_minute);
-  return DoRecalcVitals(who);
+  SetObjProperty( who, CPROP_NAME_PREFIX_REGEN_RATE + vitalid, hundreth_per_minute );
+  return DoRecalcVitals( who );
 endfunction
 
-
-Function DoRecalcVitals( mob )
-  set_critical(1);
-  if(mob.acctname)
-    if(mob.ip)
-      RecalcVitals(mob);
+function DoRecalcVitals( mob )
+  set_critical( 1 );
+  if ( mob.acctname )
+    if ( mob.ip )
+      RecalcVitals( mob );
     endif
   else
-    RecalcVitals(mob);
+    RecalcVitals( mob );
   endif
-  set_critical(0);
+  set_critical( 0 );
 endfunction
-

@@ -34,29 +34,28 @@ include "ai/main/setup";
 include "ai/main/loot";
 include "ai/main/sleepMode";
 
-
 const HALT_THRESHOLD := 10; // how close before he attacks?
 var npccfgfile := ReadConfigFile( "npcdesc" );
-var idlesnd1 := CInt(npccfgfile[me.npctemplate].idlesound1);
-var idlesnd2 := CInt(npccfgfile[me.npctemplate].idlesound2);
+var idlesnd1 := CInt( npccfgfile[me.npctemplate].idlesound1 );
+var idlesnd2 := CInt( npccfgfile[me.npctemplate].idlesound2 );
 
 program KillPlayers()
 
-    drop_anchor();
+  drop_anchor();
 
-    EnableEvents( SYSEVENT_ENGAGED );
-    EnableEvents( SYSEVENT_DISENGAGED );
-    EnableEvents( SYSEVENT_DAMAGED );
-    EnableEvents( SYSEVENT_ENTEREDAREA + SYSEVENT_LEFTAREA, HALT_THRESHOLD );
-    EnableEvents( SYSEVENT_OPPONENT_MOVED );
+  EnableEvents( SYSEVENT_ENGAGED );
+  EnableEvents( SYSEVENT_DISENGAGED );
+  EnableEvents( SYSEVENT_DAMAGED );
+  EnableEvents( SYSEVENT_ENTEREDAREA + SYSEVENT_LEFTAREA, HALT_THRESHOLD );
+  EnableEvents( SYSEVENT_OPPONENT_MOVED );
 
-    SetWarMode( 0 );
+  SetWarMode( 0 );
 
-	if (GetObjProperty(me, "frozen"))
-		me.frozen := 1;
-	endif
+  if ( GetObjProperty( me, "frozen" ) )
+    me.frozen := 1;
+  endif
 
-    main_AI_loop();
+  main_AI_loop();
 
 endprogram
 
@@ -66,8 +65,6 @@ endprogram
 //  There is no way out but death.
 //
 /////////////////////////////////////////////////////////////////////////////
-
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -80,18 +77,16 @@ endprogram
 /////////////////////////////////////////////////////////////////////////////
 function CloseDistance( opponent )
 
-
-    case (Distance( me, opponent ))
-        1:              // the most likely, so first
-        0:
-            return 1;
-        default:
-            RunToward( opponent );
-		sleepms(500);
-            return 0;
-    endcase
+  case ( Distance( me, opponent ) )
+    1: // the most likely, so first
+    0:
+      return 1;
+    default:
+      RunToward( opponent );
+      sleepms( 500 );
+      return 0;
+  endcase
 
 endfunction
-
 
 // Look around me for humans to fight.

@@ -5,9 +5,9 @@ include ":contextmenus:constants";
 include ":security:contextMenuReport";
 
 // Flags used by the ContextMenu_Disabled function
-Const CM_RANGE_CHECK	:= 1;
-Const CM_LOS_CHECK		:= 2;
-Const CM_DEAD_CHECK		:= 4;
+const CM_RANGE_CHECK := 1;
+const CM_LOS_CHECK := 2;
+const CM_DEAD_CHECK := 4;
 
 /*
  *
@@ -39,37 +39,47 @@ Const CM_DEAD_CHECK		:= 4;
  * Return Values:
  * N/A
  *
- */
-function ContextMenu_AddEntry( byref list, number, byref color:=0xFFFF, byref opts:=Struct )
+*/
+function ContextMenu_AddEntry( byref list, number, byref color := 0xFFFF,
+                               byref opts := struct )
 
-// Enum support, for older context entries...
-    if( number <= 0x7FFF )
-        number += 3000000;
+  // Enum support, for older context entries...
+  if ( number <= 0x7FFF )
+    number += 3000000;
+  endif
+
+  if ( !opts.Keys().Size() )
+    list.Append( struct{ "cliloc" := number, "color" := color } );
+  else
+    if ( !opts.Mobile.IsA( POLCLASS_MOBILE ) || !opts.Exists( "Mobile" ) )
+      ContextMenu_ReportText( opts.Mobile,
+                              "ContextMenu_AddEntry -> opts Struct must contain player mobile reference with 'Mobile' as the key and does not.",
+                              CM_REPORT_CONSOLE + CM_REPORT_SYSLOG );
+      return 0;
     endif
 
-    if( !opts.Keys().Size() )
-        list.Append( Struct{ "cliloc":=number, "color":=color } );
-    else
-        if( !opts.Mobile.IsA( POLCLASS_MOBILE ) || !opts.Exists( "Mobile" ) )
-            ContextMenu_ReportText( opts.Mobile, "ContextMenu_AddEntry -> opts Struct must contain player mobile reference with 'Mobile' as the key and does not.", CM_REPORT_CONSOLE+CM_REPORT_SYSLOG );
-            return 0;
-        endif
-
-        if( opts.Flags & CM_RANGE_CHECK || opts.Flags & CM_RANGE_CHECK )
-            if( !opts.Object.IsA( POLCLASS_UOBJECT ) || !opts.Exists( "Object" ) )
-                ContextMenu_ReportText( opts.Mobile, "ContextMenu_AddEntry -> opts Struct must contain an UObject reference with 'Object' when checking Range or Line of Sight and does not.", CM_REPORT_CONSOLE+CM_REPORT_SYSLOG );
-                return 0;
-            endif
-        endif
-
-        if( opts.Flags & CM_RANGE_CHECK )
-            if( opts.Range <= 0 || !opts.Exists( "Range" ) )
-                opts.Insert( "Flags", 5 );
-            endif
-        endif
-
-        list.Append( Struct{ "cliloc":=number, "color":=color, "disabled":=ContextMenu_Disabled( opts ) } );
+    if ( opts.Flags & CM_RANGE_CHECK || opts.Flags & CM_RANGE_CHECK )
+      if ( !opts.Object.IsA( POLCLASS_UOBJECT ) || !opts.Exists( "Object" ) )
+        ContextMenu_ReportText( opts.Mobile,
+                                "ContextMenu_AddEntry -> opts Struct must contain an UObject reference with 'Object' when checking Range or Line of Sight and does not.",
+                                CM_REPORT_CONSOLE + CM_REPORT_SYSLOG );
+        return 0;
+      endif
     endif
+
+    if ( opts.Flags & CM_RANGE_CHECK )
+      if ( opts.Range <= 0 || !opts.Exists( "Range" ) )
+        opts.Insert( "Flags", 5 );
+      endif
+    endif
+
+    list.Append( struct{ "cliloc" := number,
+                         "color" := color,
+                         "disabled" := ContextMenu_Disabled(
+                         opts )
+                 }
+                 );
+  endif
 endfunction
 
 /*
@@ -100,39 +110,36 @@ endfunction
  * Return Values:
  * boolean
  *
- */
+*/
 function ContextMenu_Disabled( byref opts )
 
-    var mobile := opts.Mobile,
-        flags := opts.Flags,
-        range,
-        obj;
+  var mobile := opts.Mobile, flags := opts.Flags, range, obj;
 
-    if( opts.Exists( "Range" ) )
-        range := opts.Range;
+  if ( opts.Exists( "Range" ) )
+    range := opts.Range;
+  endif
+
+  if ( opts.Exists( "Object" ) )
+    obj := opts.Object;
+  endif
+
+  if ( flags & CM_RANGE_CHECK )
+    if ( Distance( mobile, obj ) > range )
+      return 1;
     endif
+  endif
 
-    if( opts.Exists( "Object" ) )
-        obj := opts.Object;
+  if ( flags & CM_LOS_CHECK )
+    if ( !CheckLineOfSight( mobile, obj ) )
+      return 1;
     endif
+  endif
 
-    if( flags & CM_RANGE_CHECK )
-		if( Distance( mobile, obj ) > range )
-			return 1;
-		endif
-	endif
+  if ( flags & CM_DEAD_CHECK )
+    if ( mobile.dead )
+      return 1;
+    endif
+  endif
 
-	if( flags & CM_LOS_CHECK )
-		if( !CheckLineOfSight( mobile, obj ) )
-			return 1;
-		endif
-	endif
-
-	if( flags & CM_DEAD_CHECK )
-		if( mobile.dead )
-			return 1;
-		endif
-	endif
-
-	return 0;
+  return 0;
 endfunction

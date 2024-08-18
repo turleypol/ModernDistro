@@ -1,6 +1,6 @@
-//$Id: settings.inc 373 2006-06-17 18:27:33Z austinheilman $
+// $Id: settings.inc 373 2006-06-17 18:27:33Z austinheilman $
 
-/*===============================================================
+/* ===============================================================
 * Current Version
 * SETTINGS.INC - v1.0
 * Updated 9/27/2005 2:54PM
@@ -8,7 +8,7 @@
 * -- Revision v1.0 --
 * Austin:
 *  Created include file
-===============================================================*/
+=============================================================== */
 
 use uo;
 use os;
@@ -25,15 +25,15 @@ use cfgfile;
  * Return value
  * A config file reference.
  *
- */
+*/
 function LJ_GetSettingsCfgFile()
-	var cfg := ReadConfigFile(":lumberjacking:settings");
+  var cfg := ReadConfigFile( ":lumberjacking:settings" );
 
-	if ( cfg.errortext )
-		SysLog("Error::LJ_GetSettingsCfgFile() - Unable to open [:lumberjacking:settings.cfg] ->"+cfg.errortext);
-	endif
+  if ( cfg.errortext )
+    SysLog( "Error::LJ_GetSettingsCfgFile() - Unable to open [:lumberjacking:settings.cfg] ->" + cfg.errortext );
+  endif
 
-	return cfg;
+  return cfg;
 endfunction
 
 /*
@@ -49,18 +49,17 @@ endfunction
  * Return value
  * A config file elem reference.
  *
- */
-function LJ_GetSettingsCfgElem(elem_name, byref cfg_file:=0)
-	if ( !cfg_file )
-		cfg_file := LJ_GetSettingsCfgFile();
-	endif
-	
-	var elem := cfg_file[elem_name];
+*/
+function LJ_GetSettingsCfgElem( elem_name, byref cfg_file := 0 )
+  if ( !cfg_file )
+    cfg_file := LJ_GetSettingsCfgFile();
+  endif
 
-	if ( elem.errortext )
-		SysLog("Error::LJ_GetSettingsCfgElem() - Unable to find elem ["+elem_name+"] ->"+elem.errortext);
-	endif
+  var elem := cfg_file[elem_name];
 
-	return elem;
+  if ( elem.errortext )
+    SysLog( "Error::LJ_GetSettingsCfgElem() - Unable to find elem [" + elem_name + "] ->" + elem.errortext );
+  endif
+
+  return elem;
 endfunction
-

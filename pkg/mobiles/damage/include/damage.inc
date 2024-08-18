@@ -3,7 +3,7 @@
  * Purpose
  * Handles damages and resistances to damage types
  *
- */
+*/
 // Version 2
 // 2017-11-15  Yukiko changed resistances from using a CProp to use built-in members.
 // Some functions are not used. When I switched from using a CProp containing resistances
@@ -26,49 +26,48 @@ include "include/NPCUtil";
 include ":attributes:attributes";
 include ":magery:spells";
 
-
 /*
  * http://uo.stratics.com/content/guides/resistance.shtml
  * Damage constants listed here to prevent typos in scripts.
  *
- */
+*/
 
 // Read only members
 enum DAMAGE_MEMBERS
-  DMG_FORCED         := -1,                    // This isn't an official member. It's used for applying damage without taking resistances into account.
-  DMG_COLD              := "Cold",
-  DMG_ENERGY            := "Energy",
-  DMG_FIRE              := "Fire",
-  DMG_PHYSICAL          := "Physical",
-  DMG_POISON            := "Poison"
+  DMG_FORCED := -1, // This isn't an official member. It's used for applying damage without taking resistances into account.
+  DMG_COLD := "Cold",
+  DMG_ENERGY := "Energy",
+  DMG_FIRE := "Fire",
+  DMG_PHYSICAL := "Physical",
+  DMG_POISON := "Poison"
 endenum
 
 // Read only members
 enum RESISTANCE_MEMBERS
-  RES_FORCED         := -1,                    // This isn't an official member. It's used for applying damage without taking resistances into account.
-  RES_COLD              := "Cold",
-  RES_ENERGY            := "Energy",
-  RES_FIRE              := "Fire",
-  RES_PHYSICAL          := "Physical",
-  RES_POISON            := "Poison"
+  RES_FORCED := -1, // This isn't an official member. It's used for applying damage without taking resistances into account.
+  RES_COLD := "Cold",
+  RES_ENERGY := "Energy",
+  RES_FIRE := "Fire",
+  RES_PHYSICAL := "Physical",
+  RES_POISON := "Poison"
 endenum
 
 // Read/Write members
 enum DAMAGE_MOD_MEMBERS
-  DMG_COLD_MOD              := "Cold",
-  DMG_ENERGY_MOD            := "Energy",
-  DMG_FIRE_MOD              := "Fire",
-  DMG_PHYSICAL_MOD              := "Physical",
-  DMG_POISON_MOD            := "Poison"
+  DMG_COLD_MOD := "Cold",
+  DMG_ENERGY_MOD := "Energy",
+  DMG_FIRE_MOD := "Fire",
+  DMG_PHYSICAL_MOD := "Physical",
+  DMG_POISON_MOD := "Poison"
 endenum
 
 // Read/Write members
 enum RESISTANCE_MOD_MEMBERS
-  RES_COLD_MOD              := "Cold",
-  RES_ENERGY_MOD            := "Energy",
-  RES_FIRE_MOD              := "Fire",
-  RES_PHYSICAL_MOD          := "Physical",
-  RES_POISON_MOD            := "Poison"
+  RES_COLD_MOD := "Cold",
+  RES_ENERGY_MOD := "Energy",
+  RES_FIRE_MOD := "Fire",
+  RES_PHYSICAL_MOD := "Physical",
+  RES_POISON_MOD := "Poison"
 endenum
 
 /*
@@ -84,38 +83,38 @@ endenum
  *
  * Return value
  *
- */
-function ApplyDamageEX(mobile, amount, type:=DMG_FORCED, source:=0)
+*/
+function ApplyDamageEX( mobile, amount, type := DMG_FORCED, source := 0 )
 
-	// Print("Damage amount before adjustment is "+amount);
-	// amount := CInt( amount );
-	amount := CInt( CalcDamageAmount( mobile, amount, type, source ) );
-	// Print("Source is "+source.name);
-	// Print("Damage type is "+type);
-	// Print("Damage amount after adjustment is "+amount);
+  // Print("Damage amount before adjustment is "+amount);
+  // amount := CInt( amount );
+  amount := CInt( CalcDamageAmount( mobile, amount, type, source ) );
+  // Print("Source is "+source.name);
+  // Print("Damage type is "+type);
+  // Print("Damage amount after adjustment is "+amount);
 
-	if ( amount == error )
-		return 0;
-	endif
+  if ( amount == error )
+    return 0;
+  endif
 
-	if ( amount < 0 )
-		HealDamage(mobile, Abs( amount ));
-	else
-		if ( source )
-			SetLastDamageInfo(mobile, amount, type, source);
-			SetScriptController(source);
-		endif
+  if ( amount < 0 )
+    HealDamage( mobile, Abs( amount ) );
+  else
+    if ( source )
+      SetLastDamageInfo( mobile, amount, type, source );
+      SetScriptController( source );
+    endif
     // Added for necro wraith form
-    if(source and GetObjProperty(source, "wraith"))
-		DoManaSuck(mobile, source, amount);
+    if ( source and GetObjProperty( source, "wraith" ) )
+      DoManaSuck( mobile, source, amount );
     endif
-    if(GetObjProperty(source , "cursed_weapon"))
-		LifeDrain(source, amount, 50);
+    if ( GetObjProperty( source, "cursed_weapon" ) )
+      LifeDrain( source, amount, 50 );
     endif
-		ApplyDamage(mobile, amount);
-	endif
+    ApplyDamage( mobile, amount );
+  endif
 
-	return amount;
+  return amount;
 endfunction
 
 /*
@@ -131,35 +130,35 @@ endfunction
  *
  * Return value
  *
- */
-function ApplyRawDamageEX(mobile, amount, type:=DMG_FORCED, source:=0)
+*/
+function ApplyRawDamageEX( mobile, amount, type := DMG_FORCED, source := 0 )
 
-	amount := CInt( CalcDamageAmount( mobile, amount, type, source ) );
+  amount := CInt( CalcDamageAmount( mobile, amount, type, source ) );
 
-	if ( amount == error )
-		return 0;
-	endif
+  if ( amount == error )
+    return 0;
+  endif
 
-	if ( amount < 0 )
-		HealDamage(mobile, Abs(amount));
-	else
-		if ( source )
-			SetLastDamageInfo(mobile, amount, type, source);
-			SetScriptController(source);
-		endif
+  if ( amount < 0 )
+    HealDamage( mobile, Abs( amount ) );
+  else
+    if ( source )
+      SetLastDamageInfo( mobile, amount, type, source );
+      SetScriptController( source );
+    endif
 
-		// Added for necro wraith form
-		if(source and GetObjProperty(source, "wraith"))
-			DoManaSuck(mobile, source, amount);
-		endif
-		if(GetObjProperty(source , "cursed_weapon"))
-			LifeDrain(source, amount, 50);
-		endif
+    // Added for necro wraith form
+    if ( source and GetObjProperty( source, "wraith" ) )
+      DoManaSuck( mobile, source, amount );
+    endif
+    if ( GetObjProperty( source, "cursed_weapon" ) )
+      LifeDrain( source, amount, 50 );
+    endif
 
-		ApplyRawDamage(mobile, amount);
-	endif
+    ApplyRawDamage( mobile, amount );
+  endif
 
-	return amount;
+  return amount;
 endfunction
 
 /*
@@ -177,53 +176,54 @@ endfunction
  *
  * Return value: damage amount done
  *
- */
-function ApplySpellDamageEX(mobile, amount, type:=DMG_FORCED, source:=0, circle := 1, spell := "")
+*/
+function ApplySpellDamageEX( mobile, amount, type := DMG_FORCED, source := 0,
+                             circle := 1, spell := "" )
 
-	amount := CInt(amount);
-	// base damage * ( 3 * Evaluating Intelligence / 100 + 1 )
-	if( source )
-		amount := amount + CInt( (3 * GetAttribute( source, EVALUATING_INTELLIGENCE ) / 100) ) + 1;
-	endif
+  amount := CInt( amount );
+  // base damage * ( 3 * Evaluating Intelligence / 100 + 1 )
+  if ( source )
+    amount := amount + CInt( ( 3 * GetAttribute( source, EVALUATING_INTELLIGENCE ) / 100 ) ) + 1;
+  endif
 
-	//				Settings Checks
-	// Check to see if we are using magic resistance with damage spells.
-	var settings := DMG_GetSettingsCfgElem("Settings");
-	if ( CInt(settings.UseMRInAllSpells) )
-		amount := Resisted(circle, source, mobile, amount);
-	endif
-	// Get the damage mod when the victim is an NPC.
-	if( mobile.IsA(POLCLASS_NPC) )
-		amount := CInt( amount * CDbl( settings.NPCDamageMod ) );
-	endif
-	// Check to see if we will take standard resistances into account against spell damage.
-	// if ( CInt(settings.UseDamageTypes) )
-		// amount := CalcDamageAmount(mobile, amount, type);
-	// endif
-	//				End Settings Checks.
+  // Settings Checks
+  // Check to see if we are using magic resistance with damage spells.
+  var settings := DMG_GetSettingsCfgElem( "Settings" );
+  if ( CInt( settings.UseMRInAllSpells ) )
+    amount := Resisted( circle, source, mobile, amount );
+  endif
+  // Get the damage mod when the victim is an NPC.
+  if ( mobile.IsA( POLCLASS_NPC ) )
+    amount := CInt( amount * CDbl( settings.NPCDamageMod ) );
+  endif
+  // Check to see if we will take standard resistances into account against spell damage.
+  // if ( CInt(settings.UseDamageTypes) )
+  // amount := CalcDamageAmount(mobile, amount, type);
+  // endif
+  // End Settings Checks.
 
-	if ( amount == error )
-		return 0;
-	endif
+  if ( amount == error )
+    return 0;
+  endif
 
-	if ( amount < 0 )
-		HealDamage(mobile, Abs(amount));
-	else
-		if ( source )
-			SetLastDamageInfo(mobile, amount, type, source, circle, spell);
-			SetScriptController(source);
-		endif
-	ApplyDamage(mobile, amount);
-	endif
-	// Added for necro wraith form
-	if(source and GetObjProperty(source, "wraith"))
-		DoManaSuck(mobile, source, amount);
-	endif
-	if(GetObjProperty(source, "cursed_weapon"))
-		LifeDrain(source, amount, 50);
-	endif
+  if ( amount < 0 )
+    HealDamage( mobile, Abs( amount ) );
+  else
+    if ( source )
+      SetLastDamageInfo( mobile, amount, type, source, circle, spell );
+      SetScriptController( source );
+    endif
+    ApplyDamage( mobile, amount );
+  endif
+  // Added for necro wraith form
+  if ( source and GetObjProperty( source, "wraith" ) )
+    DoManaSuck( mobile, source, amount );
+  endif
+  if ( GetObjProperty( source, "cursed_weapon" ) )
+    LifeDrain( source, amount, 50 );
+  endif
 
-	return amount;
+  return amount;
 endfunction
 
 /*
@@ -240,44 +240,45 @@ endfunction
  *
  * Return value: damage amount done
  *
- */
-function ApplyRawSpellDamageEX(mobile, amount, type:=DMG_FORCED, source:=0, circle := 1, spell := "")
+*/
+function ApplyRawSpellDamageEX( mobile, amount, type := DMG_FORCED, source := 0,
+                                circle := 1, spell := "" )
 
-	// base damage * ( 3 * Evaluating Intelligence / 100 + 1 )
-	if( source )
-		amount := amount + CInt( (3 * GetAttribute( source, EVALUATING_INTELLIGENCE ) / 100) ) + 1;
-	endif
+  // base damage * ( 3 * Evaluating Intelligence / 100 + 1 )
+  if ( source )
+    amount := amount + CInt( ( 3 * GetAttribute( source, EVALUATING_INTELLIGENCE ) / 100 ) ) + 1;
+  endif
 
-	//				Settings Checks
-	var settings := DMG_GetSettingsCfgElem("Settings");
-	// Get the damage mod when the victim is an NPC.
-	if( mobile.IsA(POLCLASS_NPC) )
-		amount := CInt( amount * CDbl( settings.NPCDamageMod ) );
-	endif
-	//				End Settings Checks.
+  // Settings Checks
+  var settings := DMG_GetSettingsCfgElem( "Settings" );
+  // Get the damage mod when the victim is an NPC.
+  if ( mobile.IsA( POLCLASS_NPC ) )
+    amount := CInt( amount * CDbl( settings.NPCDamageMod ) );
+  endif
+  // End Settings Checks.
 
-	if ( amount == error )
-		return 0;
-	endif
+  if ( amount == error )
+    return 0;
+  endif
 
-	if ( amount < 0 )
-		HealDamage(mobile, Abs(amount));
-	else
-		if ( source )
-			SetLastDamageInfo(mobile, amount, type, source, circle, spell);
-			SetScriptController(source);
-		endif
-		ApplyRawDamage(mobile, amount);
-	endif
-	// Added for necro wraith form
-	if(source and GetObjProperty(source, "wraith"))
-		DoManaSuck(mobile, source, amount);
-	endif
-	if(GetObjProperty(source , "cursed_weapon"))
-		LifeDrain(source, amount, 50);
-	endif
+  if ( amount < 0 )
+    HealDamage( mobile, Abs( amount ) );
+  else
+    if ( source )
+      SetLastDamageInfo( mobile, amount, type, source, circle, spell );
+      SetScriptController( source );
+    endif
+    ApplyRawDamage( mobile, amount );
+  endif
+  // Added for necro wraith form
+  if ( source and GetObjProperty( source, "wraith" ) )
+    DoManaSuck( mobile, source, amount );
+  endif
+  if ( GetObjProperty( source, "cursed_weapon" ) )
+    LifeDrain( source, amount, 50 );
+  endif
 
-	return CInt( amount );
+  return CInt( amount );
 endfunction
 
 /*
@@ -295,39 +296,41 @@ endfunction
  * Return value
  * Integer
  *
- */
-function CalcDamageAmount(mobile, amount, type, source)
+*/
+function CalcDamageAmount( mobile, amount, type, source )
 
-	if( source )
-		// Add all of the skill damage mods together
-		var skill_dmg_mod := CalcAnatomyDmgMod( source ) + CalcTacticsDmgMod( source ) + CalcArmsLoreDmgMod( source ) + CalcLumberjackingDamageMod( source );
-		if( skill_dmg_mod > 300.0 )
-			skill_dmg_mod := 300.0;
-		endif
-		amount := amount + (amount * skill_dmg_mod);
-	endif
+  if ( source )
+    // Add all of the skill damage mods together
+    var skill_dmg_mod := CalcAnatomyDmgMod( source ) + CalcTacticsDmgMod( source )
+                                            + CalcArmsLoreDmgMod( source ) + CalcLumberjackingDamageMod(
+                                            source );
+    if ( skill_dmg_mod > 300.0 )
+      skill_dmg_mod := 300.0;
+    endif
+    amount := amount + ( amount * skill_dmg_mod );
+  endif
 
-	// If type == DMG_FORCED we don't take resistances into account.
-	if ( type == DMG_FORCED )
-		return CInt(amount);
-	endif
+  // If type == DMG_FORCED we don't take resistances into account.
+  if ( type == DMG_FORCED )
+    return CInt( amount );
+  endif
 
-	var resistance := CDbl(GetResistance(mobile, type));
-	if ( resistance == error )
-		// Do nothing, there is no resistance.
-	else
-		// Calculate percent that was resisted.
-		// Examples:
-		// Damage = 50
-		// [ Resistance = 10 so Resisted = 5, Amount = 45 ]
-		// [ Resistance = 100 so Resisted = 50, Amount = 0 ]
-		// [ Resistance = -100 so Resisted = -50, Amount = -50 ]
-		// [ Resistance = 47.3 so Resisted = 23.65, Amount = 26.35 ]
-		var resistd := (resistance * 0.010) * CDbl(amount);
-		amount := amount - resistd;
-	endif
+  var resistance := CDbl( GetResistance( mobile, type ) );
+  if ( resistance == error )
+  // Do nothing, there is no resistance.
+  else
+    // Calculate percent that was resisted.
+    // Examples:
+    // Damage = 50
+    // [ Resistance = 10 so Resisted = 5, Amount = 45 ]
+    // [ Resistance = 100 so Resisted = 50, Amount = 0 ]
+    // [ Resistance = -100 so Resisted = -50, Amount = -50 ]
+    // [ Resistance = 47.3 so Resisted = 23.65, Amount = 26.35 ]
+    var resistd := ( resistance * 0.010 ) * CDbl( amount );
+    amount := amount - resistd;
+  endif
 
-	return CInt(amount);
+  return CInt( amount );
 endfunction
 
 /*
@@ -343,37 +346,37 @@ endfunction
  *
  * Return value
  *
- */
-function SetLastDamageInfo(mobile, amount, type, source, circle := 1, spell := "")
+*/
+function SetLastDamageInfo( mobile, amount, type, source, circle := 1, spell := "" )
 
-	var last_damage := struct;
-	last_damage.+serial	:= source.serial;
-	last_damage.+time	:= POLCore().systime;
-	last_damage.+amount	:= amount;
-	last_damage.+type	:= type;
+  var last_damage := struct;
+  last_damage.+serial := source.serial;
+  last_damage.+time := POLCore().systime;
+  last_damage.+amount := amount;
+  last_damage.+type := type;
 
-	if ( source.acctname )
-		last_damage.+acctname := source.acctname;
-	endif
+  if ( source.acctname )
+    last_damage.+acctname := source.acctname;
+  endif
 
-	if ( source.weapon )
-		last_damage.+weapon := source.weapon;
-	endif
+  if ( source.weapon )
+    last_damage.+weapon := source.weapon;
+  endif
 
-	if ( spell )
-		last_damage.+spell := spell;
-		last_damage.+circle := circle;
-	endif
+  if ( spell )
+    last_damage.+spell := spell;
+    last_damage.+circle := circle;
+  endif
 
-	if ( source.name )
-		last_damage.+name := source.name;
-	elseif ( source.IsA(POLCLASS_ITEM) )
-		last_damage.+name := source.desc;
-	endif
+  if ( source.name )
+    last_damage.+name := source.name;
+  elseif ( source.IsA( POLCLASS_ITEM ) )
+    last_damage.+name := source.desc;
+  endif
 
-	SetObjProperty(mobile, "LastDamage", last_damage);
+  SetObjProperty( mobile, "LastDamage", last_damage );
 
-	return last_damage;
+  return last_damage;
 endfunction
 
 /*
@@ -386,9 +389,9 @@ endfunction
  *
  * Return value
  *
- */
-function GetLastDamageInfo(mobile)
-	return GetObjProperty(mobile, "LastDamage");
+*/
+function GetLastDamageInfo( mobile )
+  return GetObjProperty( mobile, "LastDamage" );
 endfunction
 
 /*
@@ -402,11 +405,11 @@ endfunction
  * Return Value
  * Returns an array of strings
  *
- */
+*/
 function GetResistanceNames()
-	var cfg_elem := DMG_GetSettingsCfgElem("DamageMembers");
+  var cfg_elem := DMG_GetSettingsCfgElem( "DamageMembers" );
 
-	return GetConfigStringArray(cfg_elem, "Type");
+  return GetConfigStringArray( cfg_elem, "Type" );
 endfunction
 
 /*
@@ -426,19 +429,24 @@ endfunction
  * Return value
  * dictionary or double
  *
- */
-function GetResistance(mobile, type:=0)
-    var amt := 0;
-    // We use the damage type to check if the mobile has a
-    // corresponding resistance and return the amount of resistance.
-    case(type)
-      DMG_COLD: amt := mobile.resist_cold;
-      DMG_ENERGY: amt := mobile.resist_energy;
-      DMG_FIRE: amt := mobile.resist_fire;
-      DMG_PHYSICAL: amt := mobile.resist_physical;
-      DMG_POISON: amt := mobile.resist_poison;
-    endcase
-	return amt;
+*/
+function GetResistance( mobile, type := 0 )
+  var amt := 0;
+  // We use the damage type to check if the mobile has a
+  // corresponding resistance and return the amount of resistance.
+  case ( type )
+    DMG_COLD:
+      amt := mobile.resist_cold;
+    DMG_ENERGY:
+      amt := mobile.resist_energy;
+    DMG_FIRE:
+      amt := mobile.resist_fire;
+    DMG_PHYSICAL:
+      amt := mobile.resist_physical;
+    DMG_POISON:
+      amt := mobile.resist_poison;
+  endcase
+  return amt;
 endfunction
 
 /* Not used.
@@ -454,34 +462,34 @@ endfunction
  * Return Value
  * Returns a double or a dictionary.
  *
- */
-function GetNPCResistance(template, type:=0)
-	var cprop_resistances;
+*/
+function GetNPCResistance( template, type := 0 )
+  var cprop_resistances;
 
-	if ( template.IsA(POLCLASS_NPC) )
-		cprop_resistances := GetObjProperty(template, "%Resistances%");
-		template := template.npctemplate;
-	endif
+  if ( template.IsA( POLCLASS_NPC ) )
+    cprop_resistances := GetObjProperty( template, "%Resistances%" );
+    template := template.npctemplate;
+  endif
 
-	var npc_elem := NPC_GetNPCConfig(template);
-	if ( type )
-		if ( cprop_resistances.Exists(type) )
-			return cprop_resistances[type];
-		else
-			return GetConfigReal(npc_elem, type+"-Resistance");
-		endif
-	else
-		var resistances := dictionary;
-		foreach name in ( GetResistanceNames() )
-			if ( cprop_resistances.Exists(name) )
-				resistances[name] := cprop_resistances[name];
-			else
-				resistances[name] := GetConfigReal(npc_elem, name+"-Resistance");
-			endif
-			SleepMS(2);
-		endforeach
-		return resistances;
-	endif
+  var npc_elem := NPC_GetNPCConfig( template );
+  if ( type )
+    if ( cprop_resistances.Exists( type ) )
+      return cprop_resistances[type];
+    else
+      return GetConfigReal( npc_elem, type + "-Resistance" );
+    endif
+  else
+    var resistances := dictionary;
+    foreach name in ( GetResistanceNames() )
+      if ( cprop_resistances.Exists( name ) )
+        resistances[name] := cprop_resistances[name];
+      else
+        resistances[name] := GetConfigReal( npc_elem, name + "-Resistance" );
+      endif
+      SleepMS( 2 );
+    endforeach
+    return resistances;
+  endif
 endfunction
 
 /* Not used.
@@ -502,17 +510,22 @@ endfunction
  * eg. resist_cold, this function sets the
  * mod for the resistances, eg. resist_cold_mod.
  *
- */
-function SetResistance(mobile, name, value)
-	value := CInt(value);
-	case(name)
-		RES_COLD: mobile.resist_cold_mod := value;
-		RES_ENERGY: mobile.resist_energy_mod := value;
-		RES_FIRE: mobile.resist_fire_mod := value;
-		RES_PHYSICAL: mobile.resist_physical_mod := value;
-		RES_POISON: mobile.resist_poison_mod := value;
-	endcase
-	return value;
+*/
+function SetResistance( mobile, name, value )
+  value := CInt( value );
+  case ( name )
+    RES_COLD:
+      mobile.resist_cold_mod := value;
+    RES_ENERGY:
+      mobile.resist_energy_mod := value;
+    RES_FIRE:
+      mobile.resist_fire_mod := value;
+    RES_PHYSICAL:
+      mobile.resist_physical_mod := value;
+    RES_POISON:
+      mobile.resist_poison_mod := value;
+  endcase
+  return value;
 endfunction
 
 /* Not used.
@@ -527,19 +540,23 @@ endfunction
  * Return value
  * Returns result of SetObjProperty()
  *
- */
-function ModifyResistance(mobile, name, value)
-	value := CInt(value);
-	case(name)
-		RES_PHYSICAL_MOD: mobile.resist_physical_mod := mobile.resist_physical_mod + value;
-		RES_FIRE_MOD: mobile.resist_fire_mod := mobile.resist_fire_mod + value;
-		RES_COLD_MOD: mobile.resist_cold_mod := mobile.resist_cold_mod + value;
-		RES_POISON_MOD: mobile.resist_poison_mod := mobile.resist_poison_mod + value;
-		RES_ENERGY_MOD: mobile.resist_energy_mod := mobile.resist_energy_mod + value;
-	endcase
-	return value;
+*/
+function ModifyResistance( mobile, name, value )
+  value := CInt( value );
+  case ( name )
+    RES_PHYSICAL_MOD:
+      mobile.resist_physical_mod := mobile.resist_physical_mod + value;
+    RES_FIRE_MOD:
+      mobile.resist_fire_mod := mobile.resist_fire_mod + value;
+    RES_COLD_MOD:
+      mobile.resist_cold_mod := mobile.resist_cold_mod + value;
+    RES_POISON_MOD:
+      mobile.resist_poison_mod := mobile.resist_poison_mod + value;
+    RES_ENERGY_MOD:
+      mobile.resist_energy_mod := mobile.resist_energy_mod + value;
+  endcase
+  return value;
 endfunction
-
 
 /* Not used.
  * SetDamage(mobile, name, value)
@@ -559,17 +576,22 @@ endfunction
  * eg. resist_cold, this function sets the
  * mod for the damage, eg. resist_cold_mod.
  *
- */
-function SetDamage(mobile, name, value)
-	value := CInt(value);
-	case(name)
-		DMG_COLD: mobile.damage_cold_mod := value;
-		DMG_ENERGY: mobile.damage_energy_mod := value;
-		DMG_FIRE: mobile.damage_fire_mod := value;
-		DMG_PHYSICAL: mobile.damage_physical_mod := value;
-		DMG_POISON: mobile.damage_poison_mod := value;
-	endcase
-	return value;
+*/
+function SetDamage( mobile, name, value )
+  value := CInt( value );
+  case ( name )
+    DMG_COLD:
+      mobile.damage_cold_mod := value;
+    DMG_ENERGY:
+      mobile.damage_energy_mod := value;
+    DMG_FIRE:
+      mobile.damage_fire_mod := value;
+    DMG_PHYSICAL:
+      mobile.damage_physical_mod := value;
+    DMG_POISON:
+      mobile.damage_poison_mod := value;
+  endcase
+  return value;
 endfunction
 
 /* Not used.
@@ -584,22 +606,27 @@ endfunction
  * Return value
  * Returns nothing
  *
- */
-function ModifyDamage(mobile, name, value)
+*/
+function ModifyDamage( mobile, name, value )
 
-	value := CInt(value);
-	case(name)
-		DMG_COLD_MOD: mobile.damage_cold_mod := mobile.damage_cold_mod + value;
-		DMG_ENERGY_MOD: mobile.damage_energy_mod := mobile.damage_energy_mod + value;
-		DMG_FIRE_MOD: mobile.damage_fire_mod := mobile.damage_fire_mod + value;
-		DMG_PHYSICAL_MOD: mobile.damage_physical_mod := mobile.damage_physical_mod + value;
-		DMG_POISON_MOD: mobile.damage_poison_mod := mobile.damage_poison_mod + value;
-	endcase
-	// Modify damage with anatomy damage mod.
-	value := value * CalcAnatomyDmgMod( mobile );
-	// Modify damage with tactics damage mod.
-	value := value * CalcTacticsDmgMod( mobile );
-	return value;
+  value := CInt( value );
+  case ( name )
+    DMG_COLD_MOD:
+      mobile.damage_cold_mod := mobile.damage_cold_mod + value;
+    DMG_ENERGY_MOD:
+      mobile.damage_energy_mod := mobile.damage_energy_mod + value;
+    DMG_FIRE_MOD:
+      mobile.damage_fire_mod := mobile.damage_fire_mod + value;
+    DMG_PHYSICAL_MOD:
+      mobile.damage_physical_mod := mobile.damage_physical_mod + value;
+    DMG_POISON_MOD:
+      mobile.damage_poison_mod := mobile.damage_poison_mod + value;
+  endcase
+  // Modify damage with anatomy damage mod.
+  value := value * CalcAnatomyDmgMod( mobile );
+  // Modify damage with tactics damage mod.
+  value := value * CalcTacticsDmgMod( mobile );
+  return value;
 
 endfunction
 
@@ -616,23 +643,22 @@ endfunction
  * Dictionary with the type of damage and porcentage, eg.: "DAMAGE_FIRE -> 0.5 DAMAGE_COLD -> 0.5"
 */
 
-function GetDamageMembers(mobile)
-	var damage_members := struct;
+function GetDamageMembers( mobile )
+  var damage_members := struct;
 
-    damage_members.+"damage_cold" := mobile.npctemplate.damage_cold;
-    damage_members.+"damage_energy" := mobile.npctemplate.damage_energy;
-    damage_members.+"damage_fire" := mobile.npctemplate.damage_fire;
-    damage_members.+"damage_physical" := mobile.npctemplate.damage_physical;
-    damage_members.+"damage_poison" := mobile.npctemplate.damage_poison;
+  damage_members.+"damage_cold" := mobile.npctemplate.damage_cold;
+  damage_members.+"damage_energy" := mobile.npctemplate.damage_energy;
+  damage_members.+"damage_fire" := mobile.npctemplate.damage_fire;
+  damage_members.+"damage_physical" := mobile.npctemplate.damage_physical;
+  damage_members.+"damage_poison" := mobile.npctemplate.damage_poison;
 
-	if ( !damage_members )
-		damage_members := struct;
-		damage_members.+"DAMAGE_PHYSICAL" := 1.0;
-	endif
+  if ( !damage_members )
+    damage_members := struct;
+    damage_members.+"DAMAGE_PHYSICAL" := 1.0;
+  endif
 
-	return damage_members;
+  return damage_members;
 endfunction
-
 
 /* Not used.
  * ResistancePercentToMult(percent)
@@ -646,15 +672,15 @@ endfunction
  * Return value
  * Double resistance multiplier
  *
- */
-function ResistancePercentToMult(percent)
-    if ( percent > 0 )
-        //print("% to mult: "+percent+" is: "+(CDbl(100 - percent) * 0.010));
-        return CDbl(100 - percent) * 0.010;
-    else
-        //print("% to mult: "+percent+" is: "+(CDbl(100 + percent) * 0.010));
-        return CDbl(100 + percent) * 0.010;
-    endif
+*/
+function ResistancePercentToMult( percent )
+  if ( percent > 0 )
+    // print("% to mult: "+percent+" is: "+(CDbl(100 - percent) * 0.010));
+    return CDbl( 100 - percent ) * 0.010;
+  else
+    // print("% to mult: "+percent+" is: "+(CDbl(100 + percent) * 0.010));
+    return CDbl( 100 + percent ) * 0.010;
+  endif
 endfunction
 
 /* Not used.
@@ -669,41 +695,41 @@ endfunction
  * Return value
  * Int percentage
  *
- */
-function ResistanceMultToPercent(mult)
-    if ( mult > 0 )
-        //print("mult to %: "+mult+" is: "+CInt(100 - (mult * 100)));
-        return CInt(100 - (mult * 100));
-    else
-        //print("mult to %: "+mult+" is: "+CInt(100 + (mult * 100)));
-        return CInt(100 + (mult * 100));
-    endif
+*/
+function ResistanceMultToPercent( mult )
+  if ( mult > 0 )
+    // print("mult to %: "+mult+" is: "+CInt(100 - (mult * 100)));
+    return CInt( 100 - ( mult * 100 ) );
+  else
+    // print("mult to %: "+mult+" is: "+CInt(100 + (mult * 100)));
+    return CInt( 100 + ( mult * 100 ) );
+  endif
 endfunction
 
-function DoManaSuck(defender, attacker, amount)
+function DoManaSuck( defender, attacker, amount )
 
   // Added for necro wraith form
   // Get Spirit Speak skill level from the attacker and divide it by 5.
   // Then convert to percent (div by 100) and determine the mana amount to suck from defender.
-    var sspeak := GetAttribute(attacker, SPIRIT_SPEAK);
-    sspeak := CDbl(sspeak);
-    sspeak := sspeak/5;
-    if(sspeak < 8)
-      sspeak := 8;
+  var sspeak := GetAttribute( attacker, SPIRIT_SPEAK );
+  sspeak := CDbl( sspeak );
+  sspeak := sspeak / 5;
+  if ( sspeak < 8 )
+    sspeak := 8;
+  endif
+  sspeak := sspeak / 100;
+  // The amount of mana to suck from the defender.
+  var manasuck := amount * sspeak;
+  var defmana := GetVital( defender, "Mana" ) / 100;
+  // If the defender has mana and it is more mana than we want to suck then take the amount.
+  // else take what he's got left if any.
+  if ( defmana )
+    if ( manasuck <= defmana )
+      ConsumeVital( defender, "Mana", CInt( manasuck * 100 ) );
+    else
+      ConsumeVital( defender, "Mana", defmana );
     endif
-    sspeak := sspeak / 100;
-    // The amount of mana to suck from the defender.
-    var manasuck := amount * sspeak;
-    var defmana := GetVital(defender, "Mana")/ 100;
-    // If the defender has mana and it is more mana than we want to suck then take the amount.
-    // else take what he's got left if any.
-    if(defmana)
-      if(manasuck <= defmana)
-        ConsumeVital(defender, "Mana", CInt(manasuck * 100));
-      else
-        ConsumeVital(defender, "Mana", defmana);
-      endif
-    endif
+  endif
 endfunction
 
 ///////////////////////////////////////////////////
@@ -726,15 +752,16 @@ endfunction
 //
 ///////////////////////////////////////////////////////
 
-function LifeDrain(source, damage, percent)
+function LifeDrain( source, damage, percent )
 
-	percent := CDbl(percent);
-	percent := percent / 100;
-	var amt := CInt(CDbl(damage) * percent);
-	HealDamage(source, amt);
-	SendSysMessage(source, amt + " life force from your opponent was applied to heal you.", 2, 66);
+  percent := CDbl( percent );
+  percent := percent / 100;
+  var amt := CInt( CDbl( damage ) * percent );
+  HealDamage( source, amt );
+  SendSysMessage( source, amt + " life force from your opponent was applied to heal you.",
+                  2, 66 );
 
-	return amt;
+  return amt;
 
 endfunction
 
@@ -764,18 +791,18 @@ endfunction
 // Nothing.
 //
 ///////////////////////////////////////////////////////
-function KillMobile(mob, repsys:=0, attacker := 0)
+function KillMobile( mob, repsys := 0, attacker := 0 )
 
-	if (!repsys)
-		mob.kill();
-	elseif(attacker)
-		mob.kill(attacker);
-	else
-		var contrl:=GetProcess().controller; // Gets the mobile ref of the killer.
-		mob.kill(contrl);
-	endif
+  if ( !repsys )
+    mob.kill();
+  elseif ( attacker )
+    mob.kill( attacker );
+  else
+    var contrl := GetProcess().controller; // Gets the mobile ref of the killer.
+    mob.kill( contrl );
+  endif
 
-Endfunction
+endfunction
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -792,38 +819,38 @@ Endfunction
 //////////////////////////////////////////////////////////////////////////////////////////
 function CalcAnatomyDmgMod( byref attacker )
 
-	var anat_dmg_mod := 0.0;
-	var anat_skill := CDbl( GetAttribute( attacker, ANATOMY, ATTRIBUTE_PRECISION_TENTHS ) ) / 10.0;
+  var anat_dmg_mod := 0.0;
+  var anat_skill := CDbl( GetAttribute( attacker, ANATOMY, ATTRIBUTE_PRECISION_TENTHS ) ) / 10.0;
 
-	if( anat_skill < 10.0 )
-		anat_dmg_mod := 0.0;
-	elseif( (anat_skill >= 10.0) && (anat_skill <= 20.0) )
-		anat_dmg_mod := 0.05;
-	elseif( (anat_skill >= 20.0) && (anat_skill  <= 30.0) )
-		anat_dmg_mod := 0.10;
-	elseif( (anat_skill >= 30.0) && (anat_skill <= 40.0) )
-		anat_dmg_mod := 0.15;
-	elseif( (anat_skill >= 40.0) && (anat_skill <= 50.0) )
-		anat_dmg_mod := 0.20;
-	elseif( (anat_skill >= 50.0) && (anat_skill <= 60.0) )
-		anat_dmg_mod := 0.25;
-	elseif( (anat_skill >= 60.0) && (anat_skill <= 70.0) )
-		anat_dmg_mod := 0.30;
-	elseif( (anat_skill >= 70.0) && (anat_skill <= 80.0) )
-		anat_dmg_mod := 0.35;
-	elseif( (anat_skill >= 80.0) && (anat_skill <= 90.0) )
-		anat_dmg_mod := 0.40;
-	elseif( (anat_skill >= 90.0) && (anat_skill <= 100.0) )
-		anat_dmg_mod := 0.45;
-	elseif( (anat_skill >= 100.0) && (anat_skill <= 110.0) )
-		anat_dmg_mod := 0.55;
-	elseif( (anat_skill >= 110.0) && (anat_skill <= 120.0) )
-		anat_dmg_mod := 0.60;
-	elseif( anat_skill >= 120.0 )
-		anat_dmg_mod := 0.65;
-	endif
+  if ( anat_skill < 10.0 )
+    anat_dmg_mod := 0.0;
+  elseif ( ( anat_skill >= 10.0 ) && ( anat_skill <= 20.0 ) )
+    anat_dmg_mod := 0.05;
+  elseif ( ( anat_skill >= 20.0 ) && ( anat_skill <= 30.0 ) )
+    anat_dmg_mod := 0.10;
+  elseif ( ( anat_skill >= 30.0 ) && ( anat_skill <= 40.0 ) )
+    anat_dmg_mod := 0.15;
+  elseif ( ( anat_skill >= 40.0 ) && ( anat_skill <= 50.0 ) )
+    anat_dmg_mod := 0.20;
+  elseif ( ( anat_skill >= 50.0 ) && ( anat_skill <= 60.0 ) )
+    anat_dmg_mod := 0.25;
+  elseif ( ( anat_skill >= 60.0 ) && ( anat_skill <= 70.0 ) )
+    anat_dmg_mod := 0.30;
+  elseif ( ( anat_skill >= 70.0 ) && ( anat_skill <= 80.0 ) )
+    anat_dmg_mod := 0.35;
+  elseif ( ( anat_skill >= 80.0 ) && ( anat_skill <= 90.0 ) )
+    anat_dmg_mod := 0.40;
+  elseif ( ( anat_skill >= 90.0 ) && ( anat_skill <= 100.0 ) )
+    anat_dmg_mod := 0.45;
+  elseif ( ( anat_skill >= 100.0 ) && ( anat_skill <= 110.0 ) )
+    anat_dmg_mod := 0.55;
+  elseif ( ( anat_skill >= 110.0 ) && ( anat_skill <= 120.0 ) )
+    anat_dmg_mod := 0.60;
+  elseif ( anat_skill >= 120.0 )
+    anat_dmg_mod := 0.65;
+  endif
 
-	return anat_dmg_mod;
+  return anat_dmg_mod;
 
 endfunction
 
@@ -842,10 +869,11 @@ endfunction
 //////////////////////////////////////////////////////////////////////////////////////////
 function CalcTacticsDmgMod( byref attacker )
 
-	var tactics_skill := CDbl( GetAttribute( attacker, TACTICS, ATTRIBUTE_PRECISION_TENTHS ) ) / 10.0;
-	var tactics_dmg_mod := (tactics_skill + 50.0) * 0.01;
+  var tactics_skill := CDbl( GetAttribute( attacker, TACTICS,
+                             ATTRIBUTE_PRECISION_TENTHS ) ) / 10.0;
+  var tactics_dmg_mod := ( tactics_skill + 50.0 ) * 0.01;
 
-	return tactics_dmg_mod;
+  return tactics_dmg_mod;
 
 endfunction
 
@@ -864,9 +892,10 @@ endfunction
 //////////////////////////////////////////////////////////////////////////////////////////
 function CalcArmsLoreDmgMod( byref attacker )
 
-	var arms_lore_skill := CDbl( GetAttribute( attacker, ARMS_LORE, ATTRIBUTE_PRECISION_TENTHS ) ) / 10.0;
-	var arms_lore_dmg_mod := (arms_lore_skill / 20) * 0.01;
-	return arms_lore_dmg_mod;
+  var arms_lore_skill := CDbl( GetAttribute( attacker, ARMS_LORE,
+                               ATTRIBUTE_PRECISION_TENTHS ) ) / 10.0;
+  var arms_lore_dmg_mod := ( arms_lore_skill / 20 ) * 0.01;
+  return arms_lore_dmg_mod;
 
 endfunction
 
@@ -885,19 +914,19 @@ endfunction
 //////////////////////////////////////////////////////////////////////////////////////////
 function CalcLumberjackingDamageMod( byref attacker )
 
-	if( attacker.weapon.IsAxe() )
-		var lumberjack_skill := CDbl( GetAttribute( attacker, LUMBERJACKING, ATTRIBUTE_PRECISION_TENTHS ) ) / 10.0;
-		var lumberjack_dmg_mod := 0.0;
-		if( lumberjack_skill < 100.0 )
-			lumberjack_dmg_mod := lumberjack_skill / 5.0;
-		else
-			lumberjack_dmg_mod := (lumberjack_skill / 5.0) + 10.0;
-		endif
+  if ( attacker.weapon.IsAxe() )
+    var lumberjack_skill := CDbl( GetAttribute( attacker, LUMBERJACKING,
+                                  ATTRIBUTE_PRECISION_TENTHS ) ) / 10.0;
+    var lumberjack_dmg_mod := 0.0;
+    if ( lumberjack_skill < 100.0 )
+      lumberjack_dmg_mod := lumberjack_skill / 5.0;
+    else
+      lumberjack_dmg_mod := ( lumberjack_skill / 5.0 ) + 10.0;
+    endif
 
-		return lumberjack_dmg_mod;
-	endif
+    return lumberjack_dmg_mod;
+  endif
 
-	return 0.0;
+  return 0.0;
 
 endfunction
-

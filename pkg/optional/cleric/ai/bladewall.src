@@ -6,7 +6,7 @@ use vitals;
 var me := self();
 
 program bladewall()
-	//They only last 30 seconds
-	sleep(30);
-	me.kill();
+  // They only last 30 seconds
+  sleep( 30 );
+  me.kill();
 endprogram

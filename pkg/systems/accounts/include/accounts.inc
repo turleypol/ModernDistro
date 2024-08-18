@@ -1,7 +1,7 @@
 /* $Id: accounts.inc 375 2006-06-17 19:26:32Z austinheilman $
  *
  *
- */
+*/
 
 use uo;
 use os;
@@ -9,7 +9,7 @@ use os;
 include ":accounts:settings";
 
 // Max numbers of characters an account can have.
-CONST ACCT_MAX_CHARACTERS	:= 6;
+const ACCT_MAX_CHARACTERS := 6;
 
 /*
  * ACCT_CreateNewAccount(username, password, cmdlevel, expansion, email)
@@ -28,28 +28,29 @@ CONST ACCT_MAX_CHARACTERS	:= 6;
  * Returns error on failure.
  * Returns an account object on success.
  *
- */
-function ACCT_CreateNewAccount(username, password, cmdlevel:=0, expansion:="ML", email:="")
-	var account := CreateAccount(username, password, 1);
-	if ( account.errortext )
-		return account;
-	endif
+*/
+function ACCT_CreateNewAccount( username, password, cmdlevel := 0, expansion := "ML",
+                                email := "" )
+  var account := CreateAccount( username, password, 1 );
+  if ( account.errortext )
+    return account;
+  endif
 
-	if ( cmdlevel )
-		account.SetDefaultCmdLevel(CInt(cmdlevel));
-	endif
+  if ( cmdlevel )
+    account.SetDefaultCmdLevel( CInt( cmdlevel ) );
+  endif
 
-	if ( expansion )
-		account.Set_UO_Expansion(expansion);
-	endif
+  if ( expansion )
+    account.Set_UO_Expansion( expansion );
+  endif
 
-	if ( email )
-		account.SetProp("EMail", email);
-	endif
+  if ( email )
+    account.SetProp( "EMail", email );
+  endif
 
-	ACCT_SetLastLogin(account);
+  ACCT_SetLastLogin( account );
 
-	return account;
+  return account;
 endfunction
 
 /*
@@ -66,20 +67,20 @@ endfunction
  * Returns 1 on success.
  * Returns error on failure.
  *
- */
-function ACCT_SetLastLogin(account, time:=0)
-	if ( TypeOf(account) != "AccountRef" )
-		account := FindAccount(account);
-		if ( account.errortext )
-			return account;
-		endif
-	endif
+*/
+function ACCT_SetLastLogin( account, time := 0 )
+  if ( TypeOf( account ) != "AccountRef" )
+    account := FindAccount( account );
+    if ( account.errortext )
+      return account;
+    endif
+  endif
 
-	if ( !time )
-		time := POLCore().systime;
-	endif
+  if ( !time )
+    time := POLCore().systime;
+  endif
 
-	return account.SetProp("LastLogin", time);
+  return account.SetProp( "LastLogin", time );
 endfunction
 
 /*
@@ -95,16 +96,16 @@ endfunction
  * Returns an integer on success.
  * Returns error on failure.
  *
- */
-function ACCT_GetLastLogin(account)
-	if ( TypeOf(account) != "AccountRef" )
-		account := FindAccount(account);
-		if ( account.errortext )
-			return account;
-		endif
-	endif
+*/
+function ACCT_GetLastLogin( account )
+  if ( TypeOf( account ) != "AccountRef" )
+    account := FindAccount( account );
+    if ( account.errortext )
+      return account;
+    endif
+  endif
 
-	return CInt(account.GetProp("LastLogin"));
+  return CInt( account.GetProp( "LastLogin" ) );
 endfunction
 
 /*
@@ -120,25 +121,25 @@ endfunction
  * Returns an array of mobile references on success.
  * Returns error on failure.
  *
- */
-function ACCT_GetCharacters(account)
-	if ( TypeOf(account) != "AccountRef" )
-		account := FindAccount(account);
-		if ( account.errortext )
-			return account;
-		endif
-	endif
+*/
+function ACCT_GetCharacters( account )
+  if ( TypeOf( account ) != "AccountRef" )
+    account := FindAccount( account );
+    if ( account.errortext )
+      return account;
+    endif
+  endif
 
-	var mobile_list := array;
-	for i:=1 to ACCT_MAX_CHARACTERS
-		var mobile := account.GetCharacter(i);
-		if ( mobile )
-			mobile_list.Append(mobile);
-		endif
-		SleepMS(2);
-	endfor
+  var mobile_list := array;
+  for i := 1 to ACCT_MAX_CHARACTERS
+    var mobile := account.GetCharacter( i );
+    if ( mobile )
+      mobile_list.Append( mobile );
+    endif
+    SleepMS( 2 );
+  endfor
 
-	return mobile_list;
+  return mobile_list;
 endfunction
 
 /*
@@ -154,24 +155,24 @@ endfunction
  * Returns an integer on success.
  * Returns error on failure.
  *
- */
-function ACCT_GetNumCharacters(account)
-	if ( TypeOf(account) != "AccountRef" )
-		account := FindAccount(account);
-		if ( account.errortext )
-			return account;
-		endif
-	endif
+*/
+function ACCT_GetNumCharacters( account )
+  if ( TypeOf( account ) != "AccountRef" )
+    account := FindAccount( account );
+    if ( account.errortext )
+      return account;
+    endif
+  endif
 
-	var count := 0;
-	for i:=1 to ACCT_MAX_CHARACTERS
-		if ( account.GetCharacter(i) )
-			count := count+1;
-		endif
-		SleepMS(2);
-	endfor
+  var count := 0;
+  for i := 1 to ACCT_MAX_CHARACTERS
+    if ( account.GetCharacter( i ) )
+      count := count + 1;
+    endif
+    SleepMS( 2 );
+  endfor
 
-	return count;
+  return count;
 endfunction
 
 /*
@@ -187,22 +188,22 @@ endfunction
  * Returns an integer on success.
  * Returns error on failure.
  *
- */
-function ACCT_DeleteAllCharacters(account)
-	if ( TypeOf(account) != "AccountRef" )
-		account := FindAccount(account);
-		if ( account.errortext )
-			return account;
-		endif
-	endif
+*/
+function ACCT_DeleteAllCharacters( account )
+  if ( TypeOf( account ) != "AccountRef" )
+    account := FindAccount( account );
+    if ( account.errortext )
+      return account;
+    endif
+  endif
 
-	var count := 0;
-	for i:=1 to ACCT_MAX_CHARACTERS
-		account.DeleteCharacter(i);
-		SleepMS(2);
-	endfor
+  var count := 0;
+  for i := 1 to ACCT_MAX_CHARACTERS
+    account.DeleteCharacter( i );
+    SleepMS( 2 );
+  endfor
 
-	return count;
+  return count;
 endfunction
 
 /*
@@ -220,25 +221,24 @@ endfunction
  * Returns an integer on success.
  * Returns error on failure.
  *
- */
-function ACCT_DeleteAccount(account)
-	if ( TypeOf(account) != "AccountRef" )
-		account := FindAccount(account);
-		if ( account.errortext )
-			return account;
-		endif
-	endif
+*/
+function ACCT_DeleteAccount( account )
+  if ( TypeOf( account ) != "AccountRef" )
+    account := FindAccount( account );
+    if ( account.errortext )
+      return account;
+    endif
+  endif
 
-	foreach package in ( POLCore().packages )
-		Run_Script_To_Completion(":"+package+":acctDelete/acctDelete", account);
-		SleepMS(2);
-	endforeach
+  foreach package in ( POLCore().packages )
+    Run_Script_To_Completion( ":" + package + ":acctDelete/acctDelete", account );
+    SleepMS( 2 );
+  endforeach
 
-	ACCT_DeleteAllCharacters(account);
+  ACCT_DeleteAllCharacters( account );
 
-	return account.Delete();
+  return account.Delete();
 endfunction
-
 
 //////////////////////////////////////////////////////
 // ACCT_FindValidPlayer(player)
@@ -253,29 +253,26 @@ endfunction
 //
 //////////////////////////////////////////////////////
 
+function ACCT_FindValidPlayer( player )
 
+  var playerserial := 0;
+  var acctlist := ListAccounts();
+  var i := 1;
 
-
-function ACCT_FindValidPlayer(player)
-
-	var playerserial := 0;
-	var acctlist := ListAccounts();
-	var i := 1;
-
-	// Stuff for verifying that the player exists
-	foreach acctnam in acctlist
-		var acctref := FindAccount(acctnam);
-		for ( i := 1; i<=5; i:=i+1 )
-			var playername := CStr(acctref.GetCharacter(i).name);
-			if(!playername)
-				continue;
-			endif
-			if ( Lower(playername) == Lower(player) )
-				playerserial := acctref.GetCharacter(i).serial;
-				break;
-			endif
-		endfor
-	endforeach
+  // Stuff for verifying that the player exists
+  foreach acctnam in acctlist
+    var acctref := FindAccount( acctnam );
+    for ( i := 1; i <= 5; i := i + 1 )
+      var playername := CStr( acctref.GetCharacter( i ).name );
+      if ( !playername )
+        continue;
+      endif
+      if ( Lower( playername ) == Lower( player ) )
+        playerserial := acctref.GetCharacter( i ).serial;
+        break;
+      endif
+    endfor
+  endforeach
 
   return playerserial;
 

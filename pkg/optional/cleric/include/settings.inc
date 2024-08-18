@@ -1,6 +1,6 @@
-//$Id: settings.inc 373 2006-06-17 18:27:33Z austinheilman $
+// $Id: settings.inc 373 2006-06-17 18:27:33Z austinheilman $
 
-/*===============================================================
+/* ===============================================================
 * Current Version
 * SETTINGS.INC - v1.0
 * Updated 9/27/2005 2:54PM
@@ -8,7 +8,7 @@
 * -- Revision v1.0 --
 * Austin:
 *  Created include file
-===============================================================*/
+=============================================================== */
 
 use uo;
 use os;
@@ -25,15 +25,15 @@ use cfgfile;
  * Return value
  * A config file reference.
  *
- */
+*/
 function Cleric_GetSettingsCfgFile()
 
-	var CS_cfg := ReadConfigFile( ":cleric:settings" );
-	if( CS_cfg.errortext )
-		SysLog( "Error::Cleric_GetSettingsCfgFile() - Unable to open [:cleric:settings.cfg] ->" + CS_cfg.errortext );
-	endif
+  var CS_cfg := ReadConfigFile( ":cleric:settings" );
+  if ( CS_cfg.errortext )
+    SysLog( "Error::Cleric_GetSettingsCfgFile() - Unable to open [:cleric:settings.cfg] ->" + CS_cfg.errortext );
+  endif
 
-	return CS_cfg;
+  return CS_cfg;
 endfunction
 
 /*
@@ -49,17 +49,17 @@ endfunction
  * Return value
  * A config file elem reference.
  *
- */
-function Cleric_GetSettingsCfgElem( elem_name, byref cfg_file:=0 )
+*/
+function Cleric_GetSettingsCfgElem( elem_name, byref cfg_file := 0 )
 
-	if( !cfg_file )
-		cfg_file := Cleric_GetSettingsCfgFile();
-	endif
+  if ( !cfg_file )
+    cfg_file := Cleric_GetSettingsCfgFile();
+  endif
 
-	var cfg_elem := cfg_file[elem_name];
-	if( cfg_elem.errortext )
-		SysLog( "Error::Cleric_GetSettingsCfgElem() - Unable to find elem ["+elem_name+"] ->" + cfg_elem.errortext );
-	endif
+  var cfg_elem := cfg_file[elem_name];
+  if ( cfg_elem.errortext )
+    SysLog( "Error::Cleric_GetSettingsCfgElem() - Unable to find elem [" + elem_name + "] ->" + cfg_elem.errortext );
+  endif
 
-	return cfg_elem;
+  return cfg_elem;
 endfunction

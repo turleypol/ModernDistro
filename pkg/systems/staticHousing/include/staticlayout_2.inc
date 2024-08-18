@@ -1,5 +1,4 @@
-var ownerlayout := array(
-// Main page
+var ownerlayout := array( // Main page
 "page 0",
 "gumppic   0  50 0206            ",
 "gumppic  40  50 0201            ",
@@ -44,8 +43,7 @@ var ownerlayout := array(
 "button  100 105 5209 5209 0 1  0",
 "button  260 105 5209 5209 0 2  0",
 "button  450 105 5209 5209 0 3  0",
-"button   50 415  247  249 1 0  0",
-// Main page info - Owner name, number of lockdowns, number of secures
+"button   50 415  247  249 1 0  0", // Main page info - Owner name, number of lockdowns, number of secures
 "page 1",
 "text   160 150  910    5        ", // "Owned by"
 "text   250 150    0   24        ", // owner name
@@ -55,28 +53,23 @@ var ownerlayout := array(
 "text   350 255    0   26        ", // number of secures
 "text   250 415  910    8        ", // "Change the house's name"
 "button  50 415  247  249  0 0  0",
-"button 440 415 2714 2715  1 0  1",
-// Friends, Co-Owners, Enemies master page
+"button 440 415 2714 2715  1 0  1", // Friends, Co-Owners, Enemies master page
 "page 2",
 "text     90 148  910    9       ",
 "button   50 150 4017 4019 0 5  0",
 "text     90 178  910   10       ",
 "button   50 180 4017 4019 0 6  0",
 "text     90 208  910   11       ",
-"button   50 210 4017 4019 0 8  0",
-// Options List
+"button   50 210 4017 4019 0 8  0", // Options List
 "page 3",
 "text     85 137  910   12       ",
 "button   50 135 4017 4019 1 0  6",
 "text     85 167  910   13       ",
-"button   50 165 4017 4019 1 0  2",
-//"text     85 197  910   14       ",
+"button   50 165 4017 4019 1 0  2", // "text     85 197  910   14       ",
 //"button   50 195 4017 4019 0 4  0",
-
 "page 4",
 "text     55 183  910   15       ",
-"button  205 180 2640 2641 1 0  3",
-// Co-Owner List
+"button  205 180 2640 2641 1 0  3", // Co-Owner List
 "page 5",
 "gumppic  20 130 1141            ",
 "button  440 130 4017 4019 1 0 47",
@@ -99,8 +92,7 @@ var ownerlayout := array(
 "text    300 244 910    16       ",
 "text     30 244 910    71       ",
 "text    138 413  910   17       ",
-"button  250 415 4008 4010 1 0 52",
-// Friend list Page 1
+"button  250 415 4008 4010 1 0 52", // Friend list Page 1
 "page 6",
 "gumppic  20 130 1141            ",
 "button  440 130 4017 4019 1 0  7",
@@ -145,8 +137,7 @@ var ownerlayout := array(
 "text    158 413  910   21       ",
 "button  250 415 4008 4010 1 0  4",
 "text    358 413  910   18       ",
-"button  440 415 5224 5224 0 7  0",
-// Friend List Page 2
+"button  440 415 5224 5224 0 7  0", // Friend List Page 2
 "page 7",
 "gumppic  20 130 1141            ",
 "button  440 130 4017 4019 1 0 17",
@@ -191,8 +182,7 @@ var ownerlayout := array(
 "text    158 413  910   21       ",
 "button  250 415 4008 4010 1 0  4",
 "text    338 413  910   19       ",
-"button  440 415 5223 5223 0 6  0",
-// Enemy page 1
+"button  440 415 5223 5223 0 6  0", // Enemy page 1
 "page 8",
 "gumppic  20 130 1141            ",
 "button  440 130 4017 4019 1 0 27",
@@ -237,8 +227,7 @@ var ownerlayout := array(
 "text    158 413  910   23       ",
 "button  250 415 4008 4010 1 0  5",
 "text    358 413  910   18       ",
-"button  440 415 5224 5224 0 9  0",
-// Enemy page 2
+"button  440 415 5224 5224 0 9  0", // Enemy page 2
 "page 9",
 "gumppic  20 130 1141            ",
 "button  440 130 4017 4019 1 0 37",
@@ -283,33 +272,30 @@ var ownerlayout := array(
 "text    158 413  910   23       ",
 "button  250 415 4008 4010 1 0  5",
 "text    338 413  910   19       ",
-"button  440 415 5224 5224 0 8  0"
-);
+"button  440 415 5224 5224 0 8  0" );
 
-var data := array(
-    "",                                                      //house name line 1
-    "",                                                      //house name line 2
-    "Info",                                                  //line 2
-    "Friends",                                               //line 3
-    "Options",                                               //line 4
-    "Owned By",                                              //line 5
-    "Number of lockdowns remaining",                         //line 6
-    "Number of secure containers remaining",                 //line 7
-    "Change the house's name?",                              //line 8
-    "display a list of house co-owners",                     //line 9
-    "display a list of house friends",                       //line 10
-    "display a list of house enemies",                       //line 11
-    "change the front door locks.",                          //line 12
-    "change interior door locks.",                           //line 13
-    "Abandon this house ( give up ownership of this house)", //line 14
-    "Are you sure?",                                         //line 15
-    "Remove Co-owner",                                       //line 16
-    "Add a Co-owner",                                        //line 17
-    "Next Page",                                             //line 18
-    "Previous Page",                                         //line 19
-    "Remove friend",                                         //line 20
-    "Add friend",                                            //line 21
-    "Remove enemy",                                          //line 22
-    "Add enemy",                                              //line 23
-    "Number of teleporters left"
-);
+var data := array( "", // house name line 1
+                   "", // house name line 2
+                   "Info", // line 2
+                   "Friends", // line 3
+                   "Options", // line 4
+                   "Owned By", // line 5
+                   "Number of lockdowns remaining", // line 6
+                   "Number of secure containers remaining", // line 7
+                   "Change the house's name?", // line 8
+                   "display a list of house co-owners", // line 9
+                   "display a list of house friends", // line 10
+                   "display a list of house enemies", // line 11
+                   "change the front door locks.", // line 12
+                   "change interior door locks.", // line 13
+                   "Abandon this house ( give up ownership of this house)", // line 14
+                   "Are you sure?", // line 15
+                   "Remove Co-owner", // line 16
+                   "Add a Co-owner", // line 17
+                   "Next Page", // line 18
+                   "Previous Page", // line 19
+                   "Remove friend", // line 20
+                   "Add friend", // line 21
+                   "Remove enemy", // line 22
+                   "Add enemy", // line 23
+                   "Number of teleporters left" );

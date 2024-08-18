@@ -10,8 +10,8 @@ include ":containers:storageAreas";
 
 program OnDelete( who, container )
 
-        who := who; //Avoid ecompile warning.
-	container.usescript := ":containers:container/use";
+  who := who; // Avoid ecompile warning.
+  container.usescript := ":containers:container/use";
 
-	return 1;
+  return 1;
 endprogram

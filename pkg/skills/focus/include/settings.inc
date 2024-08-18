@@ -13,16 +13,16 @@ use cfgfile;
  * Return value
  * A config file reference.
  *
- */
+*/
 function Focus_GetSettingsCfgFile()
-	UnloadConfigFile(":focus:config/settings");
-	var cfg := ReadConfigFile(":focus:config/settings");
+  UnloadConfigFile( ":focus:config/settings" );
+  var cfg := ReadConfigFile( ":focus:config/settings" );
 
-	if ( cfg.errortext )
-		SysLog("Error::Focus_GetSettingsCfgFile() - Unable to open [:focus:config/settings.cfg] ->"+cfg.errortext);
-	endif
+  if ( cfg.errortext )
+    SysLog( "Error::Focus_GetSettingsCfgFile() - Unable to open [:focus:config/settings.cfg] ->" + cfg.errortext );
+  endif
 
-	return cfg;
+  return cfg;
 endfunction
 
 /*
@@ -38,18 +38,17 @@ endfunction
  * Return value
  * A config file elem reference.
  *
- */
-function Focus_GetSettingsCfgElem(elem_name, byref cfg_file:=0)
-	if ( !cfg_file )
-		cfg_file := Focus_GetSettingsCfgFile();
-	endif
+*/
+function Focus_GetSettingsCfgElem( elem_name, byref cfg_file := 0 )
+  if ( !cfg_file )
+    cfg_file := Focus_GetSettingsCfgFile();
+  endif
 
-	var elem := cfg_file[elem_name];
+  var elem := cfg_file[elem_name];
 
-	if ( elem.errortext )
-		SysLog("Error::Focus_GetSettingsCfgElem() - Unable to find elem ["+elem_name+"] ->"+elem.errortext);
-	endif
+  if ( elem.errortext )
+    SysLog( "Error::Focus_GetSettingsCfgElem() - Unable to find elem [" + elem_name + "] ->" + elem.errortext );
+  endif
 
-	return elem;
+  return elem;
 endfunction
-

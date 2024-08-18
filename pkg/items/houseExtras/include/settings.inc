@@ -1,6 +1,6 @@
-//$Id: settings.inc 373 2006-06-17 18:27:33Z austinheilman $
+// $Id: settings.inc 373 2006-06-17 18:27:33Z austinheilman $
 
-/*===============================================================
+/* ===============================================================
 * Current Version
 * SETTINGS.INC - v1.0
 * Updated 9/27/2005 2:54PM
@@ -8,7 +8,7 @@
 * -- Revision v1.0 --
 * Austin:
 *  Created include file
-===============================================================*/
+=============================================================== */
 
 use uo;
 use os;
@@ -25,16 +25,16 @@ use cfgfile;
  * Return value
  * A config file reference.
  *
- */
+*/
 function HE_GetSettingsCfgFile()
-	UnloadConfigFile(":houseExtras:settings");
-	var cfg := ReadConfigFile(":houseExtras:settings");
+  UnloadConfigFile( ":houseExtras:settings" );
+  var cfg := ReadConfigFile( ":houseExtras:settings" );
 
-	if ( cfg.errortext )
-		SysLog("Error::HE_GetSettingsCfgFile() - Unable to open [:staticHousing:settings.cfg] ->"+cfg.errortext);
-	endif
+  if ( cfg.errortext )
+    SysLog( "Error::HE_GetSettingsCfgFile() - Unable to open [:staticHousing:settings.cfg] ->" + cfg.errortext );
+  endif
 
-	return cfg;
+  return cfg;
 endfunction
 
 /*
@@ -50,18 +50,18 @@ endfunction
  * Return value
  * A config file elem reference.
  *
- */
-function HE_GetSettingsCfgElem(elem_name, byref cfg_file:=0)
+*/
+function HE_GetSettingsCfgElem( elem_name, byref cfg_file := 0 )
 
   if ( !cfg_file )
-		cfg_file := HE_GetSettingsCfgFile();
-	endif
+    cfg_file := HE_GetSettingsCfgFile();
+  endif
 
-	var elem := cfg_file[elem_name];
+  var elem := cfg_file[elem_name];
 
   if ( elem.errortext )
-		SysLog("Error::HE_GetSettingsCfgElem() - Unable to find elem ["+elem_name+"] ->"+elem.errortext);
-	endif
+    SysLog( "Error::HE_GetSettingsCfgElem() - Unable to find elem [" + elem_name + "] ->" + elem.errortext );
+  endif
 
-	return elem;
+  return elem;
 endfunction

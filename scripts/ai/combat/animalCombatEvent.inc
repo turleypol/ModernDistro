@@ -1,19 +1,20 @@
 include ":attributes:attributes";
-function process_combat_event(opponent)
-  if ((AP_GetVital(me, VITALID_LIFE) * 100/AP_GetVitalMaximumValue(me, VITALID_LIFE)) < flee_point)
-    EraseObjProperty(me,"#flees");
-    flee(opponent);
+function process_combat_event( opponent )
+  if ( ( AP_GetVital( me, VITALID_LIFE ) * 100 / AP_GetVitalMaximumValue( me,
+       VITALID_LIFE ) ) < flee_point )
+    EraseObjProperty( me, "#flees" );
+    flee( opponent );
   endif
 endfunction
 
-function process_flee_event(opponent)
+function process_flee_event( opponent )
   opponent := opponent;
   return 0;
 endfunction
 
-function in_combat_event_loop(opponent, loops)
+function in_combat_event_loop( opponent, loops )
   if ( loops > 50 )
-    flee(opponent);
+    flee( opponent );
     return;
   endif
 endfunction
@@ -23,11 +24,11 @@ function post_combat()
   EnableMainEvents();
   SetWarMode( 0 );
   SetOpponent( 0 );
-  sleep(1);
+  sleep( 1 );
   look_around();
 endfunction
 
-function prepare_for_fight(opponent)
+function prepare_for_fight( opponent )
   opponent := opponent;
   DisableMainEvents();
   EnableCombatEvents();

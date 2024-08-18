@@ -21,19 +21,19 @@
 use uo;
 use os;
 
-program StaffScriptTester(who)
+program StaffScriptTester( who )
 
-	if( !GetObjProperty( who, "StaffScriptTester" ) )
-		SetObjProperty( who, "StaffScriptTester", 1 );
-		SendSysMessage( who, "Script testing enabled.", color := 66 );
-	else
-		EraseObjProperty( who, "StaffScriptTester" );
-		SendSysMessage( who, "Script testing disabled.", color := 66 );
-	endif
+  if ( !GetObjProperty( who, "StaffScriptTester" ) )
+    SetObjProperty( who, "StaffScriptTester", 1 );
+    SendSysMessage( who, "Script testing enabled.", color := 66 );
+  else
+    EraseObjProperty( who, "StaffScriptTester" );
+    SendSysMessage( who, "Script testing disabled.", color := 66 );
+  endif
 
-	// For testing the hunger system.
-	If( !GetObjProperty( who, "#HungerPID" ) )
-		Start_Script( ":food_drink:hunger", {who} );
-	endif
+  // For testing the hunger system.
+  if ( !GetObjProperty( who, "#HungerPID" ) )
+    Start_Script( ":food_drink:hunger", { who } );
+  endif
 
 endprogram

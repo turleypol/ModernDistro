@@ -1,5 +1,5 @@
 
-/*===============================================================
+/* ===============================================================
 * Current Version
 * CLLILOCS.INC - v1.0
 * 
@@ -7,7 +7,7 @@
 * -- Revision v1.0 --
 *  Yukiko
 *  Created include file
-===============================================================*/
+=============================================================== */
 
 use uo;
 use os;
@@ -24,15 +24,15 @@ use cfgfile;
  * Return value
  * A config file reference.
  *
- */
+*/
 function CL_GetClilocsCfgFile()
-	var cfg := ReadConfigFile(":clilocs:clilocs");
+  var cfg := ReadConfigFile( ":clilocs:clilocs" );
 
-	if ( cfg.errortext )
-		SysLog("Error::CL_GetClilocsCfgFile() - Unable to open [:clilocs:clilocs.cfg] ->"+cfg.errortext);
-	endif
+  if ( cfg.errortext )
+    SysLog( "Error::CL_GetClilocsCfgFile() - Unable to open [:clilocs:clilocs.cfg] ->" + cfg.errortext );
+  endif
 
-	return cfg;
+  return cfg;
 endfunction
 
 /*
@@ -48,19 +48,19 @@ endfunction
  * Return value
  * A config file elem reference.
  *
- */
-function CL_GetClilocsCfgElem(elem_name, byref cfg_file:=0)
+*/
+function CL_GetClilocsCfgElem( elem_name, byref cfg_file := 0 )
 
   if ( !cfg_file )
-		cfg_file := CL_GetClilocsCfgFile();
-	endif
-	
-	var elem := cfg_file[elem_name];
+    cfg_file := CL_GetClilocsCfgFile();
+  endif
+
+  var elem := cfg_file[elem_name];
 
   if ( elem.errortext )
-		SysLog("Error::CL_GetClilocsCfgElem() - Unable to find elem ["+elem_name+"] ->"+elem.errortext);
-	endif
-	return elem;
+    SysLog( "Error::CL_GetClilocsCfgElem() - Unable to find elem [" + elem_name + "] ->" + elem.errortext );
+  endif
+  return elem;
 endfunction
 
 ////////////////////////////////////////////////////////////
@@ -74,16 +74,16 @@ endfunction
 // or "No_cliloc_found" if it couldn't find the cliloc.
 //
 ////////////////////////////////////////////////////////////
-function CL_GetCliloc(cliloc_number)
+function CL_GetCliloc( cliloc_number )
 
-  var element := CL_GetClilocsCfgElem("clilocs");
-  var cliloctext := GetConfigString(element, cliloc_number);
-  if(cliloctext.errortext)
+  var element := CL_GetClilocsCfgElem( "clilocs" );
+  var cliloctext := GetConfigString( element, cliloc_number );
+  if ( cliloctext.errortext )
     cliloctext := "No_cliloc_found";
   endif
-  if(SubStr(cliloctext, (Len(cliloctext) - 8), 9) == " Original")
-  //	SendSysMessage(who, "Yes. Original is in there.");
-    cliloctext := SubStrReplace(cliloctext, "", (Len(cliloctext) - 8), 0);
+  if ( SubStr( cliloctext, ( Len( cliloctext ) - 8 ), 9 ) == " Original" )
+    // SendSysMessage(who, "Yes. Original is in there.");
+    cliloctext := SubStrReplace( cliloctext, "", ( Len( cliloctext ) - 8 ), 0 );
   endif
 
   return cliloctext;

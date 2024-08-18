@@ -10,23 +10,22 @@ use os;
 
 program item_Returner( item )
 
-        var owner_serial := GetObjProperty( item, "owner" );
-	if( !owner_serial )
-                return 0;
-	endif
+  var owner_serial := GetObjProperty( item, "owner" );
+  if ( !owner_serial )
+    return 0;
+  endif
 
-        var owner := SystemFindObjectBySerial( owner_serial ),
-            owner_name := CStr( owner.name );
+  var owner := SystemFindObjectBySerial( owner_serial ), owner_name := CStr( owner.name );
 
-        EraseObjProperty( item, "EquippedOn" );
+  EraseObjProperty( item, "EquippedOn" );
 
-        //Return the item to the owner
-        Set_Script_Option( SCRIPTOPT_CAN_ACCESS_OFFLINE_MOBILES, 1 );
-        
-        var move_item := MoveItemToContainer( item, owner.backpack );
-        if( move_item.errortext )
-                PrintTextAbove( item, "Error moving item to "+owner_name+" item: "+item.serial+" --> "+move_item.errortext );
-        endif
+  // Return the item to the owner
+  Set_Script_Option( SCRIPTOPT_CAN_ACCESS_OFFLINE_MOBILES, 1 );
 
-        return 1;
+  var move_item := MoveItemToContainer( item, owner.backpack );
+  if ( move_item.errortext )
+    PrintTextAbove( item, "Error moving item to " + owner_name + " item: " + item.serial + " --> " + move_item.errortext );
+  endif
+
+  return 1;
 endprogram

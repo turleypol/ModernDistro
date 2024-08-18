@@ -29,19 +29,19 @@ use uo;
  * Returns a string on success.
  * Returns an error on failure.
  *
- */
-function ImplodeArray(glue, byref the_array)
-	if ( Lower(TypeOf(the_array)) != "array" )
-		return error{"errortext":="Object passed was not an array."};
-	endif
+*/
+function ImplodeArray( glue, byref the_array )
+  if ( Lower( TypeOf( the_array ) ) != "array" )
+    return error{ "errortext" := "Object passed was not an array." };
+  endif
 
-	var str_array := "";
-	foreach element in ( the_array )
-		str_array += (CStr(element)+glue);
-		SleepMS(2);
-	endforeach
+  var str_array := "";
+  foreach element in ( the_array )
+    str_array += ( CStr( element ) + glue );
+    SleepMS( 2 );
+  endforeach
 
-	return str_array;
+  return str_array;
 endfunction
 
 /*
@@ -60,31 +60,31 @@ endfunction
  * Returns an array on success.
  * Returns an error on failure.
  *
- */
-function GetArrayRange(byref the_array, start, stop:=0)
-	if ( Lower(TypeOf(the_array)) != "array" )
-		return error{"errortext":="Object passed was not an array."};
-	endif
+*/
+function GetArrayRange( byref the_array, start, stop := 0 )
+  if ( Lower( TypeOf( the_array ) ) != "array" )
+    return error{ "errortext" := "Object passed was not an array." };
+  endif
 
-	start := CInt(start);
-	stop := CInt(stop);
+  start := CInt( start );
+  stop := CInt( stop );
 
-	if ( start < 1 )
-		start := 1;
-	endif
-	if ( !stop )
-		stop := the_array.Size();
-	elseif ( stop > the_array.Size() )
-		stop := the_array.Size();
-	endif
+  if ( start < 1 )
+    start := 1;
+  endif
+  if ( !stop )
+    stop := the_array.Size();
+  elseif ( stop > the_array.Size() )
+    stop := the_array.Size();
+  endif
 
-	var new_array := array{};
-	for ( start; start<=stop; start:=start+1 )
-		new_array.Append(the_array[start]);
-		SleepMS(2);
-	endfor
+  var new_array := array{};
+  for ( start; start <= stop; start := start + 1 )
+    new_array.Append( the_array[start] );
+    SleepMS( 2 );
+  endfor
 
-	return new_array;
+  return new_array;
 endfunction
 
 /*
@@ -100,30 +100,30 @@ endfunction
  * Return value
  * Returns an array of arrays
  *
- */
-function BreakArray(byref the_array, size:=1)
-	if ( Lower(TypeOf(the_array)) != "array" )
-		return error{"errortext":="Object passed was not an array."};
-	endif
+*/
+function BreakArray( byref the_array, size := 1 )
+  if ( Lower( TypeOf( the_array ) ) != "array" )
+    return error{ "errortext" := "Object passed was not an array." };
+  endif
 
-	if ( the_array.Size() > size )
-		var new_arrays := array();
-		var arrays_needed := Ceil(CDbl(the_array.Size()) / CDbl(size));
+  if ( the_array.Size() > size )
+    var new_arrays := array();
+    var arrays_needed := Ceil( CDbl( the_array.Size() ) / CDbl( size ) );
 
-		var i := 1;
-		var start := i;
-		var stop := size;
-		for ( i; i<=arrays_needed; i:=i+1 )
-			new_arrays.Append(GetArrayRange(the_array, start, stop));
-			start := stop+1;
-			stop := stop+size;
-			SleepMS(2);
-		endfor
+    var i := 1;
+    var start := i;
+    var stop := size;
+    for ( i; i <= arrays_needed; i := i + 1 )
+      new_arrays.Append( GetArrayRange( the_array, start, stop ) );
+      start := stop + 1;
+      stop := stop + size;
+      SleepMS( 2 );
+    endfor
 
-		return new_arrays;
-	else
-		return array{the_array};
-	endif
+    return new_arrays;
+  else
+    return array{ the_array };
+  endif
 endfunction
 
 ////////////////////////////////////////////////////////////////
@@ -140,45 +140,44 @@ endfunction
 ////////////////////////////////////////////////////////////////
 function InsertInSortedArray( byref the_array, byref element )
 
-	var max := the_array.Size();
-	if( !max )
-		return the_array.Append(element);
-	endif
+  var max := the_array.Size();
+  if ( !max )
+    return the_array.Append( element );
+  endif
 
-	var ctr;
-	var min := 1;
-	if( the_array[1].IsA(POLCLASS_UOBJECT) )
-		while( min <= max )
-			ctr := Cint((min+max)/2);
-			if( the_array[ctr].serial == element.serial )
-				var ret := error;
-				ret.+errortext := "Element " + element + " already exists in array";
-				return ret;
-			elseif( the_array[ctr].serial < element.serial )
-				min := ctr + 1;
-			else
-				max := ctr - 1;
-			endif
-		endwhile
-	else
-		while( min <= max )
-			ctr := Cint((min+max)/2);
-			if( the_array[ctr] == element )
-				var ret := error;
-				ret.+errortext := "Element " + element + " already exists in array";
-				return ret;
-			elseif( the_array[ctr] < element )
-				min := ctr + 1;
-			else
-				max := ctr - 1;
-			endif
-		endwhile
-	endif
+  var ctr;
+  var min := 1;
+  if ( the_array[1].IsA( POLCLASS_UOBJECT ) )
+    while ( min <= max )
+      ctr := Cint( ( min + max ) / 2 );
+      if ( the_array[ctr].serial == element.serial )
+        var ret := error;
+        ret.+errortext := "Element " + element + " already exists in array";
+        return ret;
+      elseif ( the_array[ctr].serial < element.serial )
+        min := ctr + 1;
+      else
+        max := ctr - 1;
+      endif
+    endwhile
+  else
+    while ( min <= max )
+      ctr := Cint( ( min + max ) / 2 );
+      if ( the_array[ctr] == element )
+        var ret := error;
+        ret.+errortext := "Element " + element + " already exists in array";
+        return ret;
+      elseif ( the_array[ctr] < element )
+        min := ctr + 1;
+      else
+        max := ctr - 1;
+      endif
+    endwhile
+  endif
 
-	return the_array.Insert( min, element );
+  return the_array.Insert( min, element );
 
 endfunction
-
 
 ////////////////////////////////////////////////////////////////
 // Function	RemoveElement(byref the_array, byref element)
@@ -189,12 +188,12 @@ endfunction
 ////////////////////////////////////////////////////////////////
 function RemoveElement( byref the_array, byref element )
 
-	var index := element in the_array;
-	if( index )
-		return the_array.erase(index);
-	else
-		return index;
-	endif
+  var index := element in the_array;
+  if ( index )
+    return the_array.erase( index );
+  else
+    return index;
+  endif
 
 endfunction
 
@@ -205,50 +204,49 @@ endfunction
 // {5,3,1}. (1,5,3) will return {1,4}.
 // Added by Madman Across the Water
 
-function FillArray(starts, ends, incr := 1)
+function FillArray( starts, ends, incr := 1 )
 
-	var retval :="";
-	if(TypeOf(starts) != "Integer")
-		retval := error;
-		retval.errortext := "starts is not an integer";
-		return retval;
-	endif
-	if(TypeOf(ends) != "Integer")
-		retval := error;
-		retval.errortext := "ends is not an integer";
-		return retval;
-	endif
-	if(TypeOf(incr) != "Integer")
-		retval := error;
-		retval.errortext := "incr is not an integer";
-		return retval;
-	endif
+  var retval := "";
+  if ( TypeOf( starts ) != "Integer" )
+    retval := error;
+    retval.errortext := "starts is not an integer";
+    return retval;
+  endif
+  if ( TypeOf( ends ) != "Integer" )
+    retval := error;
+    retval.errortext := "ends is not an integer";
+    return retval;
+  endif
+  if ( TypeOf( incr ) != "Integer" )
+    retval := error;
+    retval.errortext := "incr is not an integer";
+    return retval;
+  endif
 
-	var newarray := array;
-	if (incr == 0)
-	     return starts;
-	elseif (incr > 0)
-	     var i:= 1;
-	     while (1)
-	         newarray[i] := starts;
-	         starts := starts + incr;
-	         if (starts > ends)
-	         	return newarray;
-	         endif
-	         i := i + 1;
-	     endwhile
-	else
-	     var i := 1;
-	     while (1)
-	         newarray[i] := starts;
-	         starts := starts + incr;
-	         if (starts < ends)
-	         	return newarray;
-	         endif
-	         i := i + 1;
-	     endwhile
-	endif
+  var newarray := array;
+  if ( incr == 0 )
+    return starts;
+  elseif ( incr > 0 )
+    var i := 1;
+    while ( 1 )
+      newarray[i] := starts;
+      starts := starts + incr;
+      if ( starts > ends )
+        return newarray;
+      endif
+      i := i + 1;
+    endwhile
+  else
+    var i := 1;
+    while ( 1 )
+      newarray[i] := starts;
+      starts := starts + incr;
+      if ( starts < ends )
+        return newarray;
+      endif
+      i := i + 1;
+    endwhile
+  endif
 
-	return 0;
+  return 0;
 endfunction
-

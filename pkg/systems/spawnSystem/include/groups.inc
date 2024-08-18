@@ -24,12 +24,12 @@ include ":datafile:datafile";
  * Return Value
  * Data file reference
  *
- */
+*/
 function SS_GetGroupDataFile()
 
-	var data_file := DFOpenDataFile( ":spawnsystem:Groups", DF_CREATE );
+  var data_file := DFOpenDataFile( ":spawnsystem:Groups", DF_CREATE );
 
-	return data_file;
+  return data_file;
 endfunction
 
 /*
@@ -44,13 +44,13 @@ endfunction
  * Return Value
  * A datafile elem reference.
  *
- */
+*/
 function SS_GetGroupDataElem( elem_name )
 
-	var data_file := SS_GetGroupDataFile();
-	var group_elem := DFFindElement( data_file, Lower( elem_name ), DF_NO_CREATE );
+  var data_file := SS_GetGroupDataFile();
+  var group_elem := DFFindElement( data_file, Lower( elem_name ), DF_NO_CREATE );
 
-	return group_elem;
+  return group_elem;
 endfunction
 
 /*
@@ -66,24 +66,24 @@ endfunction
  * Return Value
  * Returns the result of the elem creation
  *
- */
-function SS_AddGroup( group_name, engine_name:="" )
+*/
+function SS_AddGroup( group_name, engine_name := "" )
 
-	group_name := Lower( group_name );
+  group_name := Lower( group_name );
 
-	var data_file := SS_GetGroupDataFile();
+  var data_file := SS_GetGroupDataFile();
 
-	if( data_file.FindElement( group_name ) != error )
-		return error{"errortext":="Group already exists."};
-	endif
+  if ( data_file.FindElement( group_name ) != error )
+    return error{ "errortext" := "Group already exists." };
+  endif
 
-	var result := data_file.CreateElement( group_name );
+  var result := data_file.CreateElement( group_name );
 
-	if( engine_name && result )
-		SS_SetGroupEngine( group_name, engine_name );
-	endif
+  if ( engine_name && result )
+    SS_SetGroupEngine( group_name, engine_name );
+  endif
 
-	return result;
+  return result;
 endfunction
 
 /*
@@ -98,11 +98,11 @@ endfunction
  * Return Value
  * Result of the elem deletion.
  *
- */
+*/
 function SS_RemoveGroup( group_name )
 
-	var data_file := SS_GetGroupDataFile();
-	return data_file.DeleteElement( Lower( group_name ));
+  var data_file := SS_GetGroupDataFile();
+  return data_file.DeleteElement( Lower( group_name ) );
 endfunction
 
 /*
@@ -119,17 +119,17 @@ endfunction
  * Return Value
  * An array of strings
  *
- */
-function SS_GetGroupNames( index:=0 )
+*/
+function SS_GetGroupNames( index := 0 )
 
-	var data_file := SS_GetGroupDataFile();
-	var group_names := DFGetElemNames( data_file );
+  var data_file := SS_GetGroupDataFile();
+  var group_names := DFGetElemNames( data_file );
 
-	if( index )
-		return group_names[index];
-	else
-		return group_names;
-	endif
+  if ( index )
+    return group_names[index];
+  else
+    return group_names;
+  endif
 endfunction
 
 /*
@@ -144,11 +144,11 @@ endfunction
  * Return Value
  * String
  *
- */
+*/
 function SS_GetGroupEngine( group_name )
 
-	var group_elem := SS_GetGroupDataElem( Lower( group_name ));
-	return group_elem.GetProp( "Engine" );
+  var group_elem := SS_GetGroupDataElem( Lower( group_name ) );
+  return group_elem.GetProp( "Engine" );
 endfunction
 
 /*
@@ -164,14 +164,14 @@ endfunction
  * Return Value
  * 1 on succcess
  *
- */
+*/
 function SS_SetGroupEngine( group_name, engine_name )
 
-	group_name := Lower( group_name );
+  group_name := Lower( group_name );
 
-	var group_elem := SS_GetGroupDataElem( group_name );
+  var group_elem := SS_GetGroupDataElem( group_name );
 
-	return group_elem.SetProp( "Engine", engine_name );
+  return group_elem.SetProp( "Engine", engine_name );
 endfunction
 
 /*
@@ -187,21 +187,21 @@ endfunction
  * Return Value
  * 1 on success
  *
- */
+*/
 function SS_AddEntryToGroup( group_name, entry_name )
 
-	group_name := Lower( group_name );
-	entry_name := Lower( entry_name );
+  group_name := Lower( group_name );
+  entry_name := Lower( entry_name );
 
-	var entry_list := SS_GetEntriesInGroup( group_name );
+  var entry_list := SS_GetEntriesInGroup( group_name );
 
-	if( entry_list.Exists( entry_name ))
-		return 0;
-	else
-		entry_list.Insert( entry_name, 1 );
-		var group_elem := SS_GetGroupDataElem( group_name );
-		return group_elem.SetProp( "EntryList", entry_list );
-	endif
+  if ( entry_list.Exists( entry_name ) )
+    return 0;
+  else
+    entry_list.Insert( entry_name, 1 );
+    var group_elem := SS_GetGroupDataElem( group_name );
+    return group_elem.SetProp( "EntryList", entry_list );
+  endif
 endfunction
 
 /*
@@ -217,20 +217,20 @@ endfunction
  * Return Value
  * 1 on success
  *
- */
+*/
 function SS_RemoveEntryFromGroup( group_name, entry_name )
 
-	group_name := Lower( group_name );
-	entry_name := Lower( entry_name );
+  group_name := Lower( group_name );
+  entry_name := Lower( entry_name );
 
-	var entry_list := SS_GetEntriesInGroup( group_name );
-	if( !entry_list.Exists( entry_name ))
-		return 0;
-	else
-		entry_list.Erase( entry_name );
-		var group_elem := SS_GetGroupDataElem( group_name );
-		return group_elem.SetProp( "EntryList", entry_list );
-	endif
+  var entry_list := SS_GetEntriesInGroup( group_name );
+  if ( !entry_list.Exists( entry_name ) )
+    return 0;
+  else
+    entry_list.Erase( entry_name );
+    var group_elem := SS_GetGroupDataElem( group_name );
+    return group_elem.SetProp( "EntryList", entry_list );
+  endif
 endfunction
 
 /*
@@ -246,19 +246,19 @@ endfunction
  * Dictionary
  * Keys are the entries - nothing else is used.
  *
- */
+*/
 function SS_GetEntriesInGroup( group_name )
 
-	group_name := Lower( group_name );
+  group_name := Lower( group_name );
 
-	var group_elem := SS_GetGroupDataElem( group_name );
-	var group_list := group_elem.GetProp( "EntryList" );
+  var group_elem := SS_GetGroupDataElem( group_name );
+  var group_list := group_elem.GetProp( "EntryList" );
 
-	if( !group_list )
-		group_list := dictionary;
-	endif
+  if ( !group_list )
+    group_list := dictionary;
+  endif
 
-	return group_list;
+  return group_list;
 endfunction
 
 /*
@@ -274,18 +274,18 @@ endfunction
  * Returns a string on success.
  * Returns an empty string if nothing is set.
  *
- */
+*/
 function SS_GetEntryByNumber( group_name, number )
 
-	group_name := Lower( group_name );
-	number := CInt( number );
+  group_name := Lower( group_name );
+  number := CInt( number );
 
-	var entries := SS_GetEntriesInGroup( group_name );
-	entries := entries.Keys();
-	var entry := entries[number];
-	if( entry )
-		return CStr( entry );
-	else
-		return "";
-	endif
+  var entries := SS_GetEntriesInGroup( group_name );
+  entries := entries.Keys();
+  var entry := entries[number];
+  if ( entry )
+    return CStr( entry );
+  else
+    return "";
+  endif
 endfunction

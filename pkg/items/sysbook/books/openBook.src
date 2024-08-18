@@ -1,5 +1,5 @@
 use uo;
 
-program openbook(chr,book)
-  /*var res :=*/ SendOpenBook( chr, book );
+program openbook( chr, book )
+  /* var res := */ SendOpenBook( chr, book );
 endprogram

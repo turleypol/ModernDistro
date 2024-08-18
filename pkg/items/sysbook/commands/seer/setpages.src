@@ -13,25 +13,27 @@ use os;
 //
 /////////////////////////////////////////////////////////////////////
 
-program setpages(who, text)
+program setpages( who, text )
 
-	var page_count := CInt(text);
-	if(!page_count)
-		SendSysMessage(who, "No page count entered. Defaulting to 33 pages.", color := 88);
-		page_count := 33;
-	endif
-	if(page_count%2 == 0)
-		page_count += 1;
-	endif
-	while(1)
-		SendSysMessage(who, "Set the pages to " + CStr(page_count) + " pages for which book?", color := 88);
-		SendSysMessage(who, "Press <ESC> to cancel.", color := 88);
-		var trg := Target(who, TGTOPT_NOCHECK_LOS);
-		if(!trg)
-			SendSysMessage(who, "Canceled");
-			return;
-		endif
-		SetObjProperty(trg, "maxpages", page_count);
-	endwhile
+  var page_count := CInt( text );
+  if ( !page_count )
+    SendSysMessage( who, "No page count entered. Defaulting to 33 pages.",
+                    color := 88 );
+    page_count := 33;
+  endif
+  if ( page_count % 2 == 0 )
+    page_count += 1;
+  endif
+  while ( 1 )
+    SendSysMessage( who, "Set the pages to " + CStr( page_count ) + " pages for which book?",
+                    color := 88 );
+    SendSysMessage( who, "Press <ESC> to cancel.", color := 88 );
+    var trg := Target( who, TGTOPT_NOCHECK_LOS );
+    if ( !trg )
+      SendSysMessage( who, "Canceled" );
+      return;
+    endif
+    SetObjProperty( trg, "maxpages", page_count );
+  endwhile
 
 endprogram

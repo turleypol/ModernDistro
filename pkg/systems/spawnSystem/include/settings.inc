@@ -24,20 +24,20 @@ use cfgfile;
  * Return value
  * A config file reference.
  *
- */
-function SS_GetSettingsCfgFile( engine_name:="" )
+*/
+function SS_GetSettingsCfgFile( engine_name := "" )
 
-	var cfg_path := ":spawnsystem:settings";
-	if( engine_name )
-		cfg_path := ":spawnsystem:engines/"+engine_name+"/settings";
-	endif
+  var cfg_path := ":spawnsystem:settings";
+  if ( engine_name )
+    cfg_path := ":spawnsystem:engines/" + engine_name + "/settings";
+  endif
 
-	var cfg := ReadConfigFile( ":spawnsystem:settings" );
-	if( cfg.errortext )
-		SysLog( "Error::SS_GetSettingsCfgFile() - Unable to open "+cfg_path+".cfg ->"+cfg.errortext );
-	endif
+  var cfg := ReadConfigFile( ":spawnsystem:settings" );
+  if ( cfg.errortext )
+    SysLog( "Error::SS_GetSettingsCfgFile() - Unable to open " + cfg_path + ".cfg ->" + cfg.errortext );
+  endif
 
-	return cfg;
+  return cfg;
 endfunction
 
 /*
@@ -53,14 +53,14 @@ endfunction
  * Return value
  * A config file elem reference.
  *
- */
+*/
 function SS_GetSettingsCfgElem( cfg_file, elem_name )
 
-	var cfg := SS_GetSettingsCfgFile();
-	var elem := cfg[elem_name];
-	if( elem.errortext )
-		SysLog( "Error::SS_GetSettingsCfgElem() - Unable to find elem ["+elem_name+"] in "+cfg_file.name+" ->"+elem.errortext );
-	endif
+  var cfg := SS_GetSettingsCfgFile();
+  var elem := cfg[elem_name];
+  if ( elem.errortext )
+    SysLog( "Error::SS_GetSettingsCfgElem() - Unable to find elem [" + elem_name + "] in " + cfg_file.name + " ->" + elem.errortext );
+  endif
 
-	return elem;
+  return elem;
 endfunction

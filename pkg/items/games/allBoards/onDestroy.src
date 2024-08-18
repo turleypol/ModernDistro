@@ -8,10 +8,10 @@ use os;
 
 program OnDestroy( chessboard )
 
-	foreach item in ( EnumerateItemsInContainer( chessboard ))
-		DestroyItem( item );
-                SleepMS(5);
-	endforeach
-	
-	return 1;
+  foreach item in ( EnumerateItemsInContainer( chessboard ) )
+    DestroyItem( item );
+    SleepMS( 5 );
+  endforeach
+
+  return 1;
 endprogram

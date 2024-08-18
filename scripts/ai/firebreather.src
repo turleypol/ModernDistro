@@ -18,11 +18,11 @@ include "ai/setup/setup";
 include "ai/main/loot";
 include "ai/main/sleepMode";
 
-const MOVING_EFFECT_FIREBALL  := 0x36d4;
+const MOVING_EFFECT_FIREBALL := 0x36d4;
 const HALT_THRESHOLD := 8; // how close before he attacks?
 var npccfgfile := ReadConfigFile( "npcdesc" );
-var idlesnd1 := CInt(npccfgfile[me.npctemplate].idlesound1);
-var idlesnd2 := CInt(npccfgfile[me.npctemplate].idlesound2);
+var idlesnd1 := CInt( npccfgfile[me.npctemplate].idlesound1 );
+var idlesnd2 := CInt( npccfgfile[me.npctemplate].idlesound2 );
 
 program KillPlayers()
   SetWarMode( 0 );
@@ -30,15 +30,17 @@ program KillPlayers()
 endprogram
 
 function CloseDistance( opponent )
-  var sleepdelay := 300 - (CInt(AP_GetStat(me, DEXTERITY)) * 1.5);
-  if (sleepdelay < 0)
-	sleepdelay := 0;
+  var sleepdelay := 300 - ( CInt( AP_GetStat( me, DEXTERITY ) ) * 1.5 );
+  if ( sleepdelay < 0 )
+    sleepdelay := 0;
   endif
-  case (Distance( me, opponent ))
+  case ( Distance( me, opponent ) )
     1:
-    0:       return 1;
-    default: RunToward( opponent );
-	         sleepms(sleepdelay);
-             return 0;
+    0:
+      return 1;
+    default:
+      RunToward( opponent );
+      sleepms( sleepdelay );
+      return 0;
   endcase
 endfunction

@@ -1,6 +1,6 @@
-//$Id: skills.inc 723 2006-08-22 02:11:00Z tekproxy $
+// $Id: skills.inc 723 2006-08-22 02:11:00Z tekproxy $
 
-/*===============================================================
+/* ===============================================================
 * Current Version
 * SKILLS.INC - v1.0
 * Updated 9/24/2005 6:52PM
@@ -8,7 +8,7 @@
 * -- Revision v1.0 --
 * Austin:
 *  Created include file
-===============================================================*/
+=============================================================== */
 
 use uo;
 
@@ -27,10 +27,10 @@ include "include/eventID";
  * Return value
  * Returns an integer.
  *
- */
+*/
 function AP_GetSkill( who, skill_name )
 
-	return AP_GetTrueSkill( who, skill_name )+AP_GetSkillMod( who, skill_name );
+  return AP_GetTrueSkill( who, skill_name ) + AP_GetSkillMod( who, skill_name );
 endfunction
 
 /*
@@ -46,10 +46,10 @@ endfunction
  * Return value
  * Returns a double.
  *
- */
+*/
 function AP_GetTrueSkill( who, skill_name )
 
-	return CDbl( GetAttributeBaseValue( who, skill_name ) ) / 10.0;
+  return CDbl( GetAttributeBaseValue( who, skill_name ) ) / 10.0;
 endfunction
 
 /*
@@ -65,10 +65,10 @@ endfunction
  * Return value
  * Returns a double.
  *
- */
+*/
 function AP_GetSkillMod( who, skill_name )
 
-	return CDbl( GetAttributeTemporaryMod( who, skill_name )) / 10.0;
+  return CDbl( GetAttributeTemporaryMod( who, skill_name ) ) / 10.0;
 endfunction
 
 /*
@@ -86,18 +86,18 @@ endfunction
  * Return value
  * The result of SetAttributeBaseValue()
  *
- */
+*/
 function AP_SetTrueSkill( mobile, skill_name, points )
 
   var result;
-	if( points >= 0 )
-		result := SetAttributeBaseValue( mobile, skill_name, CInt( CDbl( points ) * 10.0 + 0.1 ));
-	else
-		result := SetAttributeBaseValue( mobile, skill_name, CInt( CDbl( points ) * 10.0 - 0.1 ));
-	endif
+  if ( points >= 0 )
+    result := SetAttributeBaseValue( mobile, skill_name, CInt( CDbl( points ) * 10.0 + 0.1 ) );
+  else
+    result := SetAttributeBaseValue( mobile, skill_name, CInt( CDbl( points ) * 10.0 - 0.1 ) );
+  endif
 
-	RecalcVitals( mobile );
-	return result;
+  RecalcVitals( mobile );
+  return result;
 endfunction
 
 /*
@@ -115,12 +115,12 @@ endfunction
  * Return value
  * The result of SetAttributeBaseValue()
  *
- */
+*/
 function AP_SetSkillMod( mobile, skill_name, points )
 
-	var result := SetAttributeTemporaryMod( mobile, skill_name, CInt( CDbl( points ) * 10.0 ));
-	RecalcVitals( mobile );
-	return result;
+  var result := SetAttributeTemporaryMod( mobile, skill_name, CInt( CDbl( points ) * 10.0 ) );
+  RecalcVitals( mobile );
+  return result;
 endfunction
 
 /*
@@ -138,15 +138,15 @@ endfunction
  * Return value
  * Returns the previous value
  *
- */
+*/
 function AP_ModifySkillMod( mobile, stat_name, points )
 
-	var orig_mod := AP_GetStatMod( mobile, stat_name );
-	var new_mod := CDbl( points ) + CDbl( orig_mod );
+  var orig_mod := AP_GetStatMod( mobile, stat_name );
+  var new_mod := CDbl( points ) + CDbl( orig_mod );
 
-	AP_SetSkillMod( mobile, stat_name, new_mod );
+  AP_SetSkillMod( mobile, stat_name, new_mod );
 
-	return orig_mod;
+  return orig_mod;
 endfunction
 
 /*
@@ -161,11 +161,11 @@ endfunction
  * Return value
  * Returns a string.
  *
- */
+*/
 function AP_GetSkillScript( attribute_name )
 
-	var cfg := AP_GetAttributeCfgElem( attribute_name );
-	return cfg.Script;
+  var cfg := AP_GetAttributeCfgElem( attribute_name );
+  return cfg.Script;
 endfunction
 
 /*
@@ -182,17 +182,17 @@ endfunction
  * Return value
  * Returns a dictionary.
  *
- */
+*/
 function AP_GetSkillStats( attribute_name )
 
-	var cfg_elem := AP_GetAttributeCfgElem( attribute_name );
-	var stat_entries := GetConfigStringDictionary( cfg_elem, "StatCheck" );
-	foreach textline in ( stat_entries )
-		textline := SplitWords( textline );
-		SleepMS(2);
-	endforeach
+  var cfg_elem := AP_GetAttributeCfgElem( attribute_name );
+  var stat_entries := GetConfigStringDictionary( cfg_elem, "StatCheck" );
+  foreach textline in ( stat_entries )
+    textline := SplitWords( textline );
+    SleepMS( 2 );
+  endforeach
 
-	return stat_entries;
+  return stat_entries;
 endfunction
 
 /*
@@ -208,19 +208,19 @@ endfunction
  * Return value
  * Returns an integer or error if the skill has no AwardDefault entry.
  *
- */
+*/
 function AP_GetSkillDefaultAward( skill_name )
 
-	var elem_info := AP_GetAttributeCfgElem( skill_name );
-	if( !elem_info )
-		return elem_info;
-	endif
+  var elem_info := AP_GetAttributeCfgElem( skill_name );
+  if ( !elem_info )
+    return elem_info;
+  endif
 
-	if( elem_info.Title )
-		return CInt( elem_info.AwardDefault / 5 );
-	else
-		return error{"errortext":="Attribute does not have a 'AwardDefault' entry."};
-	endif
+  if ( elem_info.Title )
+    return CInt( elem_info.AwardDefault / 5 );
+  else
+    return error{ "errortext" := "Attribute does not have a 'AwardDefault' entry." };
+  endif
 endfunction
 
 /*
@@ -237,27 +237,25 @@ endfunction
  * Return value
  * Returns a number or error
  *
- */
-function AP_GetSkillCapByName(skill_name:="")
-	var cfg_elem := AP_GetSettingsCfgElem("Skills");
-	var cap_val;
+*/
+function AP_GetSkillCapByName( skill_name := "" )
+  var cfg_elem := AP_GetSettingsCfgElem( "Skills" );
+  var cap_val;
 
-	if ( skill_name )
-		// Check if there is a cap for that particular skill.
-		cap_val := GetConfigReal(cfg_elem, skill_name);
+  if ( skill_name )
+    // Check if there is a cap for that particular skill.
+    cap_val := GetConfigReal( cfg_elem, skill_name );
 
-		if ( !cap_val )
-			// No skill specific cap so get the general one.
-			cap_val := GetConfigReal(cfg_elem, "SkillCap");
-		endif
-	else
-		cap_val := GetConfigReal(cfg_elem, "SkillCap");
-	endif
+    if ( !cap_val )
+      // No skill specific cap so get the general one.
+      cap_val := GetConfigReal( cfg_elem, "SkillCap" );
+    endif
+  else
+    cap_val := GetConfigReal( cfg_elem, "SkillCap" );
+  endif
 
-	return cap_val;
+  return cap_val;
 endfunction
-
-
 
 //////////////////////////////////////////////////////
 //
@@ -270,13 +268,10 @@ endfunction
 // to the proper functions.
 //
 //////////////////////////////////////////////////////
-const CORE_SETTINGS_MIN_ATTRIBUTE  := 0;
-const CORE_SETTINGS_MAX_ATTRIBUTE  := 60000;
-const CORE_SETTINGS_MIN_VITAL      := 100;
-const CORE_SETTINGS_MAX_VITAL      := 10000000;
-
-
-
+const CORE_SETTINGS_MIN_ATTRIBUTE := 0;
+const CORE_SETTINGS_MAX_ATTRIBUTE := 60000;
+const CORE_SETTINGS_MIN_VITAL := 100;
+const CORE_SETTINGS_MAX_VITAL := 10000000;
 
 /////////////////////////////////////////////////////////
 //
@@ -287,30 +282,30 @@ const CORE_SETTINGS_MAX_VITAL      := 10000000;
 
 function GetSkillIDs()
 
-var uoskillsfile := ReadConfigFile(":attributes:uoskills");
-return GetConfigIntKeys(uoskillsfile);
+  var uoskillsfile := ReadConfigFile( ":attributes:uoskills" );
+  return GetConfigIntKeys( uoskillsfile );
 
 endfunction
 
-function GetEffectiveSkill(who, skillid)
-  return AP_GetSkill(who, AP_SkillIdToAttributeName(skillid));
+function GetEffectiveSkill( who, skillid )
+  return AP_GetSkill( who, AP_SkillIdToAttributeName( skillid ) );
 endfunction
 
-function GetBaseSkill(who, skillid)
-  return Cint(AP_GetTrueSkill(who, AP_SkillIdToAttributeName(skillid)));
+function GetBaseSkill( who, skillid )
+  return Cint( AP_GetTrueSkill( who, AP_SkillIdToAttributeName( skillid ) ) );
 endfunction
 
-function GetBaseSkillBaseValue(who, skillid)
-  return AP_GetTrueSkill(who, AP_SkillIdToAttributeName(skillid) * 10);
+function GetBaseSkillBaseValue( who, skillid )
+  return AP_GetTrueSkill( who, AP_SkillIdToAttributeName( skillid ) * 10 );
 endfunction
 
-function GetTrueEffectiveSkill(who, skillid)
-  var id   := AP_SkillIdToAttributeName(skillid);
-  var base := GetAttributeBaseValue(who, id);
-  var mod1 := GetAttributeTemporaryMod(who, id);
-  var mod2 := GetAttributeIntrinsicMod(who, id);
-  var val := Cdbl((base + mod1 + mod2)/ 10.0);
-  if(val < 0.0)
+function GetTrueEffectiveSkill( who, skillid )
+  var id := AP_SkillIdToAttributeName( skillid );
+  var base := GetAttributeBaseValue( who, id );
+  var mod1 := GetAttributeTemporaryMod( who, id );
+  var mod2 := GetAttributeIntrinsicMod( who, id );
+  var val := Cdbl( ( base + mod1 + mod2 ) / 10.0 );
+  if ( val < 0.0 )
     return 0.0;
   else
     return val;
@@ -318,39 +313,42 @@ function GetTrueEffectiveSkill(who, skillid)
 endfunction
 
 // The following function will replace SetBaseSkill
-function SetBaseAttribute(who, skillid, skill)
-  return SetBaseAttributeBaseValue(who, skillid, Cint(skill*10));
+function SetBaseAttribute( who, skillid, skill )
+  return SetBaseAttributeBaseValue( who, skillid, Cint( skill * 10 ) );
 endfunction
 
-function SetBaseAttributeBaseValue(who, attribid, skill)
-  var skill_tenth := Cint(skill*10);
-  if(skill_tenth < CORE_SETTINGS_MIN_ATTRIBUTE)
+function SetBaseAttributeBaseValue( who, attribid, skill )
+  var skill_tenth := Cint( skill * 10 );
+  if ( skill_tenth < CORE_SETTINGS_MIN_ATTRIBUTE )
     skill_tenth := CORE_SETTINGS_MIN_ATTRIBUTE;
-  elseif(skill_tenth > CORE_SETTINGS_MAX_ATTRIBUTE)
+  elseif ( skill_tenth > CORE_SETTINGS_MAX_ATTRIBUTE )
     skill_tenth := CORE_SETTINGS_MAX_ATTRIBUTE;
   endif
-  return SetAttributeBaseValue(who, attribid, Cint(skill_tenth));
+  return SetAttributeBaseValue( who, attribid, Cint( skill_tenth ) );
 endfunction
 
-function SetBaseSkill(who, skillid, skill)
-  return SetBaseSkillBaseValue(who, skillid, Cint(skill*10));
+function SetBaseSkill( who, skillid, skill )
+  return SetBaseSkillBaseValue( who, skillid, Cint( skill * 10 ) );
 endfunction
 
-function SetBaseSkillBaseValue(who, skillid, skill_tenth)
-  if(skill_tenth < CORE_SETTINGS_MIN_ATTRIBUTE)
+function SetBaseSkillBaseValue( who, skillid, skill_tenth )
+  if ( skill_tenth < CORE_SETTINGS_MIN_ATTRIBUTE )
     skill_tenth := CORE_SETTINGS_MIN_ATTRIBUTE;
-  elseif(skill_tenth > CORE_SETTINGS_MAX_ATTRIBUTE)
+  elseif ( skill_tenth > CORE_SETTINGS_MAX_ATTRIBUTE )
     skill_tenth := CORE_SETTINGS_MAX_ATTRIBUTE;
   endif
-  return SetAttributeBaseValue(who, AP_SkillIdToAttributeName(skillid), Cint(skill_tenth));
+  return SetAttributeBaseValue( who, AP_SkillIdToAttributeName( skillid ),
+                                Cint( skill_tenth ) );
 endfunction
 
-function ModifyAttributeTemporaryMod(who, attributeid, moda)
-  return SetAttributeTemporaryMod(who, attributeid, Cint(GetAttributeTemporaryMod(who, attributeid)+ Cint(moda*10)));
+function ModifyAttributeTemporaryMod( who, attributeid, moda )
+  return SetAttributeTemporaryMod( who, attributeid, Cint( GetAttributeTemporaryMod( who,
+                                   attributeid ) + Cint( moda * 10 ) ) );
 endfunction
 
-function ModifyAttributeTemporaryModBaseValue(who, attributeid, moda)
-  return SetAttributeTemporaryMod(who, attributeid, Cint(GetAttributeTemporaryMod(who, attributeid)+ moda));
+function ModifyAttributeTemporaryModBaseValue( who, attributeid, moda )
+  return SetAttributeTemporaryMod( who, attributeid, Cint( GetAttributeTemporaryMod( who,
+                                   attributeid ) + moda ) );
 endfunction
 
 /*
@@ -425,84 +423,85 @@ function AwardPoints(who, skillid, skillpoints)
 endfunction
 */
 
-function AwardRawAttributePoints(who, attributeid, rawpoints, skillid)
-  if(!who.isA(POLCLASS_MOBILE))
+function AwardRawAttributePoints( who, attributeid, rawpoints, skillid )
+  if ( !who.isA( POLCLASS_MOBILE ) )
     var ret := error;
     ret.+errortext := "Invalid parameter type: " + who + " isn't a mobileref.";
     return ret;
   endif
-  rawpoints := Cdbl(rawpoints);
-  if(rawpoints == error)
+  rawpoints := Cdbl( rawpoints );
+  if ( rawpoints == error )
     return rawpoints;
-  elseif(rawpoints == 0.0)
+  elseif ( rawpoints == 0.0 )
     return 1;
   endif
-  set_critical(1);
-  var initial := GetAttributeBaseValue(who, attributeid);
+  set_critical( 1 );
+  var initial := GetAttributeBaseValue( who, attributeid );
   var current := initial;
-  if(rawpoints > 0)
-    var to_increase := GetNeededRawPointsToIncrease(current);
-    while(rawpoints >= to_increase)
-      rawpoints  := rawpoints - to_increase;
-      current    := current + 1;
-      to_increase := GetNeededRawPointsToIncrease(current);
+  if ( rawpoints > 0 )
+    var to_increase := GetNeededRawPointsToIncrease( current );
+    while ( rawpoints >= to_increase )
+      rawpoints := rawpoints - to_increase;
+      current := current + 1;
+      to_increase := GetNeededRawPointsToIncrease( current );
     endwhile
-    if(RandomInt(Cint(to_increase)) < rawpoints)
+    if ( RandomInt( Cint( to_increase ) ) < rawpoints )
       current := current + 1;
     endif
-  elseif(rawpoints < 0)
-    var to_decrease  := GetNeededRawPointsToIncrease(current-1);
-    while(rawpoints >= to_decrease && current > 0)
-      rawpoints  := rawpoints - to_decrease;
-      current    := current - 1;
-      to_decrease  := GetNeededRawPointsToIncrease(current-1);
+  elseif ( rawpoints < 0 )
+    var to_decrease := GetNeededRawPointsToIncrease( current - 1 );
+    while ( rawpoints >= to_decrease && current > 0 )
+      rawpoints := rawpoints - to_decrease;
+      current := current - 1;
+      to_decrease := GetNeededRawPointsToIncrease( current - 1 );
     endwhile
-    if(RandomInt(Cint(to_decrease))< rawpoints)
+    if ( RandomInt( Cint( to_decrease ) ) < rawpoints )
       current := current - 1;
     endif
   endif
-  if(current != initial)
-    if(who.acctname)
-      if(current > CORE_SETTINGS_MAX_ATTRIBUTE)
+  if ( current != initial )
+    if ( who.acctname )
+      if ( current > CORE_SETTINGS_MAX_ATTRIBUTE )
         current := CORE_SETTINGS_MAX_ATTRIBUTE;
       endif
-      var pid := getprocess(GetObjProperty(who, "cap_pid"));
+      var pid := getprocess( GetObjProperty( who, "cap_pid" ) );
       var k := struct;
-      if((attributeid == ATTRIBUTEID_STRENGTH) or (attributeid == ATTRIBUTEID_DEXTERITY) or (attributeid == ATTRIBUTEID_INTELLIGENCE))
-        k.+skid   := attributeid;
-        k.+skil   := skillid;
-        k.+type   := EVID_STATCAP;
-        k.+base   := current;
-        pid.sendevent(k);
+      if ( ( attributeid == ATTRIBUTEID_STRENGTH ) or ( attributeid == ATTRIBUTEID_DEXTERITY ) or
+           ( attributeid == ATTRIBUTEID_INTELLIGENCE ) )
+        k.+skid := attributeid;
+        k.+skil := skillid;
+        k.+type := EVID_STATCAP;
+        k.+base := current;
+        pid.sendevent( k );
       else
-        k.+skid   := attributeid;
-        k.+type   := EVID_SKILLCAP;
-        k.+base   := current;
-        pid.sendevent(k);
+        k.+skid := attributeid;
+        k.+type := EVID_SKILLCAP;
+        k.+base := current;
+        pid.sendevent( k );
       endif
     else
-      SetAttributeBaseValue(who, attributeid, current);
+      SetAttributeBaseValue( who, attributeid, current );
     endif
-    DoRecalcVitals(who);
+    DoRecalcVitals( who );
   endif
-  set_critical(0);
+  set_critical( 0 );
   return 1;
 endfunction
 
-function AwardRawSkillPoints(who, skillid, rawpoints)
-  return AwardRawAttributePoints(who, AP_SkillIdToAttributeName(skillid), rawpoints, skillid);
+function AwardRawSkillPoints( who, skillid, rawpoints )
+  return AwardRawAttributePoints( who, AP_SkillIdToAttributeName( skillid ),
+                                  rawpoints, skillid );
 endfunction
 
-function GetNeededRawPointsToIncrease(basevalue)
-  if(basevalue < 200)
+function GetNeededRawPointsToIncrease( basevalue )
+  if ( basevalue < 200 )
     return 20.48;
-  elseif(basevalue >= 2800)
-    return Cdbl(0x7fffffff);
+  elseif ( basevalue >= 2800 )
+    return Cdbl( 0x7fffffff );
   else
-    return Cdbl(Pow(2.0, Cint(basevalue/100))* 10.24);
+    return Cdbl( Pow( 2.0, Cint( basevalue / 100 ) ) * 10.24 );
   endif
 endfunction
-
 
 /*
 function AwardPoints(who, skillid, skillpoints)
@@ -654,13 +653,13 @@ function AwardRawSkillPoints(who, skillid, rawpoints)
   return AwardRawAttributePoints(who, AP_AttributeNameToSkillId(skillid), rawpoints, skillid);
 endfunction
 */
-function GetSkillConfigElem(skillid)
-//  var skdefcfg := ReadConfigFile(":attributes:uoskills");
-  var skdefcfg := ReadConfigFile(":attributes:skills");
-  if(!skdefcfg)
+function GetSkillConfigElem( skillid )
+  // var skdefcfg := ReadConfigFile(":attributes:uoskills");
+  var skdefcfg := ReadConfigFile( ":attributes:skills" );
+  if ( !skdefcfg )
     return skdefcfg;
   else
-    return FindConfigElem(skdefcfg, skillid);
+    return FindConfigElem( skdefcfg, skillid );
   endif
 endfunction
 
@@ -679,12 +678,11 @@ endfunction
 //////////////////////////////////////////////////////////////////////////////////////////
 function AP_GetPlayerTotalSkillPoints( player )
 
-	var attrib_names := AP_ListAttributesByType( "Skill" );
-	var attrib_points := 0;
-	foreach attrib_name in attrib_names
-		attrib_points := attrib_points + GetAttributeBaseValue( player, attrib_name );
-	endforeach
-	return attrib_points;
+  var attrib_names := AP_ListAttributesByType( "Skill" );
+  var attrib_points := 0;
+  foreach attrib_name in attrib_names
+    attrib_points := attrib_points + GetAttributeBaseValue( player, attrib_name );
+  endforeach
+  return attrib_points;
 
 endfunction
-

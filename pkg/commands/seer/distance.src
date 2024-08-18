@@ -15,15 +15,14 @@ use uo;
 
 program Distance( who )
 
-	var first_loc,
-		second_loc,
-		dist;
+  var first_loc, second_loc, dist;
 
-	SendSysMessage( who, "Target the first square: ", color := 88 );
-	first_loc := TargetCoordinates( who );
-	SendSysMessage( who, "Target the second square: ", color := 88 );
-	second_loc := TargetCoordinates( who );
-	dist := CStr( CoordinateDistance( first_loc.x, first_loc.y, second_loc.x, second_loc.y ) );
-	SendSysMessage( who, "The distance is " + dist + ".", color := 88 );
+  SendSysMessage( who, "Target the first square: ", color := 88 );
+  first_loc := TargetCoordinates( who );
+  SendSysMessage( who, "Target the second square: ", color := 88 );
+  second_loc := TargetCoordinates( who );
+  dist := CStr( CoordinateDistance( first_loc.x, first_loc.y, second_loc.x,
+                second_loc.y ) );
+  SendSysMessage( who, "The distance is " + dist + ".", color := 88 );
 
 endprogram
