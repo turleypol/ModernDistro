@@ -9,7 +9,6 @@
 
 use os;
 
-print("Initializing saver");
-start_script( "saver");
+print( "Initializing saver" );
+start_script( "saver" );
 start_script( "saverChk" );
-

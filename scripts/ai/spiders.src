@@ -16,17 +16,16 @@ include "ai/setup/setup";
 include "ai/main/loot";
 include "ai/main/sleepMode";
 
-
 const HALT_THRESHOLD := 8; // how close before he attacks?
-const UOBJ_SPIDERWEB := 0xbf01; //fixme!
+const UOBJ_SPIDERWEB := 0xbf01; // fixme!
 var npccfgfile := ReadConfigFile( "npcdesc" );
-var idlesnd1 := CInt(npccfgfile[me.npctemplate].idlesound1);
-var idlesnd2 := CInt(npccfgfile[me.npctemplate].idlesound2);
+var idlesnd1 := CInt( npccfgfile[me.npctemplate].idlesound1 );
+var idlesnd2 := CInt( npccfgfile[me.npctemplate].idlesound2 );
 
 program KillPlayers()
 
-	SetWarMode( 0 );
-	main_AI_loop();
+  SetWarMode( 0 );
+  main_AI_loop();
 
 endprogram
 
@@ -36,8 +35,6 @@ endprogram
 //  There is no way out but death.
 //
 /////////////////////////////////////////////////////////////////////////////
-
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -50,17 +47,13 @@ endprogram
 /////////////////////////////////////////////////////////////////////////////
 function CloseDistance( opponent )
 
-
-    case (Distance( me, opponent ))
-        1:              // the most likely, so first
-        0:
-            return 1;
-        default:
-            RunToward( opponent );
-            return 0;
-    endcase
+  case ( Distance( me, opponent ) )
+    1: // the most likely, so first
+    0:
+      return 1;
+    default: RunToward( opponent ); return 0;
+  endcase
 
 endfunction
-
 
 // Look around me for humans to fight.

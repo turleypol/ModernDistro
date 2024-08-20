@@ -3,12 +3,11 @@ use os;
 
 include ":mounts:mounts";
 
-program DismountCharacter(who)
+program DismountCharacter( who )
 
-	var mount := GetEquipmentByLayer(who, 25);
-	if(mount)
-		MP_Unmount(who);
-	endif
+  var mount := GetEquipmentByLayer( who, 25 );
+  if ( mount )
+    MP_Unmount( who );
+  endif
 
 endprogram
-

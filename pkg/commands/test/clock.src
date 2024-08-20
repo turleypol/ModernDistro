@@ -1,6 +1,6 @@
 use uo;
 use os;
 
-program textcmd_crim(who)
-  SendSysMessage(who, "Time is now: " + ReadGameClock());
+program textcmd_crim( who )
+  SendSysMessage( who, "Time is now: " + ReadGameClock() );
 endprogram

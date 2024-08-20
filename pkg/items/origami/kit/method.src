@@ -2,9 +2,9 @@ use uo;
 use os;
 
 program Install()
-	return 1;
+  return 1;
 endprogram
 
 exported function IsOrigamiKit( unused item )
-	return 1;
-endfunction 
+  return 1;
+endfunction
