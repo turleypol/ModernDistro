@@ -3,15 +3,15 @@ use os;
 
 include ":cleric:textcmd";
 
-program clericcmd(who, text)
-	var temp := hasrite(who, text);
+program clericcmd( who, text )
+  var temp := hasrite( who, text );
 
-	if (temp)
-		var script := start_script("ritestarter", {who, temp});
-		if (script.errortext)
-			SendSysMessage(who, script.errortext);
-		endif
-	else
-		SendSysMessage(who, "You dont have that rite.");
-	endif
+  if ( temp )
+    var script := start_script( "ritestarter", { who, temp } );
+    if ( script.errortext )
+      SendSysMessage( who, script.errortext );
+    endif
+  else
+    SendSysMessage( who, "You dont have that rite." );
+  endif
 endprogram

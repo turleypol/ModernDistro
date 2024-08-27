@@ -13,41 +13,42 @@ use cfgfile;
  * Return value
  * A config file reference.
  *
- */
+*/
 function OC_GetSettingsCfgFile()
-	var cfg := ReadConfigFile(":OrionClient:settings");
+  var cfg := ReadConfigFile( ":OrionClient:settings" );
 
-	if ( cfg.errortext )
-		SysLog("Error::OC_GetSettingsCfgFile() - Unable to open [:OrionClient:settings.cfg] ->"+cfg.errortext);
-	endif
+  if ( cfg.errortext )
+    SysLog( "Error::OC_GetSettingsCfgFile() - Unable to open [:OrionClient:settings.cfg] ->"
+          + cfg.errortext );
+  endif
 
-	return cfg;
+  return cfg;
 endfunction
 
 /*
  * OC_GetSettingsCfgElem(elem_name, cfg_file)
  *
  * Purpose
- * Retrieves an elem from a config file. 
+ * Retrieves an elem from a config file.
  *
  * Parameters
- * elem_name:	A string matching the elem name to be retrieved.
- * cfg_file:	Optional parameter - reference to a config already read in by DMG_GetSettingsCfgFile()
+ * elem_name:  A string matching the elem name to be retrieved.
+ * cfg_file:   Optional parameter - reference to a config already read in by DMG_GetSettingsCfgFile()
  *
  * Return value
  * A config file elem reference.
  *
- */
-function OC_GetSettingsCfgElem(elem_name, byref cfg_file:=0)
-	if ( !cfg_file )
-		cfg_file := OC_GetSettingsCfgFile();
-	endif
-	
-	var elem := cfg_file[elem_name];
+*/
+function OC_GetSettingsCfgElem( elem_name, byref cfg_file := 0 )
+  if ( !cfg_file )
+    cfg_file := OC_GetSettingsCfgFile();
+  endif
 
-	if ( elem.errortext )
-		SysLog("Error::OC_GetSettingsCfgElem() - Unable to find elem ["+elem_name+"] ->"+elem.errortext);
-	endif
+  var elem := cfg_file[elem_name];
 
-	return elem;
+  if ( elem.errortext )
+    SysLog( "Error::OC_GetSettingsCfgElem() - Unable to find elem [" + elem_name + "] ->" + elem.errortext );
+  endif
+
+  return elem;
 endfunction

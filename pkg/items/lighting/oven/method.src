@@ -5,11 +5,11 @@ include ":itemutils:itemdesc";
 
 program Install()
 
-	return 1;
+  return 1;
 endprogram
 
 exported function ObjectKind( unused oven )
 
-	return "fire";
+  return "fire";
 
 endfunction

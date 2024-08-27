@@ -8,20 +8,20 @@
 use uo;
 
 program keyring_onRemove( mobile, keyring, key, item_amount, movetype )
-    mobile := mobile;
-	key := key;
-	item_amount := item_amount;
-	movetype := movetype;
-	var key_count := Len( EnumerateItemsInContainer( keyring ) ) - 1;
-	if( key_count < 1 )
-		keyring.graphic := 0x1011;
-	elseif( key_count < 3 )
-		keyring.graphic := 0x1769;
-	elseif( key_count < 5 )
-		keyring.graphic := 0x176A;
-	else
-		keyring.graphic := 0x176B;
-	endif
+  mobile := mobile;
+  key := key;
+  item_amount := item_amount;
+  movetype := movetype;
+  var key_count := Len( EnumerateItemsInContainer( keyring ) ) - 1;
+  if ( key_count < 1 )
+    keyring.graphic := 0x1011;
+  elseif ( key_count < 3 )
+    keyring.graphic := 0x1769;
+  elseif ( key_count < 5 )
+    keyring.graphic := 0x176A;
+  else
+    keyring.graphic := 0x176B;
+  endif
 
-	return 1;
+  return 1;
 endprogram

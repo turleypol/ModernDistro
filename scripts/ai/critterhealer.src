@@ -21,22 +21,21 @@ const SOUND_EFFECT_RES := 0x215;
 const ACTION_EFFECT_CAST2 := 0x11;
 const REACT_THRESHOLD := 2;
 var npccfgfile := ReadConfigFile( "npcdesc" );
-var idlesnd1 := CInt(npccfgfile[me.npctemplate].idlesound1);
-var idlesnd2 := CInt(npccfgfile[me.npctemplate].idlesound2);
+var idlesnd1 := CInt( npccfgfile[me.npctemplate].idlesound1 );
+var idlesnd2 := CInt( npccfgfile[me.npctemplate].idlesound2 );
 
 program HealerAI()
 
-EquipFromTemplate(me, "creature_spellcaster");
+  EquipFromTemplate( me, "creature_spellcaster" );
   SetWarMode( 0 );
   main_AI_loop();
 endprogram
 
 function CloseDistance( opponent )
-  case (Distance( me, opponent ))
+  case ( Distance( me, opponent ) )
     1:
-    0:       return 1;
-    default: RunToward( opponent );
-             return 0;
+    0:
+      return 1;
+    default: RunToward( opponent ); return 0;
   endcase
 endfunction
-

@@ -5,19 +5,17 @@ include ":itemutils:itemdesc";
 
 program Install()
 
-	return 1;
+  return 1;
 endprogram
 
 exported function IsFlourMill( unused flourmill )
 
-	return 1;
+  return 1;
 
 endfunction
 
 exported function ObjectKind( unused fireplace )
 
-		return "mill";
+  return "mill";
 
 endfunction
-
-

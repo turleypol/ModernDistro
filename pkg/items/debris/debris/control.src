@@ -10,9 +10,9 @@ include ":timeutils:time";
 
 program Control_Debris( debris )
 
-	Sleep( SEC_HOUR );
-	
-	DestroyItem( debris );
- 
-        return 1;
+  Sleep( SEC_HOUR );
+
+  DestroyItem( debris );
+
+  return 1;
 endprogram

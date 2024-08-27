@@ -3,11 +3,10 @@ use os;
 
 include "include/client";
 
+program serl( who )
 
-program serl(who)
-
-	var item := target(who);
-	SendSysMessage ( who, "Serial number is " + CInt(item.serial));
-	SendSysMessage ( who, "Serial number is " + Hex(CInt(item.serial)));
+  var item := target( who );
+  SendSysMessage( who, "Serial number is " + CInt( item.serial ) );
+  SendSysMessage( who, "Serial number is " + Hex( CInt( item.serial ) ) );
 
 endprogram

@@ -9,82 +9,84 @@ include ":damage:damage";
 include ":magery:spells";
 
 var mods := struct;
-var ts_cfg_elem := TS_GetCfgElem("Protection");
+var ts_cfg_elem := TS_GetCfgElem( "Protection" );
 var buff_icon := CInt( ts_cfg_elem.BuffIcon );
-var cliloc_name :=  CInt(ts_cfg_elem.cliloc_name);
-var cliloc_desc :=  CInt(ts_cfg_elem.cliloc_desc);
+var cliloc_name := CInt( ts_cfg_elem.cliloc_name );
+var cliloc_desc := CInt( ts_cfg_elem.cliloc_desc );
 
+program cast_protection( params )
+  var caster := params[1];
+  var info := params[2];
+  Broadcast( caster.name );
+  if ( GetObjProperty( caster, "Protection" ) )
+    RemoveProtection( caster );
+  else
+    ApplyProtection( caster );
+  endif
 
-program cast_protection(params)
-    var caster := params[1];
-    var info := params[2];
-    Broadcast(caster.name);
-	if ( GetObjProperty(caster, "Protection") )
-		RemoveProtection(caster);
-	else
-		ApplyProtection(caster);
-	endif
+  MS_PlaySpellSFX( info.spell_id, caster );
+  MS_PlaySpellGFX( info.spell_id, caster, caster );
 
-	MS_PlaySpellSFX(info.spell_id, caster);
-	MS_PlaySpellGFX(info.spell_id, caster, caster);
-
-	return 1;
+  return 1;
 endprogram
 
-function ApplyProtection(caster)
+function ApplyProtection( caster )
 
-	// Get effective Physical Damage Resistance.
-	var phys_resist_amt := caster.resist_physical + caster.resist_physical_mod;
+  // Get effective Physical Damage Resistance.
+  var phys_resist_amt := caster.resist_physical + caster.resist_physical_mod;
 
-	// Get effective Resisting Spells skill level.
-	var resist_spells_amt := AP_GetSkill(caster, RESISTING_SPELLS);
+  // Get effective Resisting Spells skill level.
+  var resist_spells_amt := AP_GetSkill( caster, RESISTING_SPELLS );
 
-	// Get the amount caster's Inscription skill will negate the penalties for Protection.
-	//var  inscr_help := CInt(AP_GetSkill(caster, INSCRIPTION) / 20);
+  // Get the amount caster's Inscription skill will negate the penalties for Protection.
+  // var  inscr_help := CInt(AP_GetSkill(caster, INSCRIPTION) / 20);
 
-	// Calculate the Physical Resistance penalty.
-	var phys_resist_penalty := 10 + (RandomInt(6));
+  // Calculate the Physical Resistance penalty.
+  var phys_resist_penalty := 10 + ( RandomInt( 6 ) );
 
-	// Calculate the Resisting Spells penalty.
-	var resist_spells_penalty := CDbl(30 + RandomInt(6));
+  // Calculate the Resisting Spells penalty.
+  var resist_spells_penalty := CDbl( 30 + RandomInt( 6 ) );
 
-	// Now we determine if the penalty will cause Physical Resistance to go below zero.
-	// If not, no problem. If so we drop it to zero.
-	if(phys_resist_amt - phys_resist_penalty >= 0)
-		caster.resist_physical_mod := caster.resist_physical_mod - phys_resist_penalty;
-	else
-		caster.resist_physical_mod := caster.resist_physical_mod - phys_resist_amt;
-		phys_resist_penalty := phys_resist_amt;
-	endif
-	// Now we determine if the penalty will cause Spell Resistance to go below zero.
-	// If not, no problem. If so we drop it to zero.
-	if(resist_spells_amt - resist_spells_penalty >= 0)
-		AP_ModifySkillMod(caster, RESISTING_SPELLS, AP_GetSkillMod(caster, RESISTING_SPELLS) - resist_spells_penalty);
-	else
-		AP_ModifySkillMod(caster, RESISTING_SPELLS, AP_GetSkillMod(caster, RESISTING_SPELLS) - resist_spells_amt);
-		resist_spells_penalty := resist_spells_amt;
-	endif
+  // Now we determine if the penalty will cause Physical Resistance to go below zero.
+  // If not, no problem. If so we drop it to zero.
+  if ( phys_resist_amt - phys_resist_penalty >= 0 )
+    caster.resist_physical_mod := caster.resist_physical_mod - phys_resist_penalty;
+  else
+    caster.resist_physical_mod := caster.resist_physical_mod - phys_resist_amt;
+    phys_resist_penalty := phys_resist_amt;
+  endif
+  // Now we determine if the penalty will cause Spell Resistance to go below zero.
+  // If not, no problem. If so we drop it to zero.
+  if ( resist_spells_amt - resist_spells_penalty >= 0 )
+    AP_ModifySkillMod( caster, RESISTING_SPELLS,
+                       AP_GetSkillMod( caster, RESISTING_SPELLS )
+                     - resist_spells_penalty );
+  else
+    AP_ModifySkillMod( caster, RESISTING_SPELLS,
+                       AP_GetSkillMod( caster, RESISTING_SPELLS )
+                     - resist_spells_amt );
+    resist_spells_penalty := resist_spells_amt;
+  endif
 
-	mods.+ phys_resist_penalty := phys_resist_penalty;
-	mods.+ resist_spells_penalty := resist_spells_penalty;
-	// At present there is no determined way to modify casting speed and other stats:
-	// ModifyMagicProperties(caster, "FasterCastSpeed", -2);
-	SetObjProperty(caster, "Protection", mods);
-	caster.addBuff(buff_icon, 0, cliloc_name, cliloc_desc, "");
-
+  mods.+phys_resist_penalty := phys_resist_penalty;
+  mods.+resist_spells_penalty := resist_spells_penalty;
+  // At present there is no determined way to modify casting speed and other stats:
+  // ModifyMagicProperties(caster, "FasterCastSpeed", -2);
+  SetObjProperty( caster, "Protection", mods );
+  caster.addBuff( buff_icon, 0, cliloc_name, cliloc_desc, "" );
 
 endfunction
 
-function RemoveProtection(caster)
+function RemoveProtection( caster )
 
-	mods := GetObjProperty(caster, "Protection");
-	caster.resist_physical_mod := caster.resist_physical_mod + mods.phys_resist_penalty;
-	//AP_ModifySkillMod(caster, RESISTING_SPELLS, (AP_GetSkillMod(caster, RESISTING_SPELLS) + mods.resist_spells_penalty));
-	AP_ModifySkillMod(caster, RESISTING_SPELLS, mods.resist_spells_penalty);
-	// At present there is no determined way to modify casting speed and other stats:
-	// ModifyMagicProperties(caster, "FasterCastSpeed", 2);
-	EraseObjProperty(caster, "Protection");
-	caster.delbuff(buff_icon);
+  mods := GetObjProperty( caster, "Protection" );
+  caster.resist_physical_mod := caster.resist_physical_mod + mods.phys_resist_penalty;
+  // AP_ModifySkillMod(caster, RESISTING_SPELLS, (AP_GetSkillMod(caster, RESISTING_SPELLS) + mods.resist_spells_penalty));
+  AP_ModifySkillMod( caster, RESISTING_SPELLS, mods.resist_spells_penalty );
+  // At present there is no determined way to modify casting speed and other stats:
+  // ModifyMagicProperties(caster, "FasterCastSpeed", 2);
+  EraseObjProperty( caster, "Protection" );
+  caster.delbuff( buff_icon );
 
 endfunction
 

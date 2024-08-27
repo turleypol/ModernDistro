@@ -12,29 +12,28 @@ include "include/shardInfo";
 
 program helpfile_help( who, helpfile )
 
-	if( GetProcess( CInt( GetObjProperty( who, "#CmdHelpPid" ))))
-		return 0;
-	else
-		SetObjProperty( who, "#CmdHelpPid", GetPid() );
-	endif
+  if ( GetProcess( CInt( GetObjProperty( who, "#CmdHelpPid" ) ) ) )
+    return 0;
+  else
+    SetObjProperty( who, "#CmdHelpPid", GetPid() );
+  endif
 
-	if( !helpfile )
-		helpfile := "help";
-	endif
+  if ( !helpfile )
+    helpfile := "help";
+  endif
 
-	var file_path := GetHelpFilePath( helpfile );
-	if( !file_path )
-		file_path := ":help:helptopics/"+helpfile+".txt";
-	endif
+  var file_path := GetHelpFilePath( helpfile );
+  if ( !file_path )
+    file_path := ":help:helptopics/" + helpfile + ".txt";
+  endif
 
-	var text_array := ReadFile( file_path );
-	if( text_array )
-		var text := ImplodeArray( "", text_array );
-		SendHTMLGump( who, SHARD_NAME+" Help Managment", text );
-		return 1;
-	else
-		SendSysMessage( who, "No help available for that topic." );
-		return 0;
-	endif
+  var text_array := ReadFile( file_path );
+  if ( text_array )
+    var text := ImplodeArray( "", text_array );
+    SendHTMLGump( who, SHARD_NAME + " Help Managment", text );
+    return 1;
+  else
+    SendSysMessage( who, "No help available for that topic." );
+    return 0;
+  endif
 endprogram
-
