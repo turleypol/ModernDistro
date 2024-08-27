@@ -4,9 +4,9 @@
 
 use uo;
 
-program OnCreateFirstAidBelt(FirstAidBelt)
+program OnCreateFirstAidBelt( FirstAidBelt )
 
-	var bonus_healing_points := 10;
-	SetObjProperty(FirstAidBelt, "HealingBonus", bonus_healing_points);
+  var bonus_healing_points := 10;
+  SetObjProperty( FirstAidBelt, "HealingBonus", bonus_healing_points );
 
 endprogram

@@ -4,49 +4,52 @@ use vitals;
 include ":damage:damage";
 
 program evil_omen( params )
-	var caster := params[1];
-	var info := params[2]; // Struct containing additional info about the spell.
-	var spellID := params[3];
+  var caster := params[1];
+  var info := params[2]; // Struct containing additional info about the spell.
+  var spellID := params[3];
 
-	SendSysMessage(caster, "Select your victim:", 1, 88);
-	var cast_on := Target(caster);
-	
+  SendSysMessage( caster, "Select your victim:", 1, 88 );
+  var cast_on := Target( caster );
 
-	var duration := 20;
-	info := info;
-	spellID := spellID;
-	if(Reflected(cast_on))
-		cast_on := caster;
-	endif
+  var duration := 20;
+  info := info;
+  spellID := spellID;
+  if ( Reflected( cast_on ) )
+    cast_on := caster;
+  endif
 
-	if(!cast_on.isa(POLCLASS_MOBILE))
-		SendSysMessage(caster, "You can not use this spell on items.",3,40);
-		return 0;
-	endif
+  if ( !cast_on.isa( POLCLASS_MOBILE ) )
+    SendSysMessage( caster, "You can not use this spell on items.", 3, 40 );
+    return 0;
+  endif
 
-	var cast_onrs := GetAttribute(cast_on, RESISTING_SPELLS);
-	var modrs := cast_onrs / 50 * -1;
-	modrs := modrs * 10;
-	
-	detach();
-	PlayObjectCenteredEffectEx( cast_on, 0x3779, 1, 15, 9502, 67, 0, 7 );
-	PlaySoundEffect(cast_on, 0xFC);
-	Sleep(1);
-	PlayObjectCenteredEffectEx( cast_on, 0x3728, 1, 13, 9912, 1150, 0, 7 );
-	Setobjproperty(cast_on, "evilomen", 1);
-	ModifyResistance(cast_on, DMG_PHYSICAL, -20);
-	SetAttributeTemporaryMod( cast_on, RESISTING_SPELLS, GetAttributeTemporaryMod(cast_on, RESISTING_SPELLS) + modrs );
-	
-	Sleep(duration);
-	
-	PlayObjectCenteredEffectEx( cast_on, 0x3779, 1, 15, 9502, 67, 0, 7 );
-	PlaySoundEffect(cast_on, 0xFC);
-	Sleep(1);
-	PlayObjectCenteredEffectEx( cast_on, 0x3728, 1, 13, 9912, 1150, 0, 7 );
-	Eraseobjproperty(cast_on, "evilomen");
-	ModifyResistance(cast_on, DMG_PHYSICAL, 20);
-	SetAttributeTemporaryMod( cast_on, RESISTING_SPELLS, GetAttributeTemporaryMod(cast_on, RESISTING_SPELLS) - modrs );
-	
+  var cast_onrs := GetAttribute( cast_on, RESISTING_SPELLS );
+  var modrs := cast_onrs / 50 * -1;
+  modrs := modrs * 10;
+
+  detach();
+  PlayObjectCenteredEffectEx( cast_on, 0x3779, 1, 15, 9502, 67, 0, 7 );
+  PlaySoundEffect( cast_on, 0xFC );
+  Sleep( 1 );
+  PlayObjectCenteredEffectEx( cast_on, 0x3728, 1, 13, 9912, 1150, 0, 7 );
+  Setobjproperty( cast_on, "evilomen", 1 );
+  ModifyResistance( cast_on, DMG_PHYSICAL, -20 );
+  SetAttributeTemporaryMod( cast_on, RESISTING_SPELLS,
+                            GetAttributeTemporaryMod( cast_on, RESISTING_SPELLS )
+                          + modrs );
+
+  Sleep( duration );
+
+  PlayObjectCenteredEffectEx( cast_on, 0x3779, 1, 15, 9502, 67, 0, 7 );
+  PlaySoundEffect( cast_on, 0xFC );
+  Sleep( 1 );
+  PlayObjectCenteredEffectEx( cast_on, 0x3728, 1, 13, 9912, 1150, 0, 7 );
+  Eraseobjproperty( cast_on, "evilomen" );
+  ModifyResistance( cast_on, DMG_PHYSICAL, 20 );
+  SetAttributeTemporaryMod( cast_on, RESISTING_SPELLS,
+                            GetAttributeTemporaryMod( cast_on, RESISTING_SPELLS )
+                          - modrs );
+
 endprogram
 
 /*

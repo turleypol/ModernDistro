@@ -12,21 +12,21 @@ use guilds;
 
 program UseGuildStone( mobile, item )
 
-        var guild_id := item.GetGuild(),
-            guild := FindGuild( guild_id );
+  var guild_id := item.GetGuild(), guild := FindGuild( guild_id );
 
-        if( !guild && !mobile.cmdlevel > 3 )
-                SendSysMessage( mobile, "That guild stone has no members! Page a staff!" );
-                return 0;
-        endif
+  if ( !guild && !mobile.cmdlevel > 3 )
+    SendSysMessage( mobile, "That guild stone has no members! Page a staff!" );
+    return 0;
+  endif
 
-        SetName( item, guild.GetProp( "Name" ));
+  SetName( item, guild.GetProp( "Name" ) );
 
-        var script := Start_Script( ":guilds:GuildMain", {mobile, guild_id} );
-        if( script.errortext )
-                SendSysMessage( mobile, "Error starting script <:guilds:guildMenu> -->"+script.errortext );
-                return 0;
-        endif
+  var script := Start_Script( ":guilds:GuildMain", { mobile, guild_id } );
+  if ( script.errortext )
+    SendSysMessage( mobile, "Error starting script <:guilds:guildMenu> -->"
+                  + script.errortext );
+    return 0;
+  endif
 
-        return 1;
+  return 1;
 endprogram

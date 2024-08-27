@@ -1,16 +1,16 @@
 use uo;
 
-program setAnchor(who)
-var anchorArray := {};
+program setAnchor( who )
+  var anchorArray := {};
 
-  SendSysMessage(who, "Set whose anchor?");
-  var what := Target(who);
-  if(!what)
+  SendSysMessage( who, "Set whose anchor?" );
+  var what := Target( who );
+  if ( !what )
     return;
   endif
-  SendSysMessage(who, "To where?");
-  var where := TargetCoordinates(who);
-  if(!where)
+  SendSysMessage( who, "To where?" );
+  var where := TargetCoordinates( who );
+  if ( !where )
     return;
   endif
 
@@ -18,6 +18,6 @@ var anchorArray := {};
   anchorArray[2] := where.y;
   anchorArray[3] := where.z;
 
-  SetObjProperty(what, "Anchor", anchorArray);
-  
+  SetObjProperty( what, "Anchor", anchorArray );
+
 endprogram

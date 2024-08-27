@@ -3,30 +3,29 @@
  * Purpose
  * Provide various functions and constants for the shard's behaviour.
  *
- */
+*/
 use cfgfile;
 use os;
 
 include ":logger:exception";
 
-CONST SHARD_CFG     := ":config:config/shardconfig";
-CONST DEFAULT_KEY   := "Main";
+const SHARD_CFG := ":config:config/shardconfig";
+const DEFAULT_KEY := "Main";
 
 enum CFG_ENTRIES
-    SHARD_NAME      := "ShardName",
-    SHARD_TIMEZONE  := "TimeZone",
+  SHARD_NAME := "ShardName",
+  SHARD_TIMEZONE := "TimeZone",
 
-    LINGER_STAFF    := "StaffLingerTime",
-    LINGER_PLAYER   := "PlayerLingerTime",
+  LINGER_STAFF := "StaffLingerTime",
+  LINGER_PLAYER := "PlayerLingerTime",
 
-    REGEN_HITS      := "HitsRegenRate",
-    REGEN_MANA      := "ManaRegenRate",
-    REGEN_STAM      := "StamRegenRate",
+  REGEN_HITS := "HitsRegenRate",
+  REGEN_MANA := "ManaRegenRate",
+  REGEN_STAM := "StamRegenRate",
 
-    SAVE_TIME       := "SaveTime",
-    SAVE_ANNOUNCE   := "SaveAnnounce"
+  SAVE_TIME := "SaveTime",
+  SAVE_ANNOUNCE := "SaveAnnounce"
 endenum
-
 
 /*
  * QueryConfigString(what)
@@ -38,22 +37,22 @@ endenum
  * default elem name.
  *
  * Parameters
- * what:	The name of the config elem to return
- * cfg_file:	Optional. Packaged name of the config file.
- * elem_name:	Optional. Elem name to look up in the config.
+ * what:   The name of the config elem to return
+ * cfg_file:   Optional. Packaged name of the config file.
+ * elem_name:  Optional. Elem name to look up in the config.
  *
  * Return value
  * The config file's value for the desired elem.
  *
- */
-function QueryConfigString(what, cfg_file:=SHARD_CFG, elem_name:=DEFAULT_KEY)
-	var ret_value := GetConfigString(FindConfigElem(ReadConfigFile(cfg_file), elem_name), what);
-	if( ret_value.errortext )
-		SysLog("Error::QueryConfigString() - Unable to open ["+cfg_file+"] ->"+ret_value.errortext);
-	endif
-	return ret_value;
+*/
+function QueryConfigString( what, cfg_file := SHARD_CFG, elem_name := DEFAULT_KEY )
+  var ret_value := GetConfigString( FindConfigElem( ReadConfigFile( cfg_file ),
+                                                    elem_name ), what );
+  if ( ret_value.errortext )
+    SysLog( "Error::QueryConfigString() - Unable to open [" + cfg_file + "] ->" + ret_value.errortext );
+  endif
+  return ret_value;
 endfunction
-
 
 /*
  * QueryConfigInt(what)
@@ -64,22 +63,22 @@ endfunction
  * default elem name.
  *
  * Parameters
- * what:	The name of the config elem to return
- * cfg_file:	Optional. Packaged name of the config file.
- * elem_name:	Optional. Elem name to look up in the config.
+ * what:   The name of the config elem to return
+ * cfg_file:   Optional. Packaged name of the config file.
+ * elem_name:  Optional. Elem name to look up in the config.
  *
  * Return value
  * The config file's value for the desired elem.
  *
- */
-function QueryConfigInt(what, cfg_file:=SHARD_CFG, elem_name:=DEFAULT_KEY)
-	var ret_value := GetConfigInt(FindConfigElem(ReadConfigFile(cfg_file), elem_name), what);
-	if( ret_value.errortext )
-		SysLog("Error::QueryConfigInt() - Unable to open ["+cfg_file+"] ->"+ret_value.errortext);
-	endif
-	return ret_value;
+*/
+function QueryConfigInt( what, cfg_file := SHARD_CFG, elem_name := DEFAULT_KEY )
+  var ret_value := GetConfigInt( FindConfigElem( ReadConfigFile( cfg_file ),
+                                                 elem_name ), what );
+  if ( ret_value.errortext )
+    SysLog( "Error::QueryConfigInt() - Unable to open [" + cfg_file + "] ->" + ret_value.errortext );
+  endif
+  return ret_value;
 endfunction
-
 
 /*
  * GetShardName()
@@ -93,11 +92,10 @@ endfunction
  * Return value
  * The shard's name.
  *
- */
+*/
 function GetShardName()
-    return(QueryConfigString(SHARD_NAME));
+  return ( QueryConfigString( SHARD_NAME ) );
 endfunction
-
 
 /*
  * GetStaffLingerTime()
@@ -111,11 +109,10 @@ endfunction
  * Return value
  * The staff linger time in seconds.
  *
- */
+*/
 function GetStaffLingerTime()
-    return(QueryConfigInt(LINGER_STAFF));
+  return ( QueryConfigInt( LINGER_STAFF ) );
 endfunction
-
 
 /*
  * GetPlayerLingerTime()
@@ -129,11 +126,10 @@ endfunction
  * Return value
  * The player linger time in seconds.
  *
- */
+*/
 function GetPlayerLingerTime()
-    return(QueryConfigInt(LINGER_PLAYER));
+  return ( QueryConfigInt( LINGER_PLAYER ) );
 endfunction
-
 
 /*
  * GetTimeZone()
@@ -147,11 +143,10 @@ endfunction
  * Return value
  * The offset from GMT
  *
- */
+*/
 function GetTimeZone()
-    return(QueryConfigInt(SHARD_TIMEZONE));
+  return ( QueryConfigInt( SHARD_TIMEZONE ) );
 endfunction
-
 
 /*
  * GetDefaultRegenRate(stat)
@@ -165,14 +160,14 @@ endfunction
  * Return value
  * The default stat regen rate
  *
- */
-function GetDefaultRegenRate(stat)
-    if(stat != REGEN_HITS && stat != REGEN_MANA && stat != REGEN_STAM)
-        return(Exception("config::GetDefaultRegenRate: Invalid stat '" + CStr(stat) + "'."));
-    endif
-    return(QueryConfigInt(stat));
+*/
+function GetDefaultRegenRate( stat )
+  if ( stat != REGEN_HITS && stat != REGEN_MANA && stat != REGEN_STAM )
+    return ( Exception( "config::GetDefaultRegenRate: Invalid stat '" + CStr( stat )
+                      + "'." ) );
+  endif
+  return ( QueryConfigInt( stat ) );
 endfunction
-
 
 /*
  * GetSaveTime()
@@ -186,11 +181,10 @@ endfunction
  * Return value
  * The time between saves in minutes
  *
- */
+*/
 function GetSaveTime()
-    return(QueryConfigInt(SAVE_TIME));
+  return ( QueryConfigInt( SAVE_TIME ) );
 endfunction
-
 
 /*
  * GetSaveAnnounceTime()
@@ -204,7 +198,7 @@ endfunction
  * Return value
  * The offset of the save time and announce time
  *
- */
+*/
 function GetSaveAnnounceTime()
-    return(QueryConfigInt(SAVE_ANNOUNCE));
+  return ( QueryConfigInt( SAVE_ANNOUNCE ) );
 endfunction

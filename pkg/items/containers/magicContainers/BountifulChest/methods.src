@@ -6,12 +6,11 @@ include ":itemutils:itemdesc";
 
 program Install()
 
-	return 1;
+  return 1;
 endprogram
 
 exported function IsBountifulChest( item )
 
-	item := item;
-	return 1;
+  item := item;
+  return 1;
 endfunction
-

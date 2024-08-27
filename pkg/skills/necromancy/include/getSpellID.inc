@@ -6,6 +6,6 @@
 use cfgfile;
 
 function GetSpellId( magicitem )
-    var itemdesc_cfg := ReadConfigFile( "itemdesc" );
-    return itemdesc_cfg[ magicitem.objtype ].spellid;
+  var itemdesc_cfg := ReadConfigFile( "itemdesc" );
+  return itemdesc_cfg[magicitem.objtype].spellid;
 endfunction

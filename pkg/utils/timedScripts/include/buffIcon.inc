@@ -19,17 +19,16 @@ use polsys;
 ////////////////////////////////////////////////////////////////////////////////////////
 function UpdateBuffIcon( mobile, byref cfg_elem, byref event )
 
-        var buff_icon := CInt( cfg_elem.BuffIcon );
-        if( buff_icon )
-            var amount := event.amount;
-            if(amount)
-                mobile.delbuff(buff_icon);
-            endif
+  var buff_icon := CInt( cfg_elem.BuffIcon );
+  if ( buff_icon )
+    var amount := event.amount;
+    if ( amount )
+      mobile.delbuff( buff_icon );
+    endif
 
-        endif
-        return 1;
+  endif
+  return 1;
 endfunction
-
 
 /*
 

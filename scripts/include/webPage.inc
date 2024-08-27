@@ -1,27 +1,27 @@
-//Shinni's web page functions
+// Shinni's web page functions
 
-Function OpenWebSite(who, url)
-  var packet:="A5"+WordPacket(Len(url)+4);
-  ForEach ascii_code in CAscZ(url)
-    packet:=packet+BytePacket(ascii_code);
-  EndForEach
-  SendPacket(who, packet+"00");
-EndFunction
+function OpenWebSite( who, url )
+  var packet := "A5" + WordPacket( Len( url ) + 4 );
+  foreach ascii_code in CAscZ( url )
+    packet := packet + BytePacket( ascii_code );
+  endforeach
+  SendPacket( who, packet + "00" );
+endfunction
 
-Function BytePacket(byte)
-  var paket:=Hex(byte);
-  paket:="00"+paket[3, Len(paket)-2];
-  Return (paket[Len(paket)-1, 2]);
-EndFunction
+function BytePacket( byte )
+  var paket := Hex( byte );
+  paket := "00" + paket[3, Len( paket ) - 2];
+  return ( paket[Len( paket ) - 1, 2] );
+endfunction
 
-Function WordPacket(word)
-  var paket:=Hex(word);
-  paket:="0000"+paket[3, Len(paket)-2];
-  Return (paket[Len(paket)-3, 4]);
-EndFunction
+function WordPacket( word )
+  var paket := Hex( word );
+  paket := "0000" + paket[3, Len( paket ) - 2];
+  return ( paket[Len( paket ) - 3, 4] );
+endfunction
 
-Function DoubleWordPacket(doubleword)
-  var paket:=Hex(doubleword);
-  paket:="00000000"+paket[3, Len(paket)-2];
-  Return (paket[Len(paket)-7, 8]);
-EndFunction
+function DoubleWordPacket( doubleword )
+  var paket := Hex( doubleword );
+  paket := "00000000" + paket[3, Len( paket ) - 2];
+  return ( paket[Len( paket ) - 7, 8] );
+endfunction

@@ -1,18 +1,16 @@
 // methods for signs
 
-
 use uo;
 use os;
 
 include "include/housing";
 include ":staticHousing:settings";
 
-var settings := SH_GetSettingsCfgElem("Settings");
-
+var settings := SH_GetSettingsCfgElem( "Settings" );
 
 program Install()
 
-	return 1;
+  return 1;
 endprogram
 
 ///////////////////////////////////////////////////////////
@@ -30,14 +28,14 @@ endprogram
 ///////////////////////////////////////////////////////////
 exported function IsHouseSign( byref unused sign )
 
-	var signs := {0xBD0, 0xBD2, 0x20BD1, 0x20BD2, 0x20BCF, 0x20BD0, 0x260FA};
-	foreach thing in signs
-		thing := thing; // stops unused warning.
-		if(GetObjProperty(thing, "footage"))
-			return 1;
-		endif
-	endforeach
-		return 0;
+  var signs := { 0xBD0, 0xBD2, 0x20BD1, 0x20BD2, 0x20BCF, 0x20BD0, 0x260FA };
+  foreach thing in signs
+    thing := thing; // stops unused warning.
+    if ( GetObjProperty( thing, "footage" ) )
+      return 1;
+    endif
+  endforeach
+  return 0;
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -54,14 +52,16 @@ endfunction
 // Returns: 1 if true and 0 if false.
 ///////////////////////////////////////////////////////////
 exported function IsStaticHouseSign( byref unused sign )
-	var signs := {CInt(0x20BD1), CInt(0x20BD2), CInt(0x20BCF), CInt(0x20BD0), CInt(0x260FA)};
-	foreach thing in signs
-		thing := thing; // stops unused warning.
-		if(GetObjProperty(thing, "footage"))
-			return 1;
-		endif
-	endforeach
-	return 0;
+  var signs := { CInt( 0x20BD1 ), CInt( 0x20BD2 ), CInt( 0x20BCF ),
+                 CInt( 0x20BD0 ), CInt( 0x260FA )
+                 };
+  foreach thing in signs
+    thing := thing; // stops unused warning.
+    if ( GetObjProperty( thing, "footage" ) )
+      return 1;
+    endif
+  endforeach
+  return 0;
 
 endfunction
 
@@ -79,14 +79,14 @@ endfunction
 // Returns: 1 if true and 0 if false.
 ///////////////////////////////////////////////////////////
 exported function IsMultiHouseSign( byref unused sign )
-	var signs := {0xBD2, 0xBD0};
-	foreach thing in signs
-		thing := thing; // stops unused warning.
-		if(GetObjProperty(thing, "footage"))
-			return 1;
-		endif
-	endforeach
-	return 0;
+  var signs := { 0xBD2, 0xBD0 };
+  foreach thing in signs
+    thing := thing; // stops unused warning.
+    if ( GetObjProperty( thing, "footage" ) )
+      return 1;
+    endif
+  endforeach
+  return 0;
 
 endfunction
 
@@ -101,22 +101,21 @@ endfunction
 //
 // Returns: 1 if true and 0 if false.
 ///////////////////////////////////////////////////////////
-exported function IsLocationInsideHouse(sign, byref loc)
-	var fotage := GetObjProperty (sign, "footage");
-	var chk := 0;
-	foreach thing in fotage
-		if ( (loc.realm == sign.realm) &&
-			(loc.x >= thing[1] && loc.x <= thing[4]) &&
-			(loc.y >= thing[2] && loc.y <= thing[5]) &&
-			(loc.z >= thing[3] && loc.z <= thing[6]) )
-			chk := 1;
-			break;
-		endif
-		if(chk)
-			break;
-		endif
-	endforeach
-	return chk;
+exported function IsLocationInsideHouse( sign, byref loc )
+  var fotage := GetObjProperty( sign, "footage" );
+  var chk := 0;
+  foreach thing in fotage
+    if ( ( loc.realm == sign.realm ) && ( loc.x >= thing[1] &&
+         loc.x <= thing[4] ) && ( loc.y >= thing[2] && loc.y <= thing[5] ) &&
+         ( loc.z >= thing[3] && loc.z <= thing[6] ) )
+      chk := 1;
+      break;
+    endif
+    if ( chk )
+      break;
+    endif
+  endforeach
+  return chk;
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -132,23 +131,22 @@ endfunction
 //
 // Returns: 1 if true and 0 if false.
 ///////////////////////////////////////////////////////////
-exported function IsObjectInsideHouse(byref sign, byref object)
-	var fotage := GetObjProperty (sign, "footage");
-	var chk := 0;
-	foreach thing in fotage
-		if ( (object.realm == sign.realm) &&
-			(object.x >= thing[1] && object.x <= thing[4]) &&
-			(object.y >= thing[2] && object.y <= thing[5]) &&
-			(object.z >= thing[3] && object.z <= thing[6]) )
-			return 1;
-			chk := 1;
-			break;
-		endif
-		if(chk)
-			break;
-		endif
-	endforeach
-	return chk;
+exported function IsObjectInsideHouse( byref sign, byref object )
+  var fotage := GetObjProperty( sign, "footage" );
+  var chk := 0;
+  foreach thing in fotage
+    if ( ( object.realm == sign.realm ) && ( object.x >= thing[1] &&
+         object.x <= thing[4] ) && ( object.y >= thing[2] &&
+         object.y <= thing[5] ) && ( object.z >= thing[3] && object.z <= thing[6] ) )
+      return 1;
+      chk := 1;
+      break;
+    endif
+    if ( chk )
+      break;
+    endif
+  endforeach
+  return chk;
 
 endfunction
 
@@ -160,10 +158,11 @@ endfunction
 // RefreshTime times 60 seconds times 60 minutes times 24 hours
 //
 //////////////////////////////////////////////////////////////
-exported function RefreshHouse(sign)
+exported function RefreshHouse( sign )
 
-	SetObjProperty(sign,"decay", ReadGameClock() + (CInt(settings.RefreshTime) * 360 * 24));
-    return 1;
+  SetObjProperty( sign, "decay",
+                  ReadGameClock() + ( CInt( settings.RefreshTime ) * 360 * 24 ) );
+  return 1;
 
 endfunction
 
@@ -176,7 +175,7 @@ endfunction
 ///////////////////////////////////////////////
 exported function IsNewHouse( sign )
 
-	return GetObjProperty(sign, "NewHouse") == 1;;
+  return GetObjProperty( sign, "NewHouse" ) == 1;
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -195,7 +194,7 @@ endfunction
 ///////////////////////////////////////////////////////////
 exported function GetLockdowns( sign )
 
-	return CInt( GetObjProperty( sign, "RemainingLockdowns" ));
+  return CInt( GetObjProperty( sign, "RemainingLockdowns" ) );
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -214,7 +213,7 @@ endfunction
 ///////////////////////////////////////////////////////////
 exported function GetMaxLockdowns( sign )
 
-	return CInt( GetObjProperty( sign, "MaxLockdowns" ));
+  return CInt( GetObjProperty( sign, "MaxLockdowns" ) );
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -233,7 +232,7 @@ endfunction
 ///////////////////////////////////////////////////////////
 exported function GetSecures( sign )
 
-	return CInt( GetObjProperty( sign, "RemainingSecures" ));
+  return CInt( GetObjProperty( sign, "RemainingSecures" ) );
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -252,7 +251,7 @@ endfunction
 ///////////////////////////////////////////////////////////
 exported function GetMaxSecures( sign )
 
-	return CInt( GetObjProperty( sign, "MaxSecures" ));
+  return CInt( GetObjProperty( sign, "MaxSecures" ) );
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -272,7 +271,7 @@ endfunction
 ///////////////////////////////////////////////////////////
 exported function GetFootage( sign )
 
-return GetObjProperty(sign, "footage");
+  return GetObjProperty( sign, "footage" );
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -288,7 +287,7 @@ endfunction
 ///////////////////////////////////////////////////////////
 exported function GetHousePrice( sign )
 
-return GetObjProperty(sign, "Price");
+  return GetObjProperty( sign, "Price" );
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -305,13 +304,13 @@ endfunction
 //
 ///////////////////////////////////////////////////////////
 exported function AddLockdown( sign )
-	var temp := GetLockdowns(sign);
-	temp := temp + 1;
-	if(temp > GetMaxLockdowns(sign))
-		temp := GetMaxLockdowns(sign);
-	endif
-	SetObjProperty(sign, "RemainingLockdowns", temp);
-	return;
+  var temp := GetLockdowns( sign );
+  temp := temp + 1;
+  if ( temp > GetMaxLockdowns( sign ) )
+    temp := GetMaxLockdowns( sign );
+  endif
+  SetObjProperty( sign, "RemainingLockdowns", temp );
+  return;
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -329,13 +328,13 @@ endfunction
 //
 ///////////////////////////////////////////////////////////
 exported function SubtractLockdown( sign )
-	var temp := GetLockdowns(sign);
-	temp := temp - 1;
-	if(temp < 0)
-		temp := 0;
-	endif
-	SetObjProperty(sign, "RemainingLockdowns", temp);
-	return;
+  var temp := GetLockdowns( sign );
+  temp := temp - 1;
+  if ( temp < 0 )
+    temp := 0;
+  endif
+  SetObjProperty( sign, "RemainingLockdowns", temp );
+  return;
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -352,13 +351,13 @@ endfunction
 //
 ///////////////////////////////////////////////////////////
 exported function AddSecure( sign )
-	var temp := GetLockdowns(sign);
-	temp := temp + 1;
-	if(temp > GetMaxSecures(sign))
-		temp := GetMaxSecures(sign);
-	endif
-	SetObjProperty(sign, "RemainingSecures", temp);
-	return;
+  var temp := GetLockdowns( sign );
+  temp := temp + 1;
+  if ( temp > GetMaxSecures( sign ) )
+    temp := GetMaxSecures( sign );
+  endif
+  SetObjProperty( sign, "RemainingSecures", temp );
+  return;
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -376,13 +375,13 @@ endfunction
 //
 ///////////////////////////////////////////////////////////
 exported function SubtractSecure( sign )
-	var temp := GetSecures(sign);
-	temp := temp - 1;
-	if(temp < 0)
-		temp := 0;
-	endif
-	SetObjProperty(sign, "RemainingSecures", temp);
-	return;
+  var temp := GetSecures( sign );
+  temp := temp - 1;
+  if ( temp < 0 )
+    temp := 0;
+  endif
+  SetObjProperty( sign, "RemainingSecures", temp );
+  return;
 endfunction
 
 //////////////////////////////////////////////////////////
@@ -400,18 +399,18 @@ endfunction
 //
 //////////////////////////////////////////////////////////
 exported function UpdateLockdowns( sign, ldamount := 1 )
-	var numlockdowns := CInt( GetObjProperty( sign, "RemainingLockdowns" ));
-	var maxlockdowns := CInt( GetObjProperty( sign, "MaxLockdowns" ));
-	if(numlockdowns == maxlockdowns)
-		return 0;
-	// elseif((numlockdowns + ldamount) < 0) // Original operation - kept for debugging purposes
-	elseif((numlockdowns - ldamount) < 0)
-		return -1;
-	endif
-	// numlockdowns := numlockdowns + ldamount; // Original operation - kept for debugging purposes
-	numlockdowns := numlockdowns - ldamount;
-	SetObjProperty(sign, "RemainingLockdowns", numlockdowns);
-	return 1;
+  var numlockdowns := CInt( GetObjProperty( sign, "RemainingLockdowns" ) );
+  var maxlockdowns := CInt( GetObjProperty( sign, "MaxLockdowns" ) );
+  if ( numlockdowns == maxlockdowns )
+    return 0;
+  // elseif((numlockdowns + ldamount) < 0) // Original operation - kept for debugging purposes
+  elseif ( ( numlockdowns - ldamount ) < 0 )
+    return -1;
+  endif
+  // numlockdowns := numlockdowns + ldamount; // Original operation - kept for debugging purposes
+  numlockdowns := numlockdowns - ldamount;
+  SetObjProperty( sign, "RemainingLockdowns", numlockdowns );
+  return 1;
 endfunction
 
 //////////////////////////////////////////////////////
@@ -429,18 +428,18 @@ endfunction
 //
 //////////////////////////////////////////////////////
 exported function UpdateSecures( sign, secamount := 1 )
-	var numsecures := CInt( GetObjProperty( sign, "RemainingSecures" ));
-	var maxsecures := CInt( GetObjProperty( sign, "MaxSecures" ));
-	if(numsecures == maxsecures)
-		return 0;
-	// elseif((numsecures + secamount) < 0) // Original operation - kept for debugging purposes
-	elseif((numsecures - secamount) < 0) // Original operation - kept for debugging purposes
-		return -1;
-	endif
-	// numsecures := numsecures + secamount; // Original operation - kept for debugging purposes
-	numsecures := numsecures - secamount;
-	SetObjProperty(sign, "RemainingSecures", numsecures);
-	return 1;
+  var numsecures := CInt( GetObjProperty( sign, "RemainingSecures" ) );
+  var maxsecures := CInt( GetObjProperty( sign, "MaxSecures" ) );
+  if ( numsecures == maxsecures )
+    return 0;
+  // elseif((numsecures + secamount) < 0) // Original operation - kept for debugging purposes
+  elseif ( ( numsecures - secamount ) < 0 ) // Original operation - kept for debugging purposes
+    return -1;
+  endif
+  // numsecures := numsecures + secamount; // Original operation - kept for debugging purposes
+  numsecures := numsecures - secamount;
+  SetObjProperty( sign, "RemainingSecures", numsecures );
+  return 1;
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -457,15 +456,16 @@ endfunction
 // co-owner or 0 if not.
 //
 ///////////////////////////////////////////////////////////
-exported function IsCoOwnerOrOwner(sign, byref mobile)
-	if (mobile.serial in GetObjProperty(sign,"coowners") || mobile.serial == GetObjProperty(sign, "ownerserial"))
-		return 1;
-	endif
+exported function IsCoOwnerOrOwner( sign, byref mobile )
+  if ( mobile.serial in GetObjProperty( sign, "coowners" ) ||
+       mobile.serial == GetObjProperty( sign, "ownerserial" ) )
+    return 1;
+  endif
 
-	// if (mobile.acctname == (GetObjProperty(sign, "owneracct") ) )
-		// return 1;
-	// endif
-	return 0;
+  // if (mobile.acctname == (GetObjProperty(sign, "owneracct") ) )
+  // return 1;
+  // endif
+  return 0;
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -489,19 +489,19 @@ endfunction
 ///////////////////////////////////////////////////////////
 exported function IsAffiliated( sign, byref mobile )
 
-	if( IsOwner( sign, mobile ))
-		return 4;
-	elseif( IsACoowner( sign, mobile ))
-		return 3;
-	elseif( IsAFriend( sign, mobile ))
-		return 2;
-//	elseif( IsGuildAffiliate( sign, mobile ))
-//		return 1;
-//	elseif( mobile.cmdlevel >= 3 )
-//		return 4;
-	else
-		return 0;
-	endif
+  if ( IsOwner( sign, mobile ) )
+    return 4;
+  elseif ( IsACoowner( sign, mobile ) )
+    return 3;
+  elseif ( IsAFriend( sign, mobile ) )
+    return 2;
+  //  elseif( IsGuildAffiliate( sign, mobile ))
+  //      return 1;
+  //  elseif( mobile.cmdlevel >= 3 )
+  //      return 4;
+  else
+    return 0;
+  endif
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -520,19 +520,19 @@ endfunction
 // Returns: ::integer - 1 if in a list or 0 if not.
 //
 ///////////////////////////////////////////////////////////
-exported function IsInHouseLists(sign, byref who, byref type)
+exported function IsInHouseLists( sign, byref who, byref type )
 
-	var nfo := {};
-	case(type)
-		1: nfo := GetObjProperty(sign, "coowners");
-		2: nfo := GetObjProperty(sign, "friendlist");
-		3: nfo := GetObjProperty(sign, "banlist");
-	endcase
-	if(who.serial in nfo)
-		return 1;
-	else
-		return 0;
-	endif
+  var nfo := {};
+  case ( type )
+    1: nfo := GetObjProperty( sign, "coowners" );
+    2: nfo := GetObjProperty( sign, "friendlist" );
+    3: nfo := GetObjProperty( sign, "banlist" );
+  endcase
+  if ( who.serial in nfo )
+    return 1;
+  else
+    return 0;
+  endif
 endfunction
 
 // Owner methods
@@ -552,10 +552,10 @@ endfunction
 ///////////////////////////////////////////////////////////
 exported function IsOwner( sign, byref mobile )
 
-	If(mobile.serial == CInt( GetObjProperty( sign, "ownerserial" )))
-		return 1;
-	endif
-	return 0;
+  if ( mobile.serial == CInt( GetObjProperty( sign, "ownerserial" ) ) )
+    return 1;
+  endif
+  return 0;
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -573,7 +573,7 @@ endfunction
 //
 ///////////////////////////////////////////////////////////
 exported function GetOwnerName( sign )
-	return GetObjProperty( sign, "Owner" );
+  return GetObjProperty( sign, "Owner" );
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -592,7 +592,7 @@ endfunction
 ///////////////////////////////////////////////////////////
 exported function GetOwnerSerial( sign )
 
-	return CInt( GetObjProperty( sign, "ownerserial" ));
+  return CInt( GetObjProperty( sign, "ownerserial" ) );
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -609,7 +609,7 @@ endfunction
 //
 ///////////////////////////////////////////////////////////
 exported function SetOwnerName( sign, byref owner )
-	return SetObjProperty(sign, "Owner", owner.name );
+  return SetObjProperty( sign, "Owner", owner.name );
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -626,7 +626,7 @@ endfunction
 //
 ///////////////////////////////////////////////////////////
 exported function SetOwnerSerial( sign, byref owner )
-	return SetObjProperty(sign, "ownerserial", owner.serial );
+  return SetObjProperty( sign, "ownerserial", owner.serial );
 endfunction
 
 // Co-Owner Stuff
@@ -645,10 +645,10 @@ endfunction
 //
 ///////////////////////////////////////////////////////////
 exported function IsACoOwner( sign, byref mobile )
-	if(mobile.serial in GetObjProperty(sign, "coowners"))
-		return 1;
-	endif
-	return 0;
+  if ( mobile.serial in GetObjProperty( sign, "coowners" ) )
+    return 1;
+  endif
+  return 0;
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -666,12 +666,12 @@ endfunction
 ///////////////////////////////////////////////////////////
 exported function GetCoOwnerList( sign )
 
-	var CoOwner_list := GetObjProperty( sign, "coowners" );
-	if( !CoOwner_list )
-		CoOwner_list := {};
-	endif
+  var CoOwner_list := GetObjProperty( sign, "coowners" );
+  if ( !CoOwner_list )
+    CoOwner_list := {};
+  endif
 
-	return CoOwner_list;
+  return CoOwner_list;
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -689,23 +689,23 @@ endfunction
 //
 ///////////////////////////////////////////////////////////
 exported function AddCoOwner( sign, byref mobile )
-	var coownerinfo := GetObjProperty(sign,"coowners");
-	if (!coownerinfo)
-		coownerinfo := {};
-	endif
-	var arraysize := len(coownerinfo);
-	arraysize := arraysize + 1;
-	if (arraysize > 20)
-		return -1;
-	endif
+  var coownerinfo := GetObjProperty( sign, "coowners" );
+  if ( !coownerinfo )
+    coownerinfo := {};
+  endif
+  var arraysize := len( coownerinfo );
+  arraysize := arraysize + 1;
+  if ( arraysize > 20 )
+    return -1;
+  endif
 
-	if(IsACoOwner( sign, mobile ))
-		return 0;
-	endif
+  if ( IsACoOwner( sign, mobile ) )
+    return 0;
+  endif
 
-	coownerinfo[len(coownerinfo) + 1] := mobile.serial;
-	SetObjProperty(sign, "coowners", coownerinfo);
-	return 1;
+  coownerinfo[len( coownerinfo ) + 1] := mobile.serial;
+  SetObjProperty( sign, "coowners", coownerinfo );
+  return 1;
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -723,7 +723,7 @@ endfunction
 //
 ///////////////////////////////////////////////////////////
 exported function SetCoOwnerList( sign, byref list )
-	return SetObjProperty( sign, "coowners", list );
+  return SetObjProperty( sign, "coowners", list );
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -743,19 +743,19 @@ endfunction
 ///////////////////////////////////////////////////////////
 exported function RemoveCoOwner( sign, byref mobile )
 
-	var coowners := GetObjProperty(sign,"coowners");
-	// There are no co-owners in the coowners list.
-	if (!coowners || (coowners.size() == 0))
-		return 0;
-	endif
-	var index := mobile.serial in coowners;
-	// mobile is not in coowners.
-	if(!index)
-		return -1;
-	endif
-	coowners.erase(index);
-	SetObjProperty(sign, "coowners", coowners);
-	return 1;
+  var coowners := GetObjProperty( sign, "coowners" );
+  // There are no co-owners in the coowners list.
+  if ( !coowners || ( coowners.size() == 0 ) )
+    return 0;
+  endif
+  var index := mobile.serial in coowners;
+  // mobile is not in coowners.
+  if ( !index )
+    return -1;
+  endif
+  coowners.erase( index );
+  SetObjProperty( sign, "coowners", coowners );
+  return 1;
 
 endfunction
 
@@ -773,9 +773,8 @@ endfunction
 //
 ///////////////////////////////////////////////////////////
 exported function WipeCoOwnerList( sign )
-	return EraseObjProperty( sign, "coowners" );
+  return EraseObjProperty( sign, "coowners" );
 endfunction
-
 
 // Friend Methods
 ///////////////////////////////////////////////////////////
@@ -793,10 +792,10 @@ endfunction
 //
 ///////////////////////////////////////////////////////////
 exported function IsAFriend( sign, byref mobile )
-	if(mobile.serial in GetObjProperty(sign, "friendlist"))
-		return 1;
-	endif
-	return 0;
+  if ( mobile.serial in GetObjProperty( sign, "friendlist" ) )
+    return 1;
+  endif
+  return 0;
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -814,12 +813,12 @@ endfunction
 ///////////////////////////////////////////////////////////
 exported function GetFriendList( sign )
 
-	var friendlist := GetObjProperty( sign, "friendlist" );
-	if( !friendlist )
-		friendlist := {};
-	endif
+  var friendlist := GetObjProperty( sign, "friendlist" );
+  if ( !friendlist )
+    friendlist := {};
+  endif
 
-	return friendlist;
+  return friendlist;
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -837,23 +836,23 @@ endfunction
 ///////////////////////////////////////////////////////////
 exported function AddFriend( sign, byref mobile )
 
-	var friendlist := GetObjProperty(sign,"friendlist");
-	if (!friendlist)
-		friendlist := {};
-	endif
-	var arraysize := len(friendlist);
-	arraysize := arraysize + 1;
-	if (arraysize > 20)
-		return -1;
-	endif
+  var friendlist := GetObjProperty( sign, "friendlist" );
+  if ( !friendlist )
+    friendlist := {};
+  endif
+  var arraysize := len( friendlist );
+  arraysize := arraysize + 1;
+  if ( arraysize > 20 )
+    return -1;
+  endif
 
-	if(IsAFriend( sign, mobile ))
-		return 0;
-	endif
+  if ( IsAFriend( sign, mobile ) )
+    return 0;
+  endif
 
-	friendlist[len(friendlist) + 1] := mobile.serial;
-	SetObjProperty(sign, "friendlist", friendlist);
-	return 1;
+  friendlist[len( friendlist ) + 1] := mobile.serial;
+  SetObjProperty( sign, "friendlist", friendlist );
+  return 1;
 
 endfunction
 
@@ -874,19 +873,19 @@ endfunction
 ///////////////////////////////////////////////////////////
 exported function RemoveFriend( sign, byref mobile )
 
-	var friendlist := GetObjProperty(sign,"friendlist");
-	// There are no friends in the friendlist.
-	if (!friendlist || (friendlist.size() == 0))
-		return 0;
-	endif
-	var index := mobile.serial in friendlist;
-	// mobile is not in friendlist.
-	if(!index)
-		return -1;
-	endif
-	friendlist.erase(index);
-	SetObjProperty(sign, "friendlist", friendlist);
-	return 1;
+  var friendlist := GetObjProperty( sign, "friendlist" );
+  // There are no friends in the friendlist.
+  if ( !friendlist || ( friendlist.size() == 0 ) )
+    return 0;
+  endif
+  var index := mobile.serial in friendlist;
+  // mobile is not in friendlist.
+  if ( !index )
+    return -1;
+  endif
+  friendlist.erase( index );
+  SetObjProperty( sign, "friendlist", friendlist );
+  return 1;
 
 endfunction
 
@@ -904,7 +903,7 @@ endfunction
 //
 ///////////////////////////////////////////////////////////
 exported function SetFriendList( sign, byref list )
-	return SetObjProperty( sign, "friendlist", list );
+  return SetObjProperty( sign, "friendlist", list );
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -921,7 +920,7 @@ endfunction
 //
 ///////////////////////////////////////////////////////////
 exported function WipeFriendList( sign )
-	return EraseObjProperty( sign, "friendlist" );
+  return EraseObjProperty( sign, "friendlist" );
 endfunction
 
 // Ban Methods
@@ -938,11 +937,11 @@ endfunction
 // Returns: integer:: 1 if they're a banned and 0 if not.
 //
 ///////////////////////////////////////////////////////////
-exported function IsBanned(sign, byref mobile)
+exported function IsBanned( sign, byref mobile )
 
-   var nfo := nfo := GetObjProperty(sign, "banlist");
+  var nfo := nfo := GetObjProperty( sign, "banlist" );
 
-  if(mobile.serial in nfo)
+  if ( mobile.serial in nfo )
     return 1;
   else
     return 0;
@@ -965,23 +964,23 @@ endfunction
 ///////////////////////////////////////////////////////////
 exported function AddBan( sign, byref mobile )
 
-	var banlist := GetObjProperty(sign,"banlist");
-	if (!banlist)
-		banlist := {};
-	endif
-	var arraysize := len(banlist);
-	arraysize := arraysize + 1;
-	if (arraysize >= 20)
-		return -1;
-	endif
+  var banlist := GetObjProperty( sign, "banlist" );
+  if ( !banlist )
+    banlist := {};
+  endif
+  var arraysize := len( banlist );
+  arraysize := arraysize + 1;
+  if ( arraysize >= 20 )
+    return -1;
+  endif
 
-	if(IsBanned( sign, mobile ))
-		return 0;
-	endif
+  if ( IsBanned( sign, mobile ) )
+    return 0;
+  endif
 
-	banlist[len(banlist) + 1] := mobile.serial;
-	SetObjProperty(sign, "banlist", banlist);
-	return 1;
+  banlist[len( banlist ) + 1] := mobile.serial;
+  SetObjProperty( sign, "banlist", banlist );
+  return 1;
 
 endfunction
 
@@ -1002,19 +1001,19 @@ endfunction
 ///////////////////////////////////////////////////////////
 exported function RemoveBan( sign, byref mobile )
 
-	var banlist := GetObjProperty(sign,"banlist");
-	// There are no friends in the banlist.
-	if (!banlist || (banlist.size() == 0))
-		return 0;
-	endif
-	var index := mobile.serial in banlist;
-	// mobile is not in banlist.
-	if(!index)
-		return -1;
-	endif
-	banlist.erase(index);
-	SetObjProperty(sign, "banlist", banlist);
-	return 1;
+  var banlist := GetObjProperty( sign, "banlist" );
+  // There are no friends in the banlist.
+  if ( !banlist || ( banlist.size() == 0 ) )
+    return 0;
+  endif
+  var index := mobile.serial in banlist;
+  // mobile is not in banlist.
+  if ( !index )
+    return -1;
+  endif
+  banlist.erase( index );
+  SetObjProperty( sign, "banlist", banlist );
+  return 1;
 
 endfunction
 
@@ -1034,11 +1033,11 @@ endfunction
 //
 ///////////////////////////////////////////////////////////
 exported function GetBanList( sign )
-	var banlist := GetObjProperty( sign, "banlist" );
-	if( !banlist )
-		banlist := {};
-	endif
-	return banlist;
+  var banlist := GetObjProperty( sign, "banlist" );
+  if ( !banlist )
+    banlist := {};
+  endif
+  return banlist;
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -1055,7 +1054,7 @@ endfunction
 //
 ///////////////////////////////////////////////////////////
 exported function SetBanList( sign, byref list )
-	return SetObjProperty( sign, "banlist", list );
+  return SetObjProperty( sign, "banlist", list );
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -1072,7 +1071,7 @@ endfunction
 //
 ///////////////////////////////////////////////////////////
 exported function ClearBanList( sign )
-	return EraseObjProperty( sign, "banlist" );
+  return EraseObjProperty( sign, "banlist" );
 endfunction
 
 // Guild Methods
@@ -1096,12 +1095,12 @@ endfunction
 ///////////////////////////////////////////////////////////
 exported function IsGuildAffiliate( sign, byref mobile )
 
-	var isGuildHouse := GetGuildStone( sign );
-	if ( isGuildHouse && mobile.guildid == isGuildHouse )
-		return 1;
-	endif
+  var isGuildHouse := GetGuildStone( sign );
+  if ( isGuildHouse && mobile.guildid == isGuildHouse )
+    return 1;
+  endif
 
-	return 0;
+  return 0;
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -1119,7 +1118,7 @@ endfunction
 ///////////////////////////////////////////////////////////
 exported function SetGuildStone( sign, byref guildid )
 
-	return SetObjProperty( sign, "GuildStone", guildid );
+  return SetObjProperty( sign, "GuildStone", guildid );
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -1137,7 +1136,7 @@ endfunction
 ///////////////////////////////////////////////////////////
 exported function GetGuildStone( sign )
 
-	return GetObjProperty( sign, "GuildStone" );
+  return GetObjProperty( sign, "GuildStone" );
 endfunction
 
 ///////////////////////////////////////////////////////////
@@ -1155,10 +1154,8 @@ endfunction
 ///////////////////////////////////////////////////////////
 exported function EraseGuildStone( sign )
 
-	return EraseObjProperty( sign, "GuildStone" );
+  return EraseObjProperty( sign, "GuildStone" );
 endfunction
-
-
 
 ///////////////////////////////////////////////////////////
 //
@@ -1173,90 +1170,89 @@ endfunction
 // Returns: integer::
 //
 ///////////////////////////////////////////////////////////
-exported function GetHouseSize(sign)
-	footage := GetObjProperty(sign, "footage");
-	var x1, y1, z1, x2, y2, z2, x, y, area := 0;
-	if(!footage)
-		return 0;
-	endif
-	foreach thing in footage
-			x1 := thing[1];
-			y1 := thing[2];
-			z1 := thing[3];
-			x2 := thing[4];
-			y2 := thing[5];
-			z2 := thing[6];
-			x := x2-x1+1;
-			y := y2-y1+1;
-			area := area + x * y;
-	endforeach
-	return area;
+exported function GetHouseSize( sign )
+  footage := GetObjProperty( sign, "footage" );
+  var x1, y1, z1, x2, y2, z2, x, y, area := 0;
+  if ( !footage )
+    return 0;
+  endif
+  foreach thing in footage
+    x1 := thing[1];
+    y1 := thing[2];
+    z1 := thing[3];
+    x2 := thing[4];
+    y2 := thing[5];
+    z2 := thing[6];
+    x := x2 - x1 + 1;
+    y := y2 - y1 + 1;
+    area := area + x * y;
+  endforeach
+  return area;
 endfunction
 
 // The following commented out functions need to be modified to work with the Distro house pricing system.
 /*
 exported function GetHouseValueOfSign( sign )
-	if (GetObjProperty (sign, "housevalue"))
-		return CInt(GetObjProperty(sign, "housevalue"));
-	else
-		return CalculateHouseValueBySize( sign );
-	endif
+   if (GetObjProperty (sign, "housevalue"))
+       return CInt(GetObjProperty(sign, "housevalue"));
+   else
+       return CalculateHouseValueBySize( sign );
+   endif
 endfunction
 
 exported function CalculateHouseValueBySize( sign )
-	var area := GetHouseSize( sign );
-	if( area >= 1070 )
-		return 50;
-	elseif( area < 1070 && area >= 820 )
-		return CInt((area-820) / 115) + 40;
-	elseif( area < 820 && area >= 520 )
-		return CInt((area-520) / 50) + 30;
-	elseif( area >= 245 )
-		return CInt((area-245) / 25) + 15;
-	else
-		return CInt(area / 17.5) + 1;
-	endif
+   var area := GetHouseSize( sign );
+   if( area >= 1070 )
+       return 50;
+   elseif( area < 1070 && area >= 820 )
+       return CInt((area-820) / 115) + 40;
+   elseif( area < 820 && area >= 520 )
+       return CInt((area-520) / 50) + 30;
+   elseif( area >= 245 )
+       return CInt((area-245) / 25) + 15;
+   else
+       return CInt(area / 17.5) + 1;
+   endif
 endfunction
 
 exported function GetHouseValueOfSign( sign )
-	var HV;
-	if (GetObjProperty ( sign, "housevalue" ) )
-		return CInt ( GetObjProperty ( sign, "housevalue" ) );
-	else
-		HV := CalculateHouseValueBySize( sign );
-		SetObjProperty ( sign, "housevalue", CInt ( HV ) );
-		return HV;
-	endif
+   var HV;
+   if (GetObjProperty ( sign, "housevalue" ) )
+       return CInt ( GetObjProperty ( sign, "housevalue" ) );
+   else
+       HV := CalculateHouseValueBySize( sign );
+       SetObjProperty ( sign, "housevalue", CInt ( HV ) );
+       return HV;
+   endif
 endfunction
 
 exported function CalculateHouseValueBySize( sign )
-	var area := GetHouseSize( sign );
-	if( area >= 1070 )
-		return 50;
-	elseif( area < 1070 && area >= 820 )
-		return CInt((area-820) / 115) + 40;
-	elseif( area < 820 && area >= 520 )
-		return CInt((area-520) / 50) + 30;
-	elseif( area < 520 && area >= 245 )
-		return CInt((area-245) / 25) + 15;
-	else
-		return CInt(area / 17.5) + 1;
-	endif
+   var area := GetHouseSize( sign );
+   if( area >= 1070 )
+       return 50;
+   elseif( area < 1070 && area >= 820 )
+       return CInt((area-820) / 115) + 40;
+   elseif( area < 820 && area >= 520 )
+       return CInt((area-520) / 50) + 30;
+   elseif( area < 520 && area >= 245 )
+       return CInt((area-245) / 25) + 15;
+   else
+       return CInt(area / 17.5) + 1;
+   endif
 endfunction
 
 exported function CalculateHousePriceBySize(sign)
-	var area := GetHouseSize( sign );
-	if( area >= 870 )
-		return CInt(area * 6500);
-	elseif( area < 870 && area >= 521 )
-		return CInt(area * 5000);
-	elseif( area < 521 && area >= 321 )
-		return CInt(area * 4000);
-	elseif( area < 321 && area >= 101 )
-		return CInt(area * 3500);
-	else
-		return CInt(area * 3000);
-	endif
+   var area := GetHouseSize( sign );
+   if( area >= 870 )
+       return CInt(area * 6500);
+   elseif( area < 870 && area >= 521 )
+       return CInt(area * 5000);
+   elseif( area < 521 && area >= 321 )
+       return CInt(area * 4000);
+   elseif( area < 321 && area >= 101 )
+       return CInt(area * 3500);
+   else
+       return CInt(area * 3000);
+   endif
 endfunction
 */
-

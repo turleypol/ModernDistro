@@ -6,33 +6,32 @@ include ":itemutils:itemdesc";
 
 program Install()
 
-	return 1;
+  return 1;
 endprogram
 
 exported function IsReagent( item )
 
-	item := item;
+  item := item;
 
-	return 1;
+  return 1;
 endfunction
 
 exported function IsPlant( item )
 
-	item := item;
-	return 1;
+  item := item;
+  return 1;
 endfunction
 
 exported function IsOrganic( item )
 
-	item := item;
+  item := item;
 
-	return 1;
+  return 1;
 endfunction
 
 exported function IsInorganic( item )
 
-	item := item;
+  item := item;
 
-	return 1;
+  return 1;
 endfunction
-

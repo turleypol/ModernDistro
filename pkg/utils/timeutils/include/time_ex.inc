@@ -8,13 +8,12 @@
 //
 /////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////
 //
 // GetChAnimalYear( yyyy )
 //
 // Purpose: Returns the animal corresponding to the year
-//			according to the Chinese calendar.
+//          according to the Chinese calendar.
 //
 //
 //
@@ -25,7 +24,9 @@
 ///////////////////////////////////////////////////////////
 function GetChAnimalYear( yyyy )
 
-    return { "Monkey", "Rooster", "Dog", "Pig", "Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Sheep" }[(yyyy%12)+1];
+  return { "Monkey", "Rooster", "Dog", "Pig", "Rat", "Ox", "Tiger",
+           "Rabbit", "Dragon", "Snake", "Horse", "Sheep" }[(
+           yyyy % 12 ) + 1];
 
 endfunction
 
@@ -34,7 +35,7 @@ endfunction
 // IsLeapYear ( year )
 //
 // Purpose: Determine whether a year, using the Gregorian
-//			calendar, is a leap year.
+//          calendar, is a leap year.
 //
 //
 //
@@ -43,8 +44,8 @@ endfunction
 // Returns: integer:: 1 if leap year, 0 if not.
 //
 ///////////////////////////////////////////////////////////
-function IsLeapYear ( year )
+function IsLeapYear( year )
 
-    return year % 4 == 0 && ( year % 100 != 0 || year % 400 == 0 );
+  return year % 4 == 0 && ( year % 100 != 0 || year % 400 == 0 );
 
 endfunction

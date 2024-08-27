@@ -4,14 +4,14 @@ use cfgfile;
 
 program Install()
 
-	return 1;
+  return 1;
 endprogram
 
 exported function GetShipName( boat )
 
-	var cfg_file := ReadConfigFile( ":*:itemdesc" ); // package itemdesc
-	var elem := cfg_file[boat.objtype];
-        var name := CStr( elem.ShipObjType );
+  var cfg_file := ReadConfigFile( ":*:itemdesc" ); // package itemdesc
+  var elem := cfg_file[boat.objtype];
+  var name := CStr( elem.ShipObjType );
 
-	return name;
+  return name;
 endfunction
